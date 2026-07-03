@@ -18,11 +18,11 @@
 <style>
 
 </style>
-<link rel="stylesheet" href="<?=RS_CSS?>/common/style.css?var=<?=FRESH_TIME?>" >
-<script src="<?=RS_TH?>/jquery3.7/jquery-3.7.0.min.js"></script>
-<script src="<?=RS_JS?>/common/common.js?var=<?=FRESH_TIME?>"></script>
-
+<!--link rel="stylesheet" href="<?=RS_CSS?>/common/style.css?var=<?=FRESH_TIME?>" -->
+<!--<script src="<?php /*=RS_TH*/?>/jquery3.7/jquery-3.7.0.min.js"></script>-->
+<!--<script src="<?php /*=RS_JS*/?>/common/common.js?var=<?php /*=FRESH_TIME*/?>"></script>
+-->
 <!-- Font Awesome :: Start -->
-<link rel="stylesheet" href="<?=RS_TH?>/fontawesome_free_6_1_1/css/all.css" />
-<script type="text/javascript" src="<?=RS_TH?>/fontawesome_free_6_1_1/js/all.js"></script>
+<!--<link rel="stylesheet" href="<?php /*=RS_TH*/?>/fontawesome_free_6_1_1/css/all.css" />-->
+<!--<script type="text/javascript" src="<?php /*=RS_TH*/?>/fontawesome_free_6_1_1/js/all.js"></script>-->
 <!-- Font Awesome :: End -->
