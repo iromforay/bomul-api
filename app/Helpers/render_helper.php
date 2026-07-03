@@ -1,7 +1,7 @@
 <?php
 if ( ! function_exists('render'))
 {
-    function render(string $layout="default" ,string $name, array $data = [], $options)
+    function render(string $layout="default" ,string $name, array $data = [], $options=[])
     {
         $layout_dir= VIEW."/layout/".$layout;
         if(! file_exists($layout_dir)){
@@ -10,6 +10,18 @@ if ( ! function_exists('render'))
 
         $data['FRESH_TIME'] = isset($data['FRESH_TIME'])? DATE('YmdHis') : FRESH_TIME;
 
+        return view(
+            $layout,
+            [
+                'header_menu' =>"",
+                'header'=>"",
+                'content' => view($name, $data, $options),
+                'footer'=>""
+            ],
+            $options
+        );
+
+        exit;
         return view(
             $layout,
             [

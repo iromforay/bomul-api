@@ -48,7 +48,7 @@ define('APP_PDS', ROOT_PATH.'/public/pds/');
 define('SITE',getenv("site_url"));
 define('SITE_PDS', SITE.'/pds/');
 define('Admin_SITE', SITE.'/Admin');
-define('LOGIN_SERVER', 'https://login.at.com');
+define('LOGIN_SERVER', 'https://');
 define('RS', SITE.'/resources');
 define('RS_IMG', SITE.'resources/img');
 define('RS_CSS', SITE.'resources/css');
