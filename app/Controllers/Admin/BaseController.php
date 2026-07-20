@@ -88,6 +88,11 @@ abstract class BaseController extends Controller
         $this->debug=$debug;
         return $this;
     }
+
+    public function get_debug()
+    {
+        return $this->debug;
+    }
     public function getMonoLog($log_name="api")
     {
         if(!defined('FID')){

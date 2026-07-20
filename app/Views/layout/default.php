@@ -1,11 +1,22 @@
 <!doctype html>
 <html>
-<?=$header?>
-<?=$header_menu?>
-<body>
-<?php echo $content; ?>
-<?=$footer?>
-</body>
+    <head>
+        <!-- start header -->
+    <?=$header?>
+        <!-- //end header -->
+    </head>
+    <body>
+         <!-- start header menu -->
+    <?=$header_menu?>
+        <!-- //end header menu -->
+
+        <!-- start content -->
+    <?php echo $content; ?>
+        <!-- ends content -->
+        <!-- start footer -->
+    <?=$footer?>
+     <!-- end footer -->
+    </body>
 </html>
 
 <style>

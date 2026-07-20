@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Controllers\Web;
+
+use App\Controllers\Web\BaseController;
+
+class Map extends BaseController
+{
+    private $log;
+    public function __construct()
+    {
+        $this->set_code("map");
+        parent::__construct();
+        $this->log = $this->getMonoLog($this->get_code());
+        return $this;
+
+    }
+
+    public function getindex()
+    {
+        $this->set_title("오시는길");
+        $data = array(
+            'active'=> $this->get_code()
+        );
+        $this->view("",'Map/index',$data);
+    }
+}
