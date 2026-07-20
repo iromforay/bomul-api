@@ -5,7 +5,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 class CI_Model extends Model
 {
-    protected  $db;
+    protected $db;
     protected $table;
     protected $primaryKey;
     protected $query;
@@ -20,6 +20,15 @@ class CI_Model extends Model
        // dd($this->db);
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPrimaryKey()
+    {
+        return $this->primaryKey;
+    }
+
     public function getQuery()
     {
         return $this->query;
