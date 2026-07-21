@@ -15,7 +15,6 @@ class Charge extends BaseController
 
     public function getindex()
     {
-        $data = array();
         $this->view("",'Charge/index',$data);
     }
 }
