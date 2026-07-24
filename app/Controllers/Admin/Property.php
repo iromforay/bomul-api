@@ -100,10 +100,38 @@ class Property extends BaseController
         $post = $this->request->getPost();
         $this->log->info("save > data : ".serialize($post));
 
+        // 신규 등록(property_no 없음)일 때만 필수값 검증 - 수정은 부분 업데이트라 매번 강제하지 않음
+        if (empty($post['property_no'])) {
+            $missing = $this->validate_required($post);
+            if (!empty($missing)) {
+                $this->view(AT_Result::toFailData("필수 입력값이 없습니다: ".implode(', ', $missing)));
+                exit;
+            }
+        }
+
         $oResult = $this->service->save_property($post);
 
         $this->view($oResult);
         exit;
+    }
+
+    // property 테이블 NOT NULL(기본값 없음) 컬럼과 동일한 필수값 검증
+    private function validate_required($post)
+    {
+        $required = [
+            'property_name' => '매물명',
+            'addr_sido'     => '시도',
+            'addr_sigungu'  => '시군구',
+            'addr_dong'     => '읍면동',
+        ];
+
+        $missing = [];
+        foreach ($required as $field => $label) {
+            if (!isset($post[$field]) || trim($post[$field]) === '') {
+                $missing[] = $label;
+            }
+        }
+        return $missing;
     }
 
     public function postUpload_images()
