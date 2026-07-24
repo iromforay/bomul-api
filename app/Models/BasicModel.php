@@ -59,6 +59,13 @@ class BasicModel extends CI_Model
         ! is_null($entity->getKakaoChannelShow())       ?    $set[] = "`kakao_channel_show`=".      $this->db->escape($entity->getKakaoChannelShow())   : "";
 
         ! is_null($entity->getCompanyName())            ?    $set[] = "`company_name`=".            $this->db->escape($entity->getCompanyName())        : "";
+        ! is_null($entity->getBrokerOfficeName())       ?    $set[] = "`broker_office_name`=".      $this->db->escape($entity->getBrokerOfficeName())   : "";
+        ! is_null($entity->getBrokerAddress())          ?    $set[] = "`broker_address`=".          $this->db->escape($entity->getBrokerAddress())      : "";
+        ! is_null($entity->getBrokerPhone())            ?    $set[] = "`broker_phone`=".            $this->db->escape($entity->getBrokerPhone())        : "";
+        ! is_null($entity->getBrokerRegNo())             ?    $set[] = "`broker_reg_no`=".           $this->db->escape($entity->getBrokerRegNo())        : "";
+        ! is_null($entity->getBrokerCeoName())          ?    $set[] = "`broker_ceo_name`=".         $this->db->escape($entity->getBrokerCeoName())      : "";
+        ! is_null($entity->getBrokerAgentName())        ?    $set[] = "`broker_agent_name`=".       $this->db->escape($entity->getBrokerAgentName())    : "";
+        ! is_null($entity->getBrokerAgentPhone())       ?    $set[] = "`broker_agent_phone`=".      $this->db->escape($entity->getBrokerAgentPhone())   : "";
         ! is_null($entity->getFooterCopy())             ?    $set[] = "`footer_copy`=".             $this->db->escape($entity->getFooterCopy())         : "";
 
 

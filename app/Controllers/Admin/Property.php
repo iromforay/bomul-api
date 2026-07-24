@@ -4,11 +4,13 @@ namespace App\Controllers\Admin;
 
 use App\Libraries\AT_Result;
 use App\Service\PropertyService;
+use App\Service\ImgService;
 
 class Property extends BaseController
 {
     private $log;
     private $service;
+    private $imgService;
 
     public function __construct()
     {
@@ -16,6 +18,7 @@ class Property extends BaseController
         $this->is_auth();
         $this->log = $this->getMonoLog("property_api");
         $this->service = new PropertyService($this->log, $this->session_id);
+        $this->imgService = new ImgService($this->log, $this->session_id);
 
         $this->set_debug(0);
         return $this;
@@ -73,16 +76,17 @@ class Property extends BaseController
         $this->log->info("[REV] property detail : ".json_encode($_GET, JSON_UNESCAPED_UNICODE));
         $property_no = $this->request->getGet('property_no');
 
-        $rows = $this->service->get_detail($property_no);
+        $rows = $this->service->getbyid($property_no);
 
         $oResult = AT_Result::toSuccessData("", $rows);
         $this->set_debug($this->get_debug())->view($oResult);
         //
     }
 
-    public function save()
+    /*preflight*/
+    public function optionsSave()
     {
-
+        return $this;
     }
 
     /*preflight*/
@@ -95,13 +99,29 @@ class Property extends BaseController
     {
         $post = $this->request->getPost();
         $this->log->info("save > data : ".serialize($post));
-        $oResult = $this->service->exec($post);
+
+        $oResult = $this->service->save_property($post);
 
         $this->view($oResult);
         exit;
     }
 
+    public function postUpload_images()
+    {
+        $file = $_FILES['image'] ?? null;
 
+        if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
+            return $this->response->setJSON(AT_Result::toFailData('업로드할 파일이 없습니다.'));
+        }
+
+        $oResult = $this->imgService->upload_file($file, SHOP_CODE."/temp_property/");
+
+        if ($oResult['SUCCESS'] === 'TRUE') {
+            $oResult['RECORD']['file_url'] = SITE_PDS.rtrim($oResult['RECORD']['file_path'], '/')."/".$oResult['RECORD']['file_name'];
+        }
+
+        return $this->response->setJSON($oResult);
+    }
 
 
 }

@@ -70,6 +70,14 @@ class Basic extends BaseController
         $sns_file = isset($_FILES['sns_img']) ? $_FILES['sns_img'] : "";
 
         $data['company_name'] = $this->request->getVar("company_name");
+        //중개사무소 법정 표시항목
+        $data['broker_office_name'] = $this->request->getVar("broker_office_name");
+        $data['broker_address'] = $this->request->getVar("broker_address");
+        $data['broker_phone'] = $this->request->getVar("broker_phone");
+        $data['broker_reg_no'] = $this->request->getVar("broker_reg_no");
+        $data['broker_ceo_name'] = $this->request->getVar("broker_ceo_name");
+        $data['broker_agent_name'] = $this->request->getVar("broker_agent_name");
+        $data['broker_agent_phone'] = $this->request->getVar("broker_agent_phone");
         $data['footer_copy'] = $this->request->getVar("footer_copy");
 
         $data['logo_del'] = $this->request->getVar("logo_del"); //로고삭제

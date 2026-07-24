@@ -71,7 +71,8 @@ class File_Upload
         $target_file_dir = APP_PDS .$this->getTargetDir();
 
         if(!file_exists($target_file_dir)){
-            mkdir($target_file_dir, 0777, true);
+            mkdir($target_file_dir, 0775, true);
+            chmod($target_file_dir, 0775); // umask에 걸려 mkdir 모드가 그대로 반영 안 될 수 있어 명시적으로 재설정
         }
         // 파일명 생성 및 중복 체크 확인
         $i=0;
@@ -94,7 +95,7 @@ class File_Upload
             'file_size' => $file_size
         );
         if(move_uploaded_file($tmp_file_path, $target_file_path)){
-            chmod($target_file_path, 0755);
+            chmod($target_file_path, 0775);
 
 
             return AT_Result::toSuccessData( '업로드 되었습니다.', $result );
@@ -105,16 +106,41 @@ class File_Upload
         exit;
 
     }
+    // 이미 업로드된 파일을 다른 디렉토리로 이동 (temp -> 실제 경로)
+    public function move($from_dir, $file_name, $to_dir)
+    {
+        if ($file_name == "") return false;
+
+        $from_dir = rtrim($from_dir, '/').'/';
+        $to_dir = rtrim($to_dir, '/').'/';
+
+        $from_path = APP_PDS . $from_dir . $file_name;
+        $to_dir_full = APP_PDS . $to_dir;
+
+        if (!file_exists($to_dir_full)) {
+            mkdir($to_dir_full, 0775, true);
+            chmod($to_dir_full, 0775); // umask에 걸려 mkdir 모드가 그대로 반영 안 될 수 있어 명시적으로 재설정
+        }
+
+        $to_path = $to_dir_full . $file_name;
+
+        if (file_exists($from_path)) {
+            return rename($from_path, $to_path);
+        }
+        return false;
+    }
+
     //등록된 파일 삭제
     public function delete($file)
     {
-        $file_path = $file['file_path'];
         $file_name = $file['file_name'];
+        // path/dir 저장값에 마지막 슬래시가 빠져있는 경우를 대비해 정규화
+        $file_path = rtrim($file['file_path'] ?? '', '/').'/';
 
         if($file_name!="" and file_exists(APP_PDS.$file_path.$file_name)){ //파일 존재시
-            unlink(APP_PDS.$file_path.$file_name);//삭제
+            return unlink(APP_PDS.$file_path.$file_name);//삭제
         }
-        return $this;
+        return false;
     }
 
     public function download($file_name){

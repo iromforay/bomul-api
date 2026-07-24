@@ -8,13 +8,18 @@ use App\Models\CI_Model;
 class PropertyModel extends CI_Model
 {
     private $code;
+    private $log;
     public function __construct($dbs)
     {
         parent::__construct($dbs,"property","property_no");
 
         return $this;
     }
-
+    public function getLog($log)
+    {
+        $this->log = $log;
+        return $this;
+    }
     public function register(Property_Entity $entity)
     {
         $value = $entity->toSqlSet($this,$this->primaryKey ) ; // $this->db);
@@ -22,15 +27,29 @@ class PropertyModel extends CI_Model
         $sql = "
             INSERT INTO ".$this->table."
             SET
-            $value            
+            $value
             ";
-        if($this->safeExecQuery($sql))
-        {
-            return true;
-        }else{
-            return false;
-        }
-        // $this->db->query($sql, $entity->toRawArray());
+        $last_id = $this->safeExecQuery($sql); // 성공 시 property_no(insertID), 실패 시 0
+
+        $this->log->info("[save] result= last_id : ".$last_id." dbError=".var_export($this->lastError, true)." affectedRows=".var_export($this->lastAffectedRows, true));
+        return $last_id;
+
+    }
+
+    // toSqlSet()은 빈 값인 필드를 SET절에서 제외해서 NULL로 명시적으로 비울 수 없으므로,
+    // main_image/main_path는 entity 경로를 안 거치고 이 함수 하나로 설정/삭제 둘 다 처리.
+    // $main_image_name/$main_image_path를 null로 주면 컬럼을 NULL로 비움.
+    public function setMainImage($property_no, $main_image_name, $main_image_path)
+    {
+        $name = ($main_image_name === null || $main_image_name === '') ? 'NULL' : $this->db->escape($main_image_name);
+        $path = ($main_image_path === null || $main_image_path === '') ? 'NULL' : $this->db->escape($main_image_path);
+
+        $sql = "UPDATE ".$this->table." SET main_image = $name, main_path = $path WHERE ".$this->primaryKey." = ".(int)$property_no;
+        $success = $this->safeExecQuery($sql);
+
+        $this->log->info("[setMainImage] name=".var_export($main_image_name, true)." path=".var_export($main_image_path, true)." result=".var_export($success, true)." dbError=".var_export($this->getDbError(), true)." affectedRows=".var_export($this->getAffectedRows(), true));
+
+        return $success ? true : false;
     }
 
     public function modify(Property_Entity $entity)
@@ -40,18 +59,16 @@ class PropertyModel extends CI_Model
 
         $sql = "
             UPDATE ".$this->table." SET
-            $value            
+            $value
             WHERE ".$this->primaryKey." = ".$entity->property_no;
-        if($this->safeExecQuery($sql))
-        {
-            return true;
-        }else{
-            return false;
-        }
-        exit;
+        $success = $this->safeExecQuery($sql);
+
+        $this->log->info("[modify] result=".var_export($success, true)." dbError=".var_export($this->getDbError(), true)." affectedRows=".var_export($this->getAffectedRows(), true));
+
+        return $success ? true : false;
     }
 
-    public function get_direction($direction="")
+    public function get_direction($direction="all")
     {
         $_direction = array(
             "E"=>"동",
@@ -64,9 +81,9 @@ class PropertyModel extends CI_Model
             "NW"=>"북서"
         );
 
-        return $direction=="" ? $_direction : $_direction[$direction]??"";
+        return $direction=="all" ? $_direction : $_direction[$direction]??"";
     }
-    public function get_heating_fuel($heating_fuel="")
+    public function get_heating_fuel($heating_fuel="all")
     {
         $_heating_fuel = array(
             "1"=>"도시가스",
@@ -75,18 +92,18 @@ class PropertyModel extends CI_Model
             "4"=>"기름",
             "9"=>"기타"
         );
-        return $heating_fuel=="" ? $_heating_fuel : $_heating_fuel[$heating_fuel]??"";
+        return $heating_fuel=="all" ? $_heating_fuel : $_heating_fuel[$heating_fuel]??"";
     }
-    public function get_heating_type($heating_type="")
+    public function get_heating_type($heating_type="all")
     {
         $_heating_type = array(
             "1"=>"개별난방",
             "2"=>"중앙난방",
             "3"=>"지역난방"
         );
-        return $heating_type=="" ? $_heating_type : $_heating_type[$heating_type]??"";
+        return $heating_type=="all" ? $_heating_type : $_heating_type[$heating_type]??"";
     }
-    public function get_status($status="")
+    public function get_status($status="all")
     {
         $_status = array(
             "1"=>"거래가능",
@@ -95,7 +112,7 @@ class PropertyModel extends CI_Model
             "4"=>"거래보류",
             "5"=>"비공개"
         );
-        return $status=="" ? $_status : $_status[$status]??"";
+        return $status=="all" ? $_status : $_status[$status]??"";
     }
     public function get_display_yn($display_yn="")
     {
@@ -104,7 +121,41 @@ class PropertyModel extends CI_Model
             "2"=>"숨김"
 
         );
-        return $display_yn=="" ? $_display_yn : $_display_yn[$display_yn]??"";
+        return $display_yn=="all" ? $_display_yn : $_display_yn[$display_yn]??"";
     }
 
+    public function get_property_type($property_type="all")
+    {
+        // (apt : 아파트, officetel : 오피스텔, villa : 빌라/연립, house : 단독주택, land : 토지,
+        // commercial : 상가, office : 사무실, factory : 공장, warehouse : 창고, knowledge : 지식산업센터,
+        // building : 건물, motel : 숙박시설, etc : 기타)
+        $_property_type = array(
+            "apt"=>"아파트",
+            "officetel"=>"오피스텔",
+            "villa"=>"빌라/연립",
+            "house"=>"단독주택",
+            "land"=>"토지",
+            "commercial"=>"상가",
+            "office"=>"사무실",
+            "factory"=>"공장",
+            "warehouse"=>"창고",
+            "knowledge"=>"지식산업센터",
+            "building"=>"건물",
+            "motel"=>"숙박시설",
+            "etc"=>"기타"
+        );
+        return $property_type=="all" ? $_property_type : $_property_type[$property_type]??"";
+
+    }
+
+    public function get_transaction_type($transaction_type="all")
+    {
+        $_transaction_type = array(
+            "sale" => "매매",
+            "jeonse" => "전세",
+            "monthly" => "월세"
+        );
+        return $transaction_type=="all" ? $_transaction_type : $_transaction_type[$transaction_type]??"";
+
+    }
 }

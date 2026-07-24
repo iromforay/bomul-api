@@ -4,8 +4,10 @@ namespace App\Controllers\Admin;
 
 use App\Libraries\AT_Result;
 use App\Service\AddMenuService;
+use App\Service\FunctionMenuService;
 use App\Service\ImgService;
 use App\Service\MenuService;
+use App\Service\PropertyService;
 
 class Menu extends BaseController
 {
@@ -19,8 +21,11 @@ class Menu extends BaseController
         parent::__construct();
         $this->is_auth();
         $this->log = $this->getMonoLog("menu_api");
+        $this->property_log = $this->getMonoLog("property_api");
       //  $this->vdir="Admin/Menu/";
         $this->service = new MenuService($this->log,$this->session_id);
+        $this->FMservice = new FunctionMenuService($this->log,$this->session_id);
+        $this->property_service = new PropertyService($this->property_log,$this->session_id);
 
         $this->set_debug(0);
         return $this;
@@ -48,7 +53,10 @@ class Menu extends BaseController
         $debug = $this->request->getGet("debug")??0;
         $this->set_debug($debug);
 
-        if($code =="button") $oResult=$this->service->getButton_menu();
+        if($code=="property"){
+            $rows = $this->property_service->get_list();
+            $oResult = AT_Result::toSuccessData("",$rows);
+        }elseif($code =="button") $oResult=$this->service->getButton_menu();
         elseif ($code=="map"){
             $oResult=$this->service->getLocation($this->session_id);
         }
@@ -63,6 +71,13 @@ class Menu extends BaseController
         if(isset($_FILES['file'])) {
             $file = $_FILES['file'];
         }else $file=null;
+
+        if ($this->request->getVar("code") =="property"){
+            $post = $this->request->getPost();
+            $oResult = $this->FMservice->save($post);
+            $this->view($oResult);
+            exit;
+        }
 
         $data['name']=$this->request->getVar("name");
         $data['code']=$this->request->getVar("code");

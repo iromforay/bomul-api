@@ -81,6 +81,10 @@ class BasicService extends CI_Service
         $this->log->info("타 사이트 링크 메뉴 설정");
         $this->sns_link_save($data,$sns_file);
 
+        //중개사무소 법정 표시항목 설정
+        $this->log->info("중개사무소 정보 설정");
+        $this->broker_setting($data);
+
         //푸터 설정
         $this->log->info("푸터 설정");
         $this->footer_setting($data);
@@ -169,6 +173,20 @@ class BasicService extends CI_Service
 
         return $this;
     }
+    // 공인중개사법 제18조의2 - 중개사무소/개업공인중개사 법정 표시항목
+    public function broker_setting($data)
+    {
+        $this->entity->setBrokerOfficeName($data['broker_office_name']);
+        $this->entity->setBrokerAddress($data['broker_address']);
+        $this->entity->setBrokerPhone($data['broker_phone']);
+        $this->entity->setBrokerRegNo($data['broker_reg_no']);
+        $this->entity->setBrokerCeoName($data['broker_ceo_name']);
+        $this->entity->setBrokerAgentName($data['broker_agent_name']);
+        $this->entity->setBrokerAgentPhone($data['broker_agent_phone']);
+
+        return $this;
+    }
+
     public function footer_setting($data)
     {
         $this->entity->setCompanyName($data['company_name']);

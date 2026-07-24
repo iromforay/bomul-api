@@ -28,6 +28,13 @@ class Basic_Entity
     private $kakao_channel;
     private $kakao_channel_show;
     private $company_name;
+    private $broker_office_name;
+    private $broker_address;
+    private $broker_phone;
+    private $broker_reg_no;
+    private $broker_ceo_name;
+    private $broker_agent_name;
+    private $broker_agent_phone;
     private $footer_copy;
 
     /**
@@ -284,6 +291,118 @@ class Basic_Entity
     public function setCompanyName($company_name): void
     {
         $this->company_name = $company_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerOfficeName()
+    {
+        return $this->broker_office_name;
+    }
+
+    /**
+     * @param mixed $broker_office_name
+     */
+    public function setBrokerOfficeName($broker_office_name): void
+    {
+        $this->broker_office_name = $broker_office_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerAddress()
+    {
+        return $this->broker_address;
+    }
+
+    /**
+     * @param mixed $broker_address
+     */
+    public function setBrokerAddress($broker_address): void
+    {
+        $this->broker_address = $broker_address;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerPhone()
+    {
+        return $this->broker_phone;
+    }
+
+    /**
+     * @param mixed $broker_phone
+     */
+    public function setBrokerPhone($broker_phone): void
+    {
+        $this->broker_phone = $broker_phone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerRegNo()
+    {
+        return $this->broker_reg_no;
+    }
+
+    /**
+     * @param mixed $broker_reg_no
+     */
+    public function setBrokerRegNo($broker_reg_no): void
+    {
+        $this->broker_reg_no = $broker_reg_no;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerCeoName()
+    {
+        return $this->broker_ceo_name;
+    }
+
+    /**
+     * @param mixed $broker_ceo_name
+     */
+    public function setBrokerCeoName($broker_ceo_name): void
+    {
+        $this->broker_ceo_name = $broker_ceo_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerAgentName()
+    {
+        return $this->broker_agent_name;
+    }
+
+    /**
+     * @param mixed $broker_agent_name
+     */
+    public function setBrokerAgentName($broker_agent_name): void
+    {
+        $this->broker_agent_name = $broker_agent_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrokerAgentPhone()
+    {
+        return $this->broker_agent_phone;
+    }
+
+    /**
+     * @param mixed $broker_agent_phone
+     */
+    public function setBrokerAgentPhone($broker_agent_phone): void
+    {
+        $this->broker_agent_phone = $broker_agent_phone;
     }
 
     /**

@@ -61,8 +61,10 @@ class FunctionMenuService extends CI_Service
     {
         $true = true;
         foreach($post as $key=>$val) {
-            $oResult = $this->add_function_menu($key,$val);
-            if($oResult['SUCCESS'] != 'TRUE') $true = false;
+            if($key != "" && $key !="code") {
+                $oResult = $this->add_function_menu($key, $val);
+                if ($oResult['SUCCESS'] != 'TRUE') $true = false;
+            }
         }
 
         if($true){
@@ -74,27 +76,30 @@ class FunctionMenuService extends CI_Service
     }
     public function add_function_menu($key,$val)
     {
-        if($key != "") {
+
             $entity = new FunctionMenu_Entity();
 
-
+            $key  =  preg_replace("/_show$/", "", $key);
             $entity->setFunctionMenuKey($key);
             $entity->setFunctionMenuValue($val);
 
 
             $add_func_menu_data = $this->model->findbyKey($entity->getFunctionMenuKey());
+            if(!isset($add_func_menu_data['function_menu_no'])){
+                print_r($add_func_menu_data);
+                echo "key : $key";
+                exit;
+            }
             $entity->setFunctionMenuNo($add_func_menu_data['function_menu_no']);
 
-            $this->model->sql_edit($entity);
+         //   $this->model->sql_edit($entity);
 
             if($this->model->sql_edit($entity)){
                 return AT_Result::toSuccessData();
             }else{
                 return AT_Result::toFailData();
             }
-        }else{
-            return $this;
-        }
+
         return $this;
     }
 

@@ -14,7 +14,7 @@ private $property_no;         //매물번호
     // (apt : 아파트, officetel : 오피스텔, villa : 빌라/연립, house : 단독주택, land : 토지,
     // commercial : 상가, office : 사무실, factory : 공장, warehouse : 창고, knowledge : 지식산업센터,
     // building : 건물, motel : 숙박시설, etc : 기타)
-    private $transaction_type;      // 거래방식 (1-매매 , 2-전세 , 3-월세)
+    private $transaction_type;      // 거래방식 (sale : 매매 , jeonse : 전세 ,  monthly : 월세)
 
     private $property_name;         // 매물명
     private $building_name;         // 건물명
@@ -106,6 +106,8 @@ class Property_Entity extends CI_Entity
     protected $attributes = [
 
         'property_no' => null,
+        'property_type'=> null,
+        'transaction_type'=> null,
         'property_name' => null,
         'building_name' => null,
 
@@ -147,8 +149,8 @@ class Property_Entity extends CI_Entity
         'summary' => null,
         'description' => null,
 
-        'thumbnail_image' => null,
-        'detail_images' => null,
+        'main_image' => null,
+        'main_path' => null,
     ];
 
     /**
@@ -158,6 +160,16 @@ class Property_Entity extends CI_Entity
 
         'property_no' => 'integer',
 
+        'property_type'=> 'string',
+        'transaction_type'=> 'string',
+        'property_name' => 'string',
+        'building_name' => 'string',
+
+        'addr_sido' => 'string',
+        'addr_sigungu' => 'string',
+        'addr_dong' => 'string',
+        'addr_road' => 'string',
+
         'supply_area' => 'integer',
         'exclusive_area' => 'integer',
 
@@ -166,10 +178,14 @@ class Property_Entity extends CI_Entity
 
         'room_count' => 'integer',
         'bathroom_count' => 'integer',
+
+        'parking_available' => 'string',
         'parking_count' => 'integer',
 
         'completion_date' => 'datetime',
         'move_in_date' => 'datetime',
+
+        'direction' => 'string',
 
         'heating_fuel' => 'integer',
         'heating_type' => 'integer',
@@ -183,6 +199,12 @@ class Property_Entity extends CI_Entity
 
         'status' => 'integer',
         'display_yn' => 'boolean',
+
+        'summary' => 'string',
+        'description' => 'string',
+
+        'main_image' => 'string',
+        'main_path' => 'string',
     ];
 
 }

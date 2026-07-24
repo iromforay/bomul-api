@@ -9,6 +9,8 @@ class CI_Model extends Model
     protected $table;
     protected $primaryKey;
     protected $query;
+    protected $lastError;
+    protected $lastAffectedRows;
     /**
      * @param $db
      */
@@ -32,6 +34,18 @@ class CI_Model extends Model
     public function getQuery()
     {
         return $this->query;
+    }
+
+    // safeExecQuery() 내부, transCommit() 이전 시점에 캡처해둔 값. transCommit() 이후엔
+    // error()/affectedRows()가 COMMIT 자체의 결과로 덮어써져서 여기서 다시 조회하면 안 됨.
+    public function getDbError()
+    {
+        return $this->lastError;
+    }
+
+    public function getAffectedRows()
+    {
+        return $this->lastAffectedRows;
     }
     public function get_list($start=0,$limit=0)
     {
@@ -73,22 +87,20 @@ class CI_Model extends Model
             d("사용불가 쿼리문 포함"); d($result);
             return $this;
         }else{
-            $this->db->transBegin();
             $this->db->query($sql);
+            $this->lastError = $this->db->error();
+            $this->lastAffectedRows = $this->db->affectedRows();
             preg_match ("/INSERT/" ,trim($SQL),$insertquery); //$sql
             preg_match ("/UPDATE/" ,trim($SQL),$updatequery); //$sql
             preg_match ("/DELETE/" ,trim($SQL),$deletequery); //$sql
 
-            $this->db->transCommit();
-
             if(isset($insertquery[0])){
-                $this->db->insertID();
-                return true;
+                return $this->db->insertID();
             }else if(isset($updatequery[0]) or isset($deletequery)){
-                return $this->db->transStatus();
+                return $this->lastError['code'] == 0;
             }
 
-            if($this->db->transStatus() === false) {
+            if($this->lastError['code'] != 0) {
                 return false;
             }else return true;
         }
