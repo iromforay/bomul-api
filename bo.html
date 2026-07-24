@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BOMUL 관리자 - 노트 관리</title>
+<style>
+  :root {
+    --bg: #f2f4f7;
+    --surface: #ffffff;
+    --surface-sunken: #f7f8fa;
+    --border: #e4e7ec;
+    --border-strong: #d3d7de;
+    --text: #14171f;
+    --text-muted: #6b7280;
+    --text-faint: #9aa1ac;
+    --accent: #006eff;
+    --accent-soft: #eaf2ff;
+    --accent-soft-border: #cfe3ff;
+    --danger: #e0342b;
+    --sidebar-bg: #ffffff;
+    --sidebar-active-bg: #eaf2ff;
+    --shadow: 0 1px 2px rgba(20, 23, 31, 0.04), 0 1px 1px rgba(20, 23, 31, 0.03);
+    --shadow-lg: 0 8px 24px rgba(20, 23, 31, 0.08);
+    --radius: 10px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", "Segoe UI", sans-serif;
+
+    /* 진행상태 pill */
+    --st-consulting-bg: #eaf2ff; --st-consulting-fg: #0a5cd8;
+    --st-proposed-bg: #fff4e0;  --st-proposed-fg: #a8630a;
+    --st-contracted-bg: #e7f7ee; --st-contracted-fg: #147a45;
+    --st-lost-bg: #f1f2f4;      --st-lost-fg: #6b7280;
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #14161c;
+    --surface: #1b1e26;
+    --surface-sunken: #21242e;
+    --border: #2c303b;
+    --border-strong: #383d4a;
+    --text: #eceef2;
+    --text-muted: #9aa1ac;
+    --text-faint: #6b7280;
+    --accent: #3d8bff;
+    --accent-soft: #182643;
+    --accent-soft-border: #2a4676;
+    --danger: #ff6259;
+    --sidebar-bg: #1b1e26;
+    --sidebar-active-bg: #182643;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+    --st-consulting-bg: #182643; --st-consulting-fg: #7ab0ff;
+    --st-proposed-bg: #3a2c11;  --st-proposed-fg: #eab35a;
+    --st-contracted-bg: #123322; --st-contracted-fg: #4fd489;
+    --st-lost-bg: #262932;      --st-lost-fg: #9aa1ac;
+    color-scheme: dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161c;
+      --surface: #1b1e26;
+      --surface-sunken: #21242e;
+      --border: #2c303b;
+      --border-strong: #383d4a;
+      --text: #eceef2;
+      --text-muted: #9aa1ac;
+      --text-faint: #6b7280;
+      --accent: #3d8bff;
+      --accent-soft: #182643;
+      --accent-soft-border: #2a4676;
+      --danger: #ff6259;
+      --sidebar-bg: #1b1e26;
+      --sidebar-active-bg: #182643;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+      --st-consulting-bg: #182643; --st-consulting-fg: #7ab0ff;
+      --st-proposed-bg: #3a2c11;  --st-proposed-fg: #eab35a;
+      --st-contracted-bg: #123322; --st-contracted-fg: #4fd489;
+      --st-lost-bg: #262932;      --st-lost-fg: #9aa1ac;
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 244px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin: 4px 0 22px;
+  }
+
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+  }
+
+  .profile-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .profile-edit {
+    font-size: 12px;
+    color: var(--text-faint);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  .profile-links { display: flex; gap: 14px; font-size: 12.5px; }
+  .profile-links a { color: var(--text-muted); text-decoration: none; cursor: pointer; }
+  .profile-links a:hover { color: var(--accent); }
+
+  .nav { display: flex; flex-direction: column; gap: 4px; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: 9px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: var(--surface-sunken); color: var(--text); }
+  .nav-item.active { background: var(--sidebar-active-bg); color: var(--accent); }
+  .nav-icon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--surface-sunken);
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+  }
+  .nav-item.active .nav-icon { background: var(--surface); }
+  .nav-icon svg { width: 16px; height: 16px; }
+
+  .nav-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--danger);
+    border-radius: 999px;
+    padding: 2px 7px;
+  }
+
+  /* ---------- Main ---------- */
+  .main { padding: 26px 30px 60px; min-width: 0; }
+
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  h1.page-title { font-size: 21px; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .page-sub { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-ghost { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+  .btn-ghost:hover { background: var(--surface-sunken); }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .chip {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 13px;
+    cursor: pointer;
+  }
+  .chip.active { color: var(--accent); border-color: var(--accent-soft-border); background: var(--accent-soft); }
+
+  .search-box {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 14px;
+    min-width: 220px;
+  }
+  .search-box svg { flex: 0 0 auto; color: var(--text-faint); }
+  .search-box input {
+    border: none; outline: none; background: transparent;
+    font-family: inherit; font-size: 13px; color: var(--text); width: 100%;
+  }
+  .search-box input::placeholder { color: var(--text-faint); }
+
+  /* Master-detail layout */
+  .workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 1040px) {
+    .workspace { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* Note list */
+  .list-panel { display: flex; flex-direction: column; }
+  .list-scroll { max-height: 640px; overflow-y: auto; }
+
+  .note-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .note-row:last-child { border-bottom: none; }
+  .note-row:hover { background: var(--surface-sunken); }
+  .note-row.selected { background: var(--accent-soft); }
+
+  .note-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--text-muted);
+    flex: 0 0 auto;
+  }
+
+  .note-main { min-width: 0; }
+  .note-top { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .note-visitor { font-size: 14px; font-weight: 700; }
+  .note-type-badge {
+    font-size: 10.5px; font-weight: 700;
+    color: var(--text-muted); background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 6px;
+    flex: 0 0 auto;
+  }
+  .note-sub {
+    font-size: 12.5px; color: var(--text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .note-meta { text-align: right; flex: 0 0 auto; }
+  .note-date { font-size: 11.5px; color: var(--text-faint); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .pill.st-consulting { background: var(--st-consulting-bg); color: var(--st-consulting-fg); }
+  .pill.st-proposed   { background: var(--st-proposed-bg);  color: var(--st-proposed-fg); }
+  .pill.st-contracted { background: var(--st-contracted-bg); color: var(--st-contracted-fg); }
+  .pill.st-lost        { background: var(--st-lost-bg);      color: var(--st-lost-fg); }
+
+  .list-foot {
+    padding: 12px 18px;
+    font-size: 12px;
+    color: var(--text-faint);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Detail panel */
+  .detail-panel { position: sticky; top: 20px; }
+  .detail-head {
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .detail-name { font-size: 18px; font-weight: 800; margin: 0 0 4px; }
+  .detail-phone { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+  .detail-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .badge {
+    font-size: 11.5px; font-weight: 700;
+    background: var(--surface-sunken); color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 6px; padding: 3px 8px;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 18px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .detail-grid dt { color: var(--text-faint); margin-bottom: 2px; font-size: 12px; }
+  .detail-grid dd { margin: 0; font-weight: 600; }
+
+  .memo-section { padding: 18px 22px 20px; }
+  .memo-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .memo-head h3 { font-size: 14px; font-weight: 800; margin: 0; }
+  .memo-count { font-size: 12px; color: var(--text-faint); }
+
+  .memo-thread { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; max-height: 300px; overflow-y: auto; padding-right: 2px; }
+
+  .memo-item { display: flex; gap: 10px; }
+  .memo-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex: 0 0 auto;
+  }
+  .memo-body { flex: 1; min-width: 0; }
+  .memo-bubble {
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .memo-byline { display: flex; gap: 8px; align-items: baseline; margin-bottom: 4px; }
+  .memo-writer { font-size: 12.5px; font-weight: 700; }
+  .memo-time { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+
+  .memo-form { display: flex; gap: 8px; align-items: flex-end; border-top: 1px solid var(--border); padding-top: 14px; }
+  .memo-form textarea {
+    flex: 1;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    resize: none;
+    min-height: 42px;
+    max-height: 120px;
+    line-height: 1.5;
+  }
+  .memo-form textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+  .memo-form button {
+    flex: 0 0 auto;
+    height: 42px;
+    padding: 0 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="brand">MY ADMIN</div>
+
+    <div class="profile">
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="10" r="2.2"/><path d="M4 19l5-5 3.5 3.2L17 12l3 4.5"/></svg>
+      </div>
+      <div class="profile-name">foray</div>
+      <a class="profile-edit">프로필 수정</a>
+      <div class="profile-links">
+        <a>홈페이지</a>
+        <a>로그아웃</a>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 13.5 12 6l8 7.5"/><path d="M6.5 12v7.5h11V12"/></svg>
+        </span>
+        홈페이지 설정
+      </a>
+      <a class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9.5h16M9.5 9.5V20"/></svg>
+        </span>
+        게시판 관리
+      </a>
+      <a class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 21V10l8-6 8 6v11"/><path d="M9 21v-7h6v7"/></svg>
+        </span>
+        매물 관리
+      </a>
+      <a class="nav-item active">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3.5h9l3 3V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M9 10h6M9 13.5h6M9 17h3.5"/></svg>
+        </span>
+        노트 관리
+        <span class="nav-badge">3</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">노트 관리</h1>
+        <p class="page-sub">방문자 · 방문 예약자 상담 기록을 관리합니다.</p>
+      </div>
+      <button class="btn btn-primary" type="button">＋ 노트 등록</button>
+    </div>
+
+    <div class="filters">
+      <button class="chip active" type="button">전체 12</button>
+      <button class="chip" type="button">상담중 5</button>
+      <button class="chip" type="button">매물제안 3</button>
+      <button class="chip" type="button">계약완료 2</button>
+      <button class="chip" type="button">이탈 2</button>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="방문자명, 연락처 검색">
+      </div>
+    </div>
+
+    <div class="workspace">
+
+      <!-- ---- 노트 리스트 ---- -->
+      <section class="panel list-panel">
+        <div class="list-scroll" id="noteList">
+          <!-- rows injected by JS from sample data -->
+        </div>
+        <div class="list-foot">전체 12건 중 1-6 표시</div>
+      </section>
+
+      <!-- ---- 노트 상세 + 메모 스레드 ---- -->
+      <section class="panel detail-panel" id="detailPanel">
+        <!-- injected by JS -->
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  var STATUS_LABEL = { consulting: '상담중', proposed: '매물제안', contracted: '계약완료', lost: '이탈' };
+  var STATUS_CLASS = { consulting: 'st-consulting', proposed: 'st-proposed', contracted: 'st-contracted', lost: 'st-lost' };
+  var VISIT_LABEL = { tenant: '세입자', landlord: '임대인' };
+  var TXN_LABEL = { sale: '매매', jeonse: '전세', monthly: '월세' };
+
+  var notes = [
+    {
+      note_no: 21, visitor_name: '김도윤', visitor_phone: '010-2231-8845',
+      visit_type: 'tenant', transaction_type: 'jeonse', status: 'proposed',
+      property_no: 17, property_name: '여의도 25시 공장', agent_name: '나병연',
+      budget: '25,000만원', preferred_area: '영등포구 여의도동',
+      visit_date: '2026-07-25 14:00', created_at: '2026-07-23 09:12',
+      memos: [
+        { name: '나병연', write_date: '2026-07-23 09:15', memo: '전세 예산 확인, 이번 주말 방문 예약 완료.' },
+        { name: '나병연', write_date: '2026-07-23 11:40', memo: '여의도 매물 3건 우선 안내 예정. 반려동물 여부 확인 필요.' }
+      ]
+    },
+    {
+      note_no: 20, visitor_name: '이서연', visitor_phone: '010-4471-2290',
+      visit_type: 'landlord', transaction_type: 'sale', status: 'consulting',
+      property_no: null, property_name: null, agent_name: '나병연',
+      budget: '-', preferred_area: '부천시 원미구',
+      visit_date: '2026-07-24 10:30', created_at: '2026-07-22 16:03',
+      memos: [
+        { name: '나병연', write_date: '2026-07-22 16:05', memo: '매도 희망가 문의, 등기부등본 지참 예정.' }
+      ]
+    },
+    {
+      note_no: 19, visitor_name: '박준서', visitor_phone: '010-9981-3312',
+      visit_type: 'tenant', transaction_type: 'monthly', status: 'contracted',
+      property_no: 14, property_name: '상동 오피스텔 1204호', agent_name: '나병연',
+      budget: '보증금 2천/월 65', preferred_area: '상동',
+      visit_date: '2026-07-18 15:00', created_at: '2026-07-15 10:20',
+      memos: [
+        { name: '나병연', write_date: '2026-07-15 10:22', memo: '월세 계약 조건 협의 시작.' },
+        { name: '나병연', write_date: '2026-07-17 13:05', memo: '집주인과 조건 합의, 계약서 초안 발송.' },
+        { name: '나병연', write_date: '2026-07-18 16:40', memo: '계약 완료. 잔금일 8/1 확정.' }
+      ]
+    },
+    {
+      note_no: 18, visitor_name: '최민아', visitor_phone: '010-5528-7701',
+      visit_type: 'tenant', transaction_type: 'jeonse', status: 'lost',
+      property_no: null, property_name: null, agent_name: '나병연',
+      budget: '18,000만원', preferred_area: '중동',
+      visit_date: '2026-07-10 11:00', created_at: '2026-07-08 14:30',
+      memos: [
+        { name: '나병연', write_date: '2026-07-08 14:32', memo: '타 지역으로 이사 계획 변경, 보류 요청.' }
+      ]
+    },
+    {
+      note_no: 17, visitor_name: '정하늘', visitor_phone: '010-1123-9087',
+      visit_type: 'landlord', transaction_type: 'monthly', status: 'consulting',
+      property_no: 12, property_name: '중동 상가 1층', agent_name: '나병연',
+      budget: '-', preferred_area: '중동',
+      visit_date: '2026-07-26 13:00', created_at: '2026-07-23 08:50',
+      memos: []
+    },
+    {
+      note_no: 16, visitor_name: '한지우', visitor_phone: '010-7743-2201',
+      visit_type: 'tenant', transaction_type: 'sale', status: 'proposed',
+      property_no: 9, property_name: '역곡 아파트 802동', agent_name: '나병연',
+      budget: '32,000만원', preferred_area: '역곡동',
+      visit_date: '2026-07-27 16:00', created_at: '2026-07-21 11:15',
+      memos: [
+        { name: '나병연', write_date: '2026-07-21 11:20', memo: '매매 예산 상향 가능, 3건 후보 안내 예정.' }
+      ]
+    }
+  ];
+
+  var selectedNo = notes[0].note_no;
+
+  function initials(name) { return name ? name.slice(-2) : '?'; }
+
+  function renderList() {
+    var el = document.getElementById('noteList');
+    el.innerHTML = notes.map(function (n) {
+      var selected = n.note_no === selectedNo ? ' selected' : '';
+      return (
+        '<div class="note-row' + selected + '" data-no="' + n.note_no + '">' +
+          '<div class="note-avatar">' + initials(n.visitor_name) + '</div>' +
+          '<div class="note-main">' +
+            '<div class="note-top">' +
+              '<span class="note-visitor">' + n.visitor_name + '</span>' +
+              '<span class="note-type-badge">' + (VISIT_LABEL[n.visit_type] || '-') + '</span>' +
+            '</div>' +
+            '<div class="note-sub">' + n.visitor_phone + ' · ' + (TXN_LABEL[n.transaction_type] || '-') + (n.property_name ? ' · ' + n.property_name : '') + '</div>' +
+          '</div>' +
+          '<div class="note-meta">' +
+            '<div class="note-date">' + n.visit_date.slice(5, 16) + '</div>' +
+            '<span class="pill ' + STATUS_CLASS[n.status] + '">' + STATUS_LABEL[n.status] + '</span>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    Array.prototype.forEach.call(el.querySelectorAll('.note-row'), function (row) {
+      row.addEventListener('click', function () {
+        selectedNo = Number(row.getAttribute('data-no'));
+        renderList();
+        renderDetail();
+      });
+    });
+  }
+
+  function renderDetail() {
+    var n = notes.find(function (x) { return x.note_no === selectedNo; });
+    var panel = document.getElementById('detailPanel');
+    if (!n) { panel.innerHTML = ''; return; }
+
+    var memosHtml = n.memos.length
+      ? n.memos.map(function (m) {
+          return (
+            '<div class="memo-item">' +
+              '<div class="memo-avatar">' + initials(m.name) + '</div>' +
+              '<div class="memo-body">' +
+                '<div class="memo-bubble">' +
+                  '<div class="memo-byline"><span class="memo-writer">' + m.name + '</span><span class="memo-time">' + m.write_date + '</span></div>' +
+                  m.memo +
+                '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('')
+      : '<p style="font-size:13px;color:var(--text-faint);margin:0;">아직 등록된 메모가 없습니다.</p>';
+
+    panel.innerHTML =
+      '<div class="detail-head">' +
+        '<div class="detail-top">' +
+          '<div>' +
+            '<h2 class="detail-name">' + n.visitor_name + '</h2>' +
+            '<div class="detail-phone">' + n.visitor_phone + '</div>' +
+          '</div>' +
+          '<span class="pill ' + STATUS_CLASS[n.status] + '">' + STATUS_LABEL[n.status] + '</span>' +
+        '</div>' +
+        '<div class="detail-badges">' +
+          '<span class="badge">' + (VISIT_LABEL[n.visit_type] || '-') + '</span>' +
+          '<span class="badge">' + (TXN_LABEL[n.transaction_type] || '-') + '</span>' +
+          (n.property_name ? '<span class="badge">관심매물 · ' + n.property_name + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<dl class="detail-grid">' +
+        '<dt>예산</dt><dd>' + n.budget + '</dd>' +
+        '<dt>희망지역</dt><dd>' + n.preferred_area + '</dd>' +
+        '<dt>방문예정일</dt><dd>' + n.visit_date + '</dd>' +
+        '<dt>접수자</dt><dd>' + n.agent_name + '</dd>' +
+        '<dt>등록일</dt><dd>' + n.created_at + '</dd>' +
+        '<dt>노트번호</dt><dd>#' + n.note_no + '</dd>' +
+      '</dl>' +
+      '<div class="memo-section">' +
+        '<div class="memo-head"><h3>상담 메모</h3><span class="memo-count">' + n.memos.length + '건</span></div>' +
+        '<div class="memo-thread">' + memosHtml + '</div>' +
+        '<form class="memo-form" id="memoForm">' +
+          '<textarea placeholder="메모를 입력하세요" required></textarea>' +
+          '<button class="btn btn-primary" type="submit">등록</button>' +
+        '</form>' +
+      '</div>';
+
+    document.getElementById('memoForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var ta = e.target.querySelector('textarea');
+      var text = ta.value.trim();
+      if (!text) return;
+      n.memos.push({ name: 'foray', write_date: new Date().toISOString().slice(0, 16).replace('T', ' '), memo: text });
+      renderDetail();
+    });
+  }
+
+  renderList();
+  renderDetail();
+</script>
+</body>
+</html>
