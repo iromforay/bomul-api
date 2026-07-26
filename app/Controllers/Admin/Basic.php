@@ -82,9 +82,38 @@ class Basic extends BaseController
 
         $data['logo_del'] = $this->request->getVar("logo_del"); //로고삭제
 
+        $missing = $this->validate_required($data);
+        if (!empty($missing)) {
+            $this->view(AT_Result::toFailData("필수 입력값이 없습니다: ".implode(', ', $missing)));
+            exit;
+        }
+
         $this->log->info("[REV] data : ".json_encode($data,JSON_UNESCAPED_UNICODE));
         $oResult = $this->service->save($data,$file,$sns_file);
         $this->view($oResult);
+    }
+
+    // 중개사무소 법정 표시항목(공인중개사법 제18조의2) 필수값 검증
+    private function validate_required($data)
+    {
+        $required = [
+            'company_name'       => '상호명',
+            'broker_office_name' => '중개사무소 명칭',
+            'broker_address'     => '중개사무소 소재지',
+            'broker_phone'       => '중개사무소 연락처',
+            'broker_reg_no'      => '중개사무소 등록번호',
+            'broker_ceo_name'    => '개업공인중개사 성명',
+            'broker_agent_name'  => '소속공인중개사 성명',
+            'broker_agent_phone' => '소속공인중개사 연락처',
+        ];
+
+        $missing = [];
+        foreach ($required as $field => $label) {
+            if (!isset($data[$field]) || trim($data[$field]) === '') {
+                $missing[] = $label;
+            }
+        }
+        return $missing;
     }
 
     /*

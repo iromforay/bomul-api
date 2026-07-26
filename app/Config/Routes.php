@@ -23,6 +23,10 @@ if ($host !== 'api.bomul.co.kr') {
     $routes->get('review/view/([0-9]+)(?:/[^/]*)?', 'Review::getview/$1');
     $routes->get('charge/view/([0-9]+)(?:/[^/]*)?', 'Charge::getview/$1');
 
+    // 방문자 트래킹 수집 (sendBeacon)
+    $routes->post('track/collect', 'Track::postCollect');
+    $routes->options('track/collect', 'Track::optionsCollect');
+
     // 기본 자동 라우터 활성화
     //$routes->setAutoRoute(true);
 
