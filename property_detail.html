@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ==================================================================
+     [SEO / 네이버 크롤링 최적화 블록 - 시작]
+     실제 배포시 이 블록 안의 값들은 매물 데이터(property_no 기준)로
+     서버에서 동적 치환되어야 함. 나머지 화면(본문 UI)과 완전히
+     분리해서 알아보기 쉽도록 주석으로 구간을 표시함.
+=================================================================== -->
+
+<!-- 1) 문서 타이틀 : 네이버는 title 태그의 앞부분 키워드 가중치를 높게 봄
+        형식) [매물명] [거래유형] [가격] | [지역] [매물종류] [전용면적] - [사이트명] -->
+<title>래미안 부천 84A 매매 4억 5,000 | 경기 부천시 원미구 중동 아파트 84㎡ - 보물부동산</title>
+
+<!-- 2) meta description : 검색결과 스니펫에 노출되는 요약문. 핵심 정보(지역/매물종류/거래유형/가격/면적)를
+        문장 안에 자연스럽게 포함 -->
+<meta name="description" content="경기 부천시 원미구 중동 래미안 부천 84A 아파트 매매 정보. 전용면적 84㎡, 15/25층, 방3 욕실2, 매매가 4억 5,000만원. 보물부동산에서 실매물 정보를 확인하세요.">
+
+<!-- 3) meta keywords : 네이버는 공식적으로 가중치를 크게 두지 않는다고 알려져 있으나
+        보조 신호로 소액 도움이 되어 유지 (스팸성 키워드 나열은 금지, 실제 속성값만 사용) -->
+<meta name="keywords" content="부천 아파트 매매, 중동 아파트, 래미안 부천, 부천시 원미구 아파트, 부천 부동산, 보물부동산">
+
+<!-- 4) robots : 색인 허용 + 링크 추적 허용 (비공개/거래완료 매물은 서버에서 noindex로 치환) -->
+<meta name="robots" content="index, follow">
+
+<!-- 5) canonical : 동일 매물이 쿼리스트링(정렬,필터 등)으로 여러 URL을 갖더라도
+        원본 URL 하나로 검색엔진 평가가 모이도록 지정
+        URL 규칙 : /property/view/{매물번호:property_no}/{SEO텍스트 슬러그}
+                  SEO텍스트 슬러그 = 매물명-거래유형-지역 을 공백 대신 "-"로 연결해 구성 -->
+<link rel="canonical" href="https://www.bomul-realty.co.kr/property/view/1001/래미안-부천-84A-매매-경기-부천시-원미구-중동">
+
+<!-- 6) 네이버 서치어드바이저(웹마스터도구) 소유 확인용 메타 태그
+        실제 발급받은 인증 코드로 교체 필요 -->
+<meta name="naver-site-verification" content="여기에_네이버_서치어드바이저_발급코드_입력">
+
+<!-- 7) Open Graph : 네이버/카카오/페이스북 등에서 링크 공유시 미리보기 카드에 사용.
+        og:image는 반드시 절대경로(https://) + 실제 접근 가능한 URL 이어야 함 (최소 600x400 권장) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="보물부동산">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="래미안 부천 84A 매매 4억 5,000 | 경기 부천시 원미구 중동 아파트 84㎡">
+<meta property="og:description" content="전용면적 84㎡, 15/25층, 방3 욕실2, 매매가 4억 5,000만원. 경기 부천시 원미구 중동 소재 아파트 매물입니다.">
+<meta property="og:image" content="https://picsum.photos/seed/prop1/800/600">
+<meta property="og:url" content="https://www.bomul-realty.co.kr/property/view/1001/래미안-부천-84A-매매-경기-부천시-원미구-중동">
+
+<!-- 7-1) Open Graph Product 확장 태그 : 가격을 별도 필드로 노출해 일부 플랫폼의
+          가격 리치 프리뷰에 활용 (표준 og 태그는 아니지만 부작용 없이 보조 신호로 사용) -->
+<meta property="product:price:amount" content="450000000">
+<meta property="product:price:currency" content="KRW">
+
+<!-- 8) JSON-LD 구조화 데이터 : 페이지 텍스트만으로는 기계가 읽기 어려운 속성(가격, 면적,
+        주소, 방개수 등)을 명시적 데이터로 제공. 검색엔진의 리치 결과/이해도 향상 목적.
+        schema.org RealEstateListing + BreadcrumbList 2종 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  "name": "래미안 부천 84A",
+  "description": "경기 부천시 원미구 중동 소재 아파트 매매 매물. 전용면적 84㎡, 15/25층, 방3 욕실2.",
+  "url": "https://www.bomul-realty.co.kr/property/view/1001/래미안-부천-84A-매매-경기-부천시-원미구-중동",
+  "image": ["https://picsum.photos/seed/prop1/800/600"],
+  "datePosted": "2026-07-20",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "KR",
+    "addressRegion": "경기도",
+    "addressLocality": "부천시 원미구",
+    "streetAddress": "중동"
+  },
+  "floorSize": {
+    "@type": "QuantitativeValue",
+    "value": 84,
+    "unitCode": "MTK"
+  },
+  "numberOfRooms": 3,
+  "numberOfBathroomsTotal": 2,
+  "offers": {
+    "@type": "Offer",
+    "price": 450000000,
+    "priceCurrency": "KRW",
+    "availability": "https://schema.org/InStock",
+    "url": "https://www.bomul-realty.co.kr/property/view/1001/래미안-부천-84A-매매-경기-부천시-원미구-중동"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.bomul-realty.co.kr/" },
+    { "@type": "ListItem", "position": 2, "name": "매물", "item": "https://www.bomul-realty.co.kr/property" },
+    { "@type": "ListItem", "position": 3, "name": "아파트", "item": "https://www.bomul-realty.co.kr/property?type=apt" },
+    { "@type": "ListItem", "position": 4, "name": "래미안 부천 84A", "item": "https://www.bomul-realty.co.kr/property/view/1001/래미안-부천-84A-매매-경기-부천시-원미구-중동" }
+  ]
+}
+</script>
+<!-- ==================================================================
+     [SEO / 네이버 크롤링 최적화 블록 - 끝]
+=================================================================== -->
+
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #f5f6f8;
+        font-family: "Pretendard", "Malgun Gothic", -apple-system, sans-serif;
+        color: #222;
+    }
+
+    /* ---------- header (리스트 시안과 동일 톤) ---------- */
+    .site-header { background: #fff; border-bottom: 1px solid #ececec; }
+    .site-header .inner {
+        max-width: 1180px; margin: 0 auto; padding: 18px 20px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .site-header .logo { font-size: 20px; font-weight: 800; color: #006eff; }
+    .site-header nav { display: flex; gap: 28px; font-size: 14px; color: #555; }
+    .site-header nav a { text-decoration: none; color: inherit; }
+    .site-header nav a.active { color: #006eff; font-weight: 700; }
+
+    /* ---------- breadcrumb ----------
+       주의: 아래 nav.breadcrumb는 화면에 보이는 이동경로이면서 동시에
+       위 JSON-LD BreadcrumbList와 내용이 1:1로 일치해야 함 (겉보기 텍스트와
+       구조화 데이터가 다르면 크롤러가 페이지 신뢰도를 낮게 평가할 수 있음) -->
+    .breadcrumb {
+        max-width: 1180px; margin: 18px auto 0; padding: 0 20px;
+        font-size: 12px; color: #9a9a9a;
+    }
+    .breadcrumb a { color: #9a9a9a; text-decoration: none; }
+    .breadcrumb span.sep { margin: 0 6px; }
+    .breadcrumb span.current { color: #555; }
+
+    .detail-wrap {
+        max-width: 1180px; margin: 0 auto; padding: 16px 20px 60px;
+        display: grid; grid-template-columns: 2fr 1fr; gap: 24px;
+    }
+    @media (max-width: 900px) {
+        .detail-wrap { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- gallery ---------- */
+    .gallery .main-img {
+        width: 100%; aspect-ratio: 4/3; border-radius: 8px;
+        background: #e9ecef center / cover no-repeat;
+        margin-bottom: 8px;
+    }
+    .gallery .thumb-row { display: flex; gap: 8px; overflow-x: auto; }
+    .gallery .thumb-row .thumb {
+        flex: 0 0 90px; height: 68px; border-radius: 6px;
+        background: #e9ecef center / cover no-repeat; cursor: pointer;
+        border: 2px solid transparent;
+    }
+    .gallery .thumb-row .thumb.active { border-color: #006eff; }
+
+    /* ---------- title / price card ---------- */
+    .info-card {
+        background: #fff; border: 1px solid #ececec; border-radius: 8px;
+        padding: 20px; margin-top: 18px;
+    }
+    .badges { display: flex; gap: 6px; margin-bottom: 10px; }
+    .badge {
+        font-size: 12px; font-weight: 700; color: #fff;
+        padding: 4px 9px; border-radius: 4px;
+    }
+    .badge.sale { background: #006eff; }
+    .badge.jeonse { background: #12a25d; }
+    .badge.monthly { background: #ff8a00; }
+
+    /* 매물종류(property_type) 뱃지 색상 - Property_Entity 코드값(apt/officetel/... 등) 기준 1:1 매핑
+       실서비스 전환시 class="badge type-<?=$row['property_type']?>" 형태로 그대로 사용 가능 */
+    .badge.type-apt { background: #55606b; }        /* 아파트 */
+    .badge.type-officetel { background: #7950f2; }  /* 오피스텔 */
+    .badge.type-villa { background: #099268; }      /* 빌라/연립 */
+    .badge.type-house { background: #a9610c; }      /* 단독주택 */
+    .badge.type-land { background: #66800b; }       /* 토지 */
+    .badge.type-commercial { background: #d6336c; } /* 상가 */
+    .badge.type-office { background: #3b5bdb; }     /* 사무실 */
+    .badge.type-factory { background: #495057; }    /* 공장 */
+    .badge.type-warehouse { background: #8d6748; }  /* 창고 */
+    .badge.type-knowledge { background: #0c8599; }  /* 지식산업센터 */
+    .badge.type-building { background: #343a40; }   /* 건물 */
+    .badge.type-motel { background: #e64980; }      /* 숙박시설 */
+    .badge.type-etc { background: #868e96; }        /* 기타 */
+
+    .info-card h1 {
+        font-size: 21px; margin: 0 0 6px;
+    }
+    .info-card address {
+        font-style: normal; font-size: 13px; color: #8a8a8a; margin-bottom: 14px;
+    }
+    .info-card .price {
+        font-size: 26px; font-weight: 800; color: #006eff; margin-bottom: 4px;
+    }
+    .info-card .price .sub { font-size: 13px; color: #9a9a9a; font-weight: 500; margin-left: 6px; }
+
+    .key-meta {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 0;
+        margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f1f1;
+    }
+    .key-meta div { font-size: 13px; }
+    .key-meta div b { display: block; font-size: 11px; color: #9a9a9a; font-weight: 500; margin-bottom: 2px; }
+
+    .cta-row { display: flex; gap: 8px; margin-top: 18px; }
+    .btn { flex: 1; text-align: center; padding: 12px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; }
+    .btn.primary { background: #006eff; color: #fff; }
+    .btn.secondary { background: #f1f3f5; color: #333; }
+
+    /* ---------- description ---------- */
+    .desc-card {
+        background: #fff; border: 1px solid #ececec; border-radius: 8px;
+        padding: 20px; margin-top: 18px;
+    }
+    .desc-card h2 { font-size: 15px; margin: 0 0 10px; }
+    .desc-card .summary { font-size: 14px; color: #444; margin-bottom: 14px; }
+    .desc-card .description { font-size: 13px; color: #555; line-height: 1.7; white-space: pre-line; }
+
+    .table-card {
+        background: #fff; border: 1px solid #ececec; border-radius: 8px;
+        padding: 20px; margin-top: 18px;
+    }
+    .table-card h2 { font-size: 15px; margin: 0 0 12px; }
+    .table-card table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table-card th, .table-card td { text-align: left; padding: 9px 6px; border-bottom: 1px solid #f1f1f1; }
+    .table-card th { width: 110px; color: #9a9a9a; font-weight: 500; }
+
+    /* ---------- 매물종류 뱃지 색상 가이드 (시안 참고용 - 실서비스 화면에는 미노출) ---------- */
+    .type-legend {
+        max-width: 1180px; margin: 0 auto 60px; padding: 18px 20px;
+    }
+    .type-legend .box {
+        background: #f7f8f9; border: 1px dashed #d9dcdf; border-radius: 8px; padding: 16px 18px;
+    }
+    .type-legend .box .label { font-size: 12px; color: #8a8a8a; margin-bottom: 10px; }
+    .type-legend .box .row { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="inner">
+        <div class="logo">보물부동산</div>
+        <nav>
+            <a href="#">홈</a>
+            <a href="#" class="active">매물</a>
+            <a href="#">주변시세</a>
+            <a href="#">고객후기</a>
+            <a href="#">공지사항</a>
+            <a href="#">오시는길</a>
+        </nav>
+    </div>
+</header>
+
+<!-- 화면에 보이는 이동경로 : head의 BreadcrumbList와 텍스트를 일치시킬 것 -->
+<nav class="breadcrumb">
+    <a href="#">홈</a><span class="sep">›</span>
+    <a href="#">매물</a><span class="sep">›</span>
+    <a href="#">아파트</a><span class="sep">›</span>
+    <span class="current">래미안 부천 84A</span>
+</nav>
+
+<div class="detail-wrap">
+
+    <div class="left-col">
+        <!-- ---------------------------------------------------------
+             [SEO] 대표이미지 alt / 갤러리 썸네일 alt 는 "매물명 + 지역 + 매물종류"
+             조합으로 채워 이미지 검색 유입에도 대응 (아래 main-img는 CSS background라
+             실서비스 전환시 <img alt="..."> 태그로 교체 권장)
+        ------------------------------------------------------------ -->
+        <div class="gallery">
+            <div class="main-img" style="background-image:url('https://picsum.photos/seed/prop1/800/600');" role="img" aria-label="래미안 부천 84A 경기 부천시 원미구 중동 아파트 대표사진"></div>
+            <div class="thumb-row">
+                <div class="thumb active" style="background-image:url('https://picsum.photos/seed/prop1/200/150');"></div>
+                <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop1b/200/150');"></div>
+                <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop1c/200/150');"></div>
+                <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop1d/200/150');"></div>
+                <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop1e/200/150');"></div>
+            </div>
+        </div>
+
+        <div class="desc-card">
+            <h2>매물 소개</h2>
+            <div class="summary">중동역 도보 5분, 남향 위주 판상형 구조의 인기 단지입니다.</div>
+            <div class="description">거실 확장 완료된 세대로 채광이 우수합니다.
+인근 초/중/고 도보통학 가능하며 중동근린공원이 인접해 있습니다.
+전세/대출 세팅 문의 시 상세 상담 가능합니다.</div>
+        </div>
+
+        <div class="table-card">
+            <h2>상세 정보</h2>
+            <table>
+                <tr><th>매물종류</th><td>아파트</td><th>거래방식</th><td>매매</td></tr>
+                <tr><th>공급/전용면적</th><td>109㎡ / 84㎡</td><th>층수</th><td>15층 / 25층</td></tr>
+                <tr><th>방수/욕실수</th><td>3개 / 2개</td><th>방향</th><td>남향</td></tr>
+                <tr><th>난방방식</th><td>개별난방 (도시가스)</td><th>주차</th><td>가능 (세대당 1.2대)</td></tr>
+                <tr><th>입주가능일</th><td>즉시입주</td><th>준공일</th><td>2016-11</td></tr>
+                <tr><th>관리비</th><td>15만원</td><th>융자금</th><td>없음</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="right-col">
+        <div class="info-card">
+            <div class="badges">
+                <span class="badge sale">매매</span>
+                <span class="badge type-apt">아파트</span>
+            </div>
+
+            <!-- [SEO] h1은 페이지 내 유일해야 하며 title과 핵심 키워드를 공유해야 함 -->
+            <h1>래미안 부천 84A</h1>
+            <address>경기 부천시 원미구 중동</address>
+
+            <div class="price">4억 5,000<span class="sub">만원</span></div>
+
+            <div class="key-meta">
+                <div><b>전용면적</b>84㎡</div>
+                <div><b>해당층/총층</b>15/25층</div>
+                <div><b>방/욕실</b>3 / 2</div>
+                <div><b>주차</b>가능</div>
+                <div><b>방향</b>남향</div>
+                <div><b>입주</b>즉시입주</div>
+            </div>
+
+            <div class="cta-row">
+                <button class="btn primary">전화문의</button>
+                <button class="btn secondary">찜하기</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 매물종류별 뱃지 색상 가이드 (시안 확인용) : 아파트 외 나머지 매물종류 뱃지를 한번에 비교하기 위한 참고 섹션.
+     다른 매물종류의 상세페이지 제작시 badges 영역의 class만 아래 표기대로 바꿔서 사용하면 됨 -->
+<div class="type-legend">
+    <div class="box">
+        <div class="label">매물종류별 뱃지 색상 가이드 (참고용)</div>
+        <div class="row">
+            <span class="badge type-apt">아파트</span>
+            <span class="badge type-officetel">오피스텔</span>
+            <span class="badge type-villa">빌라/연립</span>
+            <span class="badge type-house">단독주택</span>
+            <span class="badge type-land">토지</span>
+            <span class="badge type-commercial">상가</span>
+            <span class="badge type-office">사무실</span>
+            <span class="badge type-factory">공장</span>
+            <span class="badge type-warehouse">창고</span>
+            <span class="badge type-knowledge">지식산업센터</span>
+            <span class="badge type-building">건물</span>
+            <span class="badge type-motel">숙박시설</span>
+            <span class="badge type-etc">기타</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

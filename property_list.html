@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매물 리스트 시안</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #f5f6f8;
+        font-family: "Pretendard", "Malgun Gothic", -apple-system, sans-serif;
+        color: #222;
+    }
+
+    /* ---------- header ---------- */
+    .site-header {
+        background: #fff;
+        border-bottom: 1px solid #ececec;
+    }
+    .site-header .inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .site-header .logo {
+        font-size: 20px;
+        font-weight: 800;
+        color: #006eff;
+    }
+    .site-header nav {
+        display: flex;
+        gap: 28px;
+        font-size: 14px;
+        color: #555;
+    }
+    .site-header nav a {
+        text-decoration: none;
+        color: inherit;
+    }
+    .site-header nav a.active {
+        color: #006eff;
+        font-weight: 700;
+    }
+
+    /* ---------- page title ---------- */
+    .page-title-area {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 32px 20px 0;
+    }
+    .page-title-area h1 {
+        font-size: 24px;
+        margin: 0 0 4px;
+    }
+    .page-title-area p {
+        margin: 0;
+        font-size: 13px;
+        color: #8a8a8a;
+    }
+
+    /* ---------- filter bar ---------- */
+    .filter-bar {
+        max-width: 1180px;
+        margin: 20px auto 0;
+        padding: 0 20px;
+    }
+    .filter-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .filter-tabs button {
+        border: 1px solid #e3e3e3;
+        background: #fff;
+        border-radius: 20px;
+        padding: 9px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        cursor: pointer;
+    }
+    .filter-tabs button.active {
+        background: #006eff;
+        border-color: #006eff;
+        color: #fff;
+    }
+    .filter-selects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        background: #fff;
+        border: 1px solid #ececec;
+        border-radius: 8px;
+        padding: 14px;
+    }
+    .filter-selects select {
+        border: 1px solid #e3e3e3;
+        background: #f7f8f9;
+        border-radius: 4px;
+        padding: 9px 12px;
+        font-size: 13px;
+        color: #333;
+        min-width: 120px;
+    }
+    .filter-selects .spacer { flex: 1; }
+    .filter-selects .result-count {
+        align-self: center;
+        font-size: 13px;
+        color: #6b6b6b;
+    }
+    .filter-selects .result-count b {
+        color: #006eff;
+    }
+
+    /* ---------- sort row ---------- */
+    .sort-row {
+        max-width: 1180px;
+        margin: 14px auto 0;
+        padding: 0 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px;
+        font-size: 13px;
+        color: #8a8a8a;
+    }
+    .sort-row a {
+        color: #8a8a8a;
+        text-decoration: none;
+        padding: 4px 8px;
+    }
+    .sort-row a.active {
+        color: #006eff;
+        font-weight: 700;
+    }
+
+    /* ---------- property grid ---------- */
+    .property-grid {
+        max-width: 1180px;
+        margin: 12px auto 0;
+        padding: 0 20px 40px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+    @media (max-width: 1024px) {
+        .property-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+        .property-grid { grid-template-columns: repeat(2, 1fr); }
+        .filter-selects select { min-width: 100px; }
+    }
+    @media (max-width: 480px) {
+        .property-grid { grid-template-columns: 1fr; }
+    }
+
+    .property-card {
+        background: #fff;
+        border: 1px solid #ececec;
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: box-shadow .15s ease, transform .15s ease;
+    }
+    .property-card:hover {
+        box-shadow: 0 6px 18px rgba(0,0,0,.08);
+        transform: translateY(-2px);
+    }
+    .thumb {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        background: #e9ecef center / cover no-repeat;
+    }
+    .thumb .badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        padding: 4px 9px;
+        border-radius: 4px;
+    }
+    .badge.sale { background: #006eff; }
+    .badge.jeonse { background: #12a25d; }
+    .badge.monthly { background: #ff8a00; }
+
+    .thumb .type-tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 11px;
+        background: rgba(0,0,0,.55);
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 4px;
+    }
+    .thumb .no-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #b3b3b3;
+        font-size: 13px;
+    }
+
+    .card-body {
+        padding: 12px 14px 14px;
+    }
+    .card-body .price {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+    .card-body .name {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .card-body .addr {
+        font-size: 12px;
+        color: #8a8a8a;
+        margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .card-body .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        font-size: 12px;
+        color: #6b6b6b;
+        border-top: 1px solid #f1f1f1;
+        padding-top: 8px;
+    }
+    .card-body .meta span:not(:last-child)::after {
+        content: "·";
+        margin-left: 8px;
+        color: #d9d9d9;
+    }
+
+    /* ---------- pagination ---------- */
+    .pagination {
+        max-width: 1180px;
+        margin: 0 auto 60px;
+        padding: 0 20px;
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+    }
+    .pagination a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #666;
+        text-decoration: none;
+        border: 1px solid #e3e3e3;
+        background: #fff;
+    }
+    .pagination a.active {
+        background: #006eff;
+        border-color: #006eff;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    /* ---------- empty state (hidden by default, for reference) ---------- */
+    .empty-state {
+        display: none;
+        max-width: 1180px;
+        margin: 40px auto;
+        padding: 60px 20px;
+        text-align: center;
+        color: #b3b3b3;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="inner">
+        <div class="logo">보물부동산</div>
+        <nav>
+            <a href="#">홈</a>
+            <a href="#" class="active">매물</a>
+            <a href="#">주변시세</a>
+            <a href="#">고객후기</a>
+            <a href="#">공지사항</a>
+            <a href="#">오시는길</a>
+        </nav>
+    </div>
+</header>
+
+<div class="page-title-area">
+    <h1>매물 리스트</h1>
+    <p>등록된 매물 정보를 확인해보세요</p>
+</div>
+
+<div class="filter-bar">
+    <div class="filter-tabs">
+        <button class="active">전체</button>
+        <button>매매</button>
+        <button>전세</button>
+        <button>월세</button>
+    </div>
+    <div class="filter-selects">
+        <select>
+            <option>매물종류 전체</option>
+            <option>아파트</option>
+            <option>오피스텔</option>
+            <option>빌라/연립</option>
+            <option>단독주택</option>
+            <option>상가</option>
+            <option>사무실</option>
+            <option>건물</option>
+        </select>
+        <select>
+            <option>지역 전체</option>
+            <option>부천시 원미구</option>
+            <option>부천시 소사구</option>
+            <option>부천시 오정구</option>
+        </select>
+        <select>
+            <option>면적 전체</option>
+            <option>60㎡ 이하</option>
+            <option>60~85㎡</option>
+            <option>85~135㎡</option>
+            <option>135㎡ 초과</option>
+        </select>
+        <div class="spacer"></div>
+        <div class="result-count">총 <b>32</b>건의 매물</div>
+    </div>
+</div>
+
+<div class="sort-row">
+    <a href="#" class="active">최신순</a>
+    <a href="#">가격낮은순</a>
+    <a href="#">가격높은순</a>
+    <a href="#">면적순</a>
+</div>
+
+<!-- [SEO] 상세페이지 링크 URL 규칙 : /property/view/{property_no}/{SEO텍스트 슬러그}
+     SEO텍스트 슬러그 = 매물명-거래유형-지역 을 공백 대신 "-"로 연결해 구성 (property_detail.html 참고) -->
+<div class="property-grid">
+
+    <a class="property-card" href="/property/view/1001/래미안-부천-84A-매매-경기-부천시-원미구-중동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop1/400/300');">
+            <span class="badge sale">매매</span>
+            <span class="type-tag">아파트</span>
+        </div>
+        <div class="card-body">
+            <div class="price">4억 5,000</div>
+            <div class="name">래미안 부천 84A</div>
+            <div class="addr">경기 부천시 원미구 중동</div>
+            <div class="meta">
+                <span>84㎡</span>
+                <span>15/25층</span>
+                <span>방3</span>
+                <span>욕실2</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1002/힐스테이트-오피스텔-전세-경기-부천시-소사구-심곡동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop2/400/300');">
+            <span class="badge jeonse">전세</span>
+            <span class="type-tag">오피스텔</span>
+        </div>
+        <div class="card-body">
+            <div class="price">1억 8,000</div>
+            <div class="name">힐스테이트 오피스텔</div>
+            <div class="addr">경기 부천시 소사구 심곡동</div>
+            <div class="meta">
+                <span>42㎡</span>
+                <span>7/20층</span>
+                <span>방1</span>
+                <span>욕실1</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1003/그린빌라-3층-월세-경기-부천시-오정구-오정동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop3/400/300');">
+            <span class="badge monthly">월세</span>
+            <span class="type-tag">빌라/연립</span>
+        </div>
+        <div class="card-body">
+            <div class="price">보증금 2,000 / 월 55</div>
+            <div class="name">그린빌라 3층</div>
+            <div class="addr">경기 부천시 오정구 오정동</div>
+            <div class="meta">
+                <span>59㎡</span>
+                <span>3/4층</span>
+                <span>방2</span>
+                <span>욕실1</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1004/중동역-1층-상가-매매-경기-부천시-원미구-중동">
+        <div class="thumb">
+            <div class="no-image">이미지 준비중</div>
+            <span class="badge sale">매매</span>
+            <span class="type-tag">상가</span>
+        </div>
+        <div class="card-body">
+            <div class="price">3억 2,000</div>
+            <div class="name">중동역 1층 상가</div>
+            <div class="addr">경기 부천시 원미구 중동</div>
+            <div class="meta">
+                <span>36㎡</span>
+                <span>1/5층</span>
+                <span>주차가능</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1005/소사동-2층-단독주택-전세-경기-부천시-소사구-소사동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop5/400/300');">
+            <span class="badge jeonse">전세</span>
+            <span class="type-tag">단독주택</span>
+        </div>
+        <div class="card-body">
+            <div class="price">2억 6,000</div>
+            <div class="name">소사동 2층 단독주택</div>
+            <div class="addr">경기 부천시 소사구 소사동</div>
+            <div class="meta">
+                <span>112㎡</span>
+                <span>2/2층</span>
+                <span>방4</span>
+                <span>욕실2</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1006/테크노밸리-사무실-B동-월세-경기-부천시-오정구-여월동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop6/400/300');">
+            <span class="badge monthly">월세</span>
+            <span class="type-tag">사무실</span>
+        </div>
+        <div class="card-body">
+            <div class="price">보증금 1,000 / 월 80</div>
+            <div class="name">테크노밸리 사무실 B동</div>
+            <div class="addr">경기 부천시 오정구 여월동</div>
+            <div class="meta">
+                <span>66㎡</span>
+                <span>9/12층</span>
+                <span>주차가능</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1007/중동-센트럴파크뷰-33평-매매-경기-부천시-원미구-상동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop7/400/300');">
+            <span class="badge sale">매매</span>
+            <span class="type-tag">아파트</span>
+        </div>
+        <div class="card-body">
+            <div class="price">6억 1,000</div>
+            <div class="name">중동 센트럴파크뷰 33평</div>
+            <div class="addr">경기 부천시 원미구 상동</div>
+            <div class="meta">
+                <span>109㎡</span>
+                <span>21/28층</span>
+                <span>방4</span>
+                <span>욕실2</span>
+            </div>
+        </div>
+    </a>
+
+    <a class="property-card" href="/property/view/1008/부천역-푸르지오시티-전세-경기-부천시-원미구-심곡동">
+        <div class="thumb" style="background-image:url('https://picsum.photos/seed/prop8/400/300');">
+            <span class="badge jeonse">전세</span>
+            <span class="type-tag">오피스텔</span>
+        </div>
+        <div class="card-body">
+            <div class="price">1억 5,500</div>
+            <div class="name">부천역 푸르지오시티</div>
+            <div class="addr">경기 부천시 원미구 심곡동</div>
+            <div class="meta">
+                <span>33㎡</span>
+                <span>11/15층</span>
+                <span>방1</span>
+                <span>욕실1</span>
+            </div>
+        </div>
+    </a>
+
+</div>
+
+<div class="pagination">
+    <a href="#">‹</a>
+    <a href="#" class="active">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <a href="#">›</a>
+</div>
+
+<div class="empty-state">등록된 매물이 없습니다.</div>
+
+</body>
+</html>
