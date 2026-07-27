@@ -57,14 +57,12 @@ class Property extends BaseController
         $debug  = $this->request->getVar("debug");
         if($property_no!="" and $property_no>0) {
             $datas = $this->service->getbyid($property_no);
-            $data = $datas[0];
 
-            if($data['status']=="N"){
-                //삭제된 게시물
-                $oResult = AT_Result::toFailData("삭제된 매물 입니다.");
+            if(empty($datas)){
+                $oResult = AT_Result::toFailData("존재하지 않는 매물 입니다.");
             }else {
-               // $this->service->viewcount($property_no);
-
+                $data = $datas[0];
+                // 어드민 조회용 - 거래상태/노출여부 상관없이 그대로 반환
                 $oResult = AT_Result::toSuccessData("", $data);
             }
         }else {

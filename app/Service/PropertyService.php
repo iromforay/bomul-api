@@ -127,7 +127,7 @@ class PropertyService extends CI_Service
     {
         $start = ($page -1)*$perPage;
 
-        $total_count  = $this->model->get_count();
+        $total_count  = $this->model->get_count($where);
        // $this->log->info("매물 count Query : ".$this->model->getQuery());
         $row = $this->model->get_list($start,$perPage,$where);
 
@@ -136,6 +136,12 @@ class PropertyService extends CI_Service
 
         return array("total"=>$total_count, "rows"=>$row);
     }
+
+    public function viewcount($property_no)
+    {
+        return $this->model->viewcount($property_no);
+    }
+
     public function getbyid($property_no)
     {
         $row = $this->model->findbyid($property_no);
@@ -147,6 +153,7 @@ class PropertyService extends CI_Service
     }
     public function after_process($data)
     {
+        $property_list = [];
         foreach($data as $k=>$v){
             $value = $v;
             $value['direction_txt'] = $this->model->get_direction($v['direction']);

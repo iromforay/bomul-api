@@ -68,6 +68,37 @@ class PropertyModel extends CI_Model
         return $success ? true : false;
     }
 
+    // CI_Model의 제네릭 get_list/get_count는 $where를 무시하므로 오버라이드.
+    // $where는 문자열 또는 조건 문자열 배열(AND로 결합) 둘 다 허용.
+    public function get_list($start=0,$limit=0,$where="")
+    {
+        $where_sql = $this->build_where($where);
+        $_limit = ($limit>0) ? " LIMIT $start,$limit " : "";
+        $sql = "SELECT * FROM `$this->table` $where_sql ORDER BY `$this->primaryKey` DESC $_limit";
+        return $this->getExecQuery($sql);
+    }
+
+    public function get_count($where="")
+    {
+        $where_sql = $this->build_where($where);
+        $sql = "SELECT count(*) as 'cnt' FROM `$this->table` $where_sql";
+        $rows = $this->getExecQuery($sql);
+        return $rows[0]['cnt'] ?? 0;
+    }
+
+    private function build_where($where)
+    {
+        if (empty($where)) return "";
+        $conditions = is_array($where) ? $where : [$where];
+        return "WHERE ".implode(" AND ", $conditions);
+    }
+
+    public function viewcount($property_no)
+    {
+        $sql = "UPDATE `$this->table` SET view_count = view_count+1 WHERE `$this->primaryKey` = ".$this->db->escape($property_no);
+        return $this->safeExecQuery($sql);
+    }
+
     public function get_direction($direction="all")
     {
         $_direction = array(

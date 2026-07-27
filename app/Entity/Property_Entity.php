@@ -105,52 +105,54 @@ class Property_Entity extends CI_Entity
      */
     protected $attributes = [
 
-        'property_no' => null,
-        'property_type'=> null,
-        'transaction_type'=> null,
-        'property_name' => null,
-        'building_name' => null,
+        'property_no' => null,              // 매물코드
+        'property_type'=> null,             // 매물종류
+        'transaction_type'=> null,          // 거래방식(sale : 매매 , jeonse : 전세 , monthly : 월세)
+        'property_name' => null,            // 매물명
+        'building_name' => null,            // 건물명
 
-        'addr_sido' => null,
-        'addr_sigungu' => null,
-        'addr_dong' => null,
-        'addr_road' => null,
+        'addr_sido' => null,                // 시도
+        'addr_sigungu' => null,             // 시군구
+        'addr_dong' => null,                // 읍면동
+        'addr_road' => null,                // 도로명
 
-        'supply_area' => null,
-        'exclusive_area' => null,
+        'supply_area' => null,              // 공급면적(㎡)
+        'exclusive_area' => null,           // 전용면적(㎡)
 
-        'total_floor' => null,
-        'current_floor' => null,
+        'total_floor' => null,              // 총층수
+        'current_floor' => null,            // 해당층
 
-        'room_count' => null,
-        'bathroom_count' => null,
+        'room_count' => null,               // 방개수
+        'bathroom_count' => null,           // 화장실수
 
-        'parking_available' => 'Y',
-        'parking_count' => null,
+        'parking_available' => 'Y',         // 주차가능여부(Y/N)
+        'parking_count' => null,            // 총주차가능대수
 
-        'completion_date' => null,
-        'move_in_date' => null,
+        'completion_date' => null,          // 준공일
+        'move_in_date' => null,             // 입주가능일
 
-        'direction' => null,
+        'direction' => null,                // 방향
 
-        'heating_fuel' => null,
-        'heating_type' => null,
+        'heating_fuel' => null,             // 난방연료
+        'heating_type' => null,             // 난방방식
 
-        'sale_price' => null,
-        'jeonse_price' => null,
-        'deposit_price' => null,
-        'monthly_rent' => null,
-        'loan_amount' => null,
-        'maintenance_fee' => null,
+        'sale_price' => null,               // 매매가(만원)
+        'jeonse_price' => null,             // 전세가(만원)
+        'deposit_price' => null,            // 보증금(만원)
+        'monthly_rent' => null,             // 월세(만원)
+        'loan_amount' => null,              // 융자금(만원)
+        'maintenance_fee' => null,          // 관리비(만원)
 
-        'status' => 1,
-        'display_yn' => true,
+        'status' => 1,                      // 거래상태
+        'display_yn' => true,               // 홈페이지노출
 
-        'summary' => null,
-        'description' => null,
+        'summary' => null,                  // 한줄소개
+        'description' => null,              // 상세설명
 
-        'main_image' => null,
-        'main_path' => null,
+        'main_image' => null,               // 대표이미지
+        'main_path' => null,                // 대표이미지 path
+
+        'view_count' => null,               // 조회수 - admin 폼에서 안 보내는 값이라 null 유지 (0이면 수정할 때마다 초기화됨)
     ];
 
     /**
@@ -205,6 +207,8 @@ class Property_Entity extends CI_Entity
 
         'main_image' => 'string',
         'main_path' => 'string',
+
+        'view_count' => 'integer',
     ];
 
 }

@@ -87,6 +87,7 @@ class NoteService extends CI_Service
 
     public function after_process($data)
     {
+        $property_list = [];
         foreach($data as $k=>$v){
             $value = $v;
             $value['visit_type_txt'] = $this->model->get_visit_type($v['visit_type']);

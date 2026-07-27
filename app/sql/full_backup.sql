@@ -85,7 +85,7 @@ CREATE TABLE `basic` (
 /*Data for the table `basic` */
 
 insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`) values 
-(1,'foray','','로고','N','#006eff','50','#e0e0e0',NULL,'#000000','#000000','Y','Y','Y','Y','N','Y','Y','','Y','','Y','25시 부동산',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'대표이사 : 나병연 | 개인정보관리책임자 : 나병연 | 사업자등록번호 : 000-00-00000 | 주소 경기 부천시 | TEL 02-1234-5678');
+(1,'foray','','로고','N','#006eff','50','#e0e0e0',NULL,'#000000','#000000','Y','N','Y','Y','N','Y','Y','','Y','','Y','25시 부동산',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'대표이사 : 나병연 | 개인정보관리책임자 : 나병연 | 사업자등록번호 : 000-00-00000 | 주소 경기 부천시 | TEL 02-1234-5678');
 
 /*Table structure for table `board` */
 
@@ -170,37 +170,37 @@ CREATE TABLE `function_menu` (
 /*Data for the table `function_menu` */
 
 insert  into `function_menu`(`function_menu_no`,`function_menu_key`,`function_menu_name`,`function_menu_value`,`write_date`) values 
-(1,'property_name','매물명','Y','2026-07-08 04:56:44'),
-(2,'building_name','건물명','Y','2026-07-08 04:56:44'),
-(3,'addr_sido','시도','Y','2026-07-08 04:56:44'),
-(4,'addr_sigungu','시군구','Y','2026-07-08 04:56:44'),
-(5,'addr_dong','읍면동','Y','2026-07-08 04:56:44'),
-(6,'addr_road','도로명','Y','2026-07-08 04:56:44'),
-(7,'supply_area','공급면적','Y','2026-07-08 04:56:44'),
-(8,'exclusive_area','전용면적','Y','2026-07-08 04:56:44'),
-(9,'total_floors','총층수','Y','2026-07-08 04:56:44'),
-(10,'current_floor','해당층','Y','2026-07-08 04:56:44'),
-(11,'room_count','방개수','Y','2026-07-08 04:56:44'),
-(12,'bathroom_count','화장실수','Y','2026-07-08 04:56:44'),
-(13,'parking_available','주차가능여부','Y','2026-07-08 04:56:44'),
-(14,'parking_count','총주차가능대수','Y','2026-07-08 04:56:44'),
-(15,'completion_date','준공일','Y','2026-07-08 04:56:44'),
-(16,'move_in_date','입주가능일','Y','2026-07-08 04:56:44'),
-(17,'direction','방향','Y','2026-07-08 04:56:44'),
-(18,'heating_fuel','난방연료','Y','2026-07-08 04:56:44'),
-(19,'heating_type','난방방식','Y','2026-07-08 04:56:44'),
-(20,'sale_price','매매가','Y','2026-07-08 04:56:44'),
-(21,'jeonse_price','전세가','Y','2026-07-08 04:56:44'),
-(22,'deposit_price','보증금','Y','2026-07-08 04:56:44'),
-(23,'monthly_rent','월세','Y','2026-07-08 04:56:44'),
-(24,'loan_amount','융자금','Y','2026-07-08 04:56:44'),
-(25,'maintenance_fee','관리비','Y','2026-07-08 04:56:44'),
+(1,'property_name','매물명','N','2026-07-08 04:56:44'),
+(2,'building_name','건물명','N','2026-07-08 04:56:44'),
+(3,'addr_sido','시도','N','2026-07-08 04:56:44'),
+(4,'addr_sigungu','시군구','N','2026-07-08 04:56:44'),
+(5,'addr_dong','읍면동','N','2026-07-08 04:56:44'),
+(6,'addr_road','도로명','N','2026-07-08 04:56:44'),
+(7,'supply_area','공급면적','N','2026-07-08 04:56:44'),
+(8,'exclusive_area','전용면적','N','2026-07-08 04:56:44'),
+(9,'total_floors','총층수','N','2026-07-08 04:56:44'),
+(10,'current_floor','해당층','N','2026-07-08 04:56:44'),
+(11,'room_count','방개수','N','2026-07-08 04:56:44'),
+(12,'bathroom_count','화장실수','N','2026-07-08 04:56:44'),
+(13,'parking_available','주차가능여부','N','2026-07-08 04:56:44'),
+(14,'parking_count','총주차가능대수','N','2026-07-08 04:56:44'),
+(15,'completion_date','준공일','N','2026-07-08 04:56:44'),
+(16,'move_in_date','입주가능일','N','2026-07-08 04:56:44'),
+(17,'direction','방향','N','2026-07-08 04:56:44'),
+(18,'heating_fuel','난방연료','N','2026-07-08 04:56:44'),
+(19,'heating_type','난방방식','N','2026-07-08 04:56:44'),
+(20,'sale_price','매매가','N','2026-07-08 04:56:44'),
+(21,'jeonse_price','전세가','N','2026-07-08 04:56:44'),
+(22,'deposit_price','보증금','N','2026-07-08 04:56:44'),
+(23,'monthly_rent','월세','N','2026-07-08 04:56:44'),
+(24,'loan_amount','융자금','N','2026-07-08 04:56:44'),
+(25,'maintenance_fee','관리비','N','2026-07-08 04:56:44'),
 (26,'status','거래상태','Y','2026-07-08 04:56:44'),
-(27,'display_yn','홈페이지노출','Y','2026-07-08 04:56:44'),
-(28,'summary','한줄소개','Y','2026-07-08 04:56:44'),
-(29,'description','상세설명','Y','2026-07-08 04:56:44'),
-(30,'thumbnail_image','대표이미지','Y','2026-07-08 04:56:44'),
-(31,'detail_images','추가이미지','Y','2026-07-08 04:56:44');
+(27,'display_yn','홈페이지노출','N','2026-07-08 04:56:44'),
+(28,'summary','한줄소개','N','2026-07-08 04:56:44'),
+(29,'description','상세설명','N','2026-07-08 04:56:44'),
+(30,'thumbnail_image','대표이미지','N','2026-07-08 04:56:44'),
+(31,'detail_images','추가이미지','N','2026-07-08 04:56:44');
 
 /*Table structure for table `img` */
 
@@ -247,13 +247,17 @@ CREATE TABLE `memo` (
   `parent_table` varchar(100) DEFAULT NULL COMMENT '연결대상 테이블명 (예: note)',
   `parent_no` int(10) unsigned DEFAULT NULL COMMENT '연결대상 PK',
   `writer_no` int(10) unsigned DEFAULT NULL COMMENT '작성자 (member.member_no)',
+  `writer_name` varchar(32) DEFAULT NULL COMMENT '작성자명',
   `memo_text` text DEFAULT NULL COMMENT '메모 내용',
   `write_date` datetime DEFAULT NULL COMMENT '메모등록일',
   PRIMARY KEY (`memo_no`),
   KEY `idx_parent` (`parent_table`,`parent_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='메모 (1:N, 상담노트 등에서 사용)';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='메모 (1:N, 상담노트 등에서 사용)';
 
 /*Data for the table `memo` */
+
+insert  into `memo`(`memo_no`,`parent_table`,`parent_no`,`writer_no`,`writer_name`,`memo_text`,`write_date`) values 
+(1,'note',1,NULL,NULL,'foray','2026-07-24 08:25:12');
 
 /*Table structure for table `menu` */
 
@@ -288,7 +292,7 @@ DROP TABLE IF EXISTS `note`;
 
 CREATE TABLE `note` (
   `note_no` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '노트번호',
-  `agent_no` int(10) unsigned NOT NULL COMMENT '접수자(담당 중개사, member.member_no)',
+  `agent_no` int(10) unsigned DEFAULT NULL COMMENT '접수자(담당 중개사, member.member_no)',
   `property_no` int(10) unsigned DEFAULT NULL COMMENT '관심매물 (property.property_no)',
   `visitor_name` varchar(50) NOT NULL COMMENT '방문자명',
   `visitor_phone` varchar(20) NOT NULL COMMENT '방문자 연락처',
@@ -307,9 +311,13 @@ CREATE TABLE `note` (
   KEY `idx_property` (`property_no`),
   KEY `idx_status` (`status`),
   KEY `idx_visit_date` (`visit_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='고객노트(방문일지)';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='고객노트(방문일지)';
 
 /*Data for the table `note` */
+
+insert  into `note`(`note_no`,`agent_no`,`property_no`,`visitor_name`,`visitor_phone`,`visit_type`,`transaction_type`,`budget`,`preferred_area`,`inflow_type`,`status`,`visit_date`,`next_contact_date`,`created_at`,`updated_at`) values 
+(1,0,0,'foray','010-1234-5678','tenant','sale\n',3000,'서울 동작구','visit','conulting','2026-07-24 00:00:00','2026-07-27','2026-07-24 08:13:18','2026-07-24 08:13:18'),
+(2,0,0,'foray','010-1234-5678','tenant','sale\n',3000,'서울 동작구','visit','conulting','2026-07-24 00:00:00','2026-07-27','2026-07-24 08:14:35','2026-07-24 08:14:35');
 
 /*Table structure for table `pager_detail` */
 
@@ -447,7 +455,7 @@ CREATE TABLE `property` (
   KEY `idx_sale_price` (`sale_price`),
   KEY `idx_jeonse_price` (`jeonse_price`),
   KEY `idx_monthly_rent` (`monthly_rent`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_nopad_ci COMMENT='매물 정보';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_nopad_ci COMMENT='매물 정보';
 
 /*Data for the table `property` */
 
@@ -462,7 +470,8 @@ insert  into `property`(`property_no`,`property_type`,`transaction_type`,`proper
 (14,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:56:04','2026-07-23 03:56:04'),
 (15,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:09:11','2026-07-23 04:09:11'),
 (16,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:13:06','2026-07-23 04:13:06'),
-(17,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,'2d2ea918023d17aead7e5829ef2a9fa2.png','foray/property/17/',0,'2026-07-23 04:14:37','2026-07-23 06:18:11');
+(17,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,'2d2ea918023d17aead7e5829ef2a9fa2.png','foray/property/17/',0,'2026-07-23 04:14:37','2026-07-23 06:18:11'),
+(18,'apt','sale','ㅂㅇㄹ',NULL,'서울','영등포구','대림동','서울 영등포구 가마산로 311',0,0,0,0,0,0,'Y',0,'2026-07-27 02:02:28','2026-07-27 02:02:28','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-27 02:02:28','2026-07-27 02:02:28');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

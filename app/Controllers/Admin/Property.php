@@ -134,6 +134,12 @@ class Property extends BaseController
         return $missing;
     }
 
+    /*preflight*/
+    public function optionsUpload_images()
+    {
+        return $this;
+    }
+
     public function postUpload_images()
     {
         $file = $_FILES['image'] ?? null;
