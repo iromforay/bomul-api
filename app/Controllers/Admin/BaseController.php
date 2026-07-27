@@ -53,19 +53,11 @@ abstract class BaseController extends Controller
         header('Access-Control-Max-Age: 86400');
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         header('Access-Control-Allow-Headers: Origin, Content-Type, X-Requested-With, Authorization');
-        header('Access-Control-Allow-Credentials: true');
 
         return $this;
     }
     public function is_auth()
     {
-        //CORS 헤더 설정
-        header('Access-Control-Allow-Origin: *' );
-        header('Access-Control-Max-Age: 86400');
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Origin, Content-Type, X-Requested-With, Authorization');
-        header('Access-Control-Allow-Credentials: true');
-
         $session_id = $_SERVER['HTTP_AUTHORIZATION']??"";
         $session_id = str_replace("Bearer ","",$session_id);
 

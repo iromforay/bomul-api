@@ -21,7 +21,6 @@ abstract class BaseController extends Controller
         header('Access-Control-Max-Age: 86400');
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         header('Access-Control-Allow-Headers: Origin, Content-Type, X-Requested-With, Authorization');
-        header('Access-Control-Allow-Credentials: true');
 
         $this->layout="/layout/default";
 
