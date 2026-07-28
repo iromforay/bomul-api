@@ -80,7 +80,7 @@ class LoginModel extends CI_Model
         $sql = "SELECT * FROM bomul.`member` WHERE user_id = ".$this->db->escape($user_id);
         $rows = $this->getExecQuery($sql);
 
-        if($rows[0]['member_no']>0){
+        if(isset($rows[0]['member_no']) && $rows[0]['member_no']>0){
             return AT_Result::toSuccessData("",$rows[0]);
         }else{
             return AT_Result::toFailData("존재하지 않는 ID 입니다.");
