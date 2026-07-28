@@ -22,7 +22,7 @@ class BaseController extends Controller
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         header('Access-Control-Allow-Headers: Origin, Content-Type, X-Requested-With, Authorization');
         header('Access-Control-Allow-Credentials: true');
-
+//dd(SITE);
         $this->get_header();
         $this->body();
         return $this;

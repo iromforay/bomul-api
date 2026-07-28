@@ -49,6 +49,7 @@ class Basic extends BaseController
         $data['sub_menu_focus_color'] = $this->request->getVar("sub_menu_color");
         $data['menu_back_color'] = $this->request->getVar("menu_back_color");
         $data['menu_back_transparent'] = $this->request->getVar("menu_back_transparent");
+        $data['property_show'] = $this->request->getVar("property_show");
         $data['notice_show'] = $this->request->getVar("notice_show");
         $data['around_show'] = $this->request->getVar("around_show");
         $data['charge_show'] = $this->request->getVar("charge_show");

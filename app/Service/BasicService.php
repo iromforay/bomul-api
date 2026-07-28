@@ -160,6 +160,7 @@ class BasicService extends CI_Service
         $this->entity->setReviewShow($data['review_show']);
         $this->entity->setVodShow($data['vod_show']);
         $this->entity->setMapShow($data['map_show']);
+        $this->entity->setPropertyShow($data['property_show']);
 
         return $this;
 

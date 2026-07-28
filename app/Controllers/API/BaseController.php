@@ -29,10 +29,10 @@ abstract class BaseController extends Controller
 
         $this->layout="/layout/default";
         $this->session_id = $_SERVER['HTTP_AUTHORIZATION']??"";
-        $SHOP_CODE = str_replace("Bearer ","",$this->session_id);
+        $this->session_id = str_replace("Bearer ","",$this->session_id);
 
-        define('SHOP_CODE', $SHOP_CODE); //상점코드 - help 아이디
-
+        // SHOP_CODE는 여기서 직접 정의하지 않음 - Admin과 동일하게 BasicService(CI_Service)가
+        // login_session 테이블에서 토큰과 매칭되는 fid(shop_code)를 조회해서 정의하도록 위임
         $this->check_service_status();
         $this->set_domain();
         return $this;
@@ -42,7 +42,7 @@ abstract class BaseController extends Controller
     {
         if($this->session_id !="") {
             $log=$this->getMonoLog("api");
-            $BasicService = new BasicService($log, SHOP_CODE);
+            $BasicService = new BasicService($log, $this->session_id); // 토큰 -> login_session 조회 -> SHOP_CODE 정의
             $status = $BasicService->get_service_status(SHOP_CODE);
 
             $log->info("[REV] SHOP_CODE : ".SHOP_CODE." status : ".$status);

@@ -67,6 +67,12 @@ abstract class BaseController extends Controller
         }else if($session_id!=""){
             $this->session_id = $session_id;
             new CI_Service($session_id);
+
+            // 토큰이 login_session에 매칭 안 되면 SHOP_CODE가 정의되지 않은 채로 통과되니 여기서 명시적으로 거부
+            if (!defined('SHOP_CODE') || SHOP_CODE == "") {
+                echo AT_Result::toFailJson("잘못된 접근입니다.", "INVALID_TOKEN");
+                exit;
+            }
             return $this;
         }else{
             echo AT_Result::toFailJson("서비스 세팅중입니다. 세팅 완료후 이용가능합니다.","NOT_SERVICE");

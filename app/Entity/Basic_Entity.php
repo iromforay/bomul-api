@@ -16,6 +16,7 @@ class Basic_Entity
     private $menu_bg_transparent;
     private $main_menu_color;
     private $sub_menu_focus_color;
+    private $property_show;
     private $notice_show;
     private $around_show;
     private $charge_show;
@@ -51,6 +52,22 @@ class Basic_Entity
     public function setBasicNo($basic_no): void
     {
         $this->basic_no = $basic_no;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPropertyShow()
+    {
+        return $this->property_show;
+    }
+
+    /**
+     * @param mixed $property_show
+     */
+    public function setPropertyShow($property_show): void
+    {
+        $this->property_show = $property_show;
     }
 
     /**
