@@ -168,8 +168,28 @@ class PropertyService extends CI_Service
             if(!empty($v['main_image']) && !empty($v['main_path'])) {
                 $value['main_image_url'] = SITE_PDS.rtrim($v['main_path'], '/')."/".$v['main_image'];
             }
+            $value['url_slug'] = $this->build_url_slug($value);
             $property_list[$k] =  $value;
         }
         return $property_list;
+    }
+
+    // 공개 웹 상세보기 URL 뒤에 붙는 장식용 슬러그(지역+거래방식+금액). 라우팅엔 쓰이지 않음.
+    private function build_url_slug($row)
+    {
+        switch ($row['transaction_type']) {
+            case 'sale':
+                $price = number_format($row['sale_price']).'만원';
+                break;
+            case 'jeonse':
+                $price = number_format($row['jeonse_price']).'만원';
+                break;
+            case 'monthly':
+                $price = number_format($row['monthly_rent']).'만원';
+                break;
+            default:
+                $price = '';
+        }
+        return trim($row['addr_dong'].' '.($row['transaction_type_txt'] ?: $row['transaction_type']).' '.$price);
     }
 }

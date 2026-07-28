@@ -32,7 +32,7 @@
             <?php else: ?>
                 <div class="property_list">
                     <?php foreach ($rows as $row): ?>
-                        <a class="property_card" href="/property/view/<?= $row['property_no'] ?>">
+                        <a class="property_card" href="/property/view/<?= $row['property_no'] ?>/<?= rawurlencode($row['url_slug']) ?>">
                             <div class="thumb"<?= !empty($row['main_image_url']) ? " style=\"background-image:url('".$row['main_image_url']."')\"" : "" ?>>
                                 <?= empty($row['main_image_url']) ? '이미지 없음' : '' ?>
                             </div>
