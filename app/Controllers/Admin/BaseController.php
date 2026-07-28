@@ -1,6 +1,6 @@
 <?php
 
-namespace App\w\Admin;
+namespace App\Controllers\Admin;
 
 use App\Libraries\AT_Result;
 use App\Service\CI_Service;
