@@ -1,22 +1,6 @@
 <!-- CSS -->
-<link rel="stylesheet" href="<?= RS_CSS ?>/property/style.css?var=<?=FRESH_TIME?>">
-
-<style>
-/* property/style.css가 아직 없을 경우를 대비한 기본 스타일 */
-.property_list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;padding:20px 0;}
-.property_card{display:block;border:1px solid #e4e7ec;border-radius:10px;overflow:hidden;text-decoration:none;color:#16181d;background:#fff;transition:box-shadow .15s ease;}
-.property_card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);}
-.property_card .thumb{width:100%;aspect-ratio:4/3;background:#f2f4f7 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:#9aa1ac;font-size:13px;}
-.property_card .body{padding:14px 16px;}
-.property_card .type{display:inline-block;font-size:11px;font-weight:700;color:#006eff;background:#eaf2ff;border-radius:5px;padding:2px 8px;margin-bottom:8px;}
-.property_card h3{font-size:16px;font-weight:700;margin:0 0 6px;}
-.property_card .addr{font-size:12.5px;color:#6b7280;margin:0 0 10px;}
-.property_card .price{font-size:15px;font-weight:800;color:#16181d;}
-.property_empty{padding:60px 0;text-align:center;color:#9aa1ac;}
-.property_paging{display:flex;justify-content:center;gap:6px;padding:24px 0;}
-.property_paging a{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border:1px solid #e4e7ec;border-radius:7px;color:#6b7280;text-decoration:none;font-size:13px;}
-.property_paging a.on{background:#eaf2ff;color:#006eff;border-color:transparent;font-weight:700;}
-</style>
+<link rel="stylesheet"  href="<?= RS_CSS ?>/property/style.css?var=<?=FRESH_TIME?>">
+<script  src="<?= RS_JS ?>/property/index.js?var=<?=FRESH_TIME?>"></script>
 
 <div class="App">
     <!-- section -->

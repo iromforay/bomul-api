@@ -1,24 +1,6 @@
 <!-- CSS -->
-<link rel="stylesheet" href="<?= RS_CSS ?>/property/style.css">
-
-<style>
-.property_view{padding:20px 0 60px;}
-.property_view .gallery{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:24px;}
-.property_view .gallery .main{aspect-ratio:4/3;background:#f2f4f7 center/cover no-repeat;border-radius:10px;}
-.property_view .gallery .thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.property_view .gallery .thumbs div{aspect-ratio:1/1;background:#f2f4f7 center/cover no-repeat;border-radius:8px;}
-.property_view .type{display:inline-block;font-size:12px;font-weight:700;color:#006eff;background:#eaf2ff;border-radius:5px;padding:3px 10px;margin-bottom:10px;}
-.property_view h1{font-size:24px;font-weight:800;margin:0 0 6px;}
-.property_view .addr{font-size:14px;color:#6b7280;margin:0 0 16px;}
-.property_view .price{font-size:22px;font-weight:800;color:#16181d;margin-bottom:24px;}
-.property_view .info_grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 12px;border-top:1px solid #e4e7ec;border-bottom:1px solid #e4e7ec;padding:20px 0;margin-bottom:24px;}
-.property_view .info_grid dt{font-size:12px;color:#9aa1ac;margin-bottom:4px;}
-.property_view .info_grid dd{font-size:14px;font-weight:700;margin:0;}
-.property_view .summary{font-size:15px;font-weight:600;margin-bottom:12px;}
-.property_view .desc{font-size:14px;line-height:1.7;color:#333;margin-bottom:32px;}
-.property_view .btn_con{text-align:center;}
-.property_view .btn_con a{display:inline-block;padding:10px 24px;border:1px solid #e4e7ec;border-radius:8px;color:#16181d;text-decoration:none;font-size:14px;}
-</style>
+<link rel="stylesheet" href="<?= RS_CSS ?>/property/style.css?var=<?=FRESH_TIME?>">
+<script  src="<?= RS_JS ?>/property/index.js?var=<?=FRESH_TIME?>"></script>
 
 <div class="App">
     <!-- section -->

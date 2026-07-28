@@ -19,7 +19,7 @@
 
 </style>
 <link rel="stylesheet" href="<?=RS_CSS?>/common/style.css?var=<?=FRESH_TIME?>" >
-<script src="<?=RS_TH?>/jquery3.7/jquery-3.7.0.min.js"></script>
+
 <script src="<?=RS_JS?>/common/index.js?var=<?=FRESH_TIME?>"></script>
 
 <!-- Font Awesome :: Start -->
@@ -32,7 +32,8 @@
 <link rel="stylesheet" href="<?= RS_CSS ?>/slick-theme.css">
 
 <!-- jQuery -->
-<script src="<?= RS_JS ?>/jquery-3.7.1.min.js"></script>
+<script src="<?=RS_TH?>/jquery3.7/jquery-3.7.0.min.js"></script>
+
 
 <!-- Slick JS -->
 <script src="<?= RS_JS ?>/slick.min.js"></script>

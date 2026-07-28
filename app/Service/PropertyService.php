@@ -190,6 +190,6 @@ class PropertyService extends CI_Service
             default:
                 $price = '';
         }
-        return trim($row['addr_dong'].' '.($row['transaction_type_txt'] ?: $row['transaction_type']).' '.$price);
+        return trim($row['addr_dong'].' '.($row['transaction_type_txt'] ?: $row['transaction_type'])); // 가격은 매칭율 저하로 제거
     }
 }

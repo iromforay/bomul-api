@@ -50,6 +50,7 @@ class BasicModel extends CI_Model
         ! is_null($entity->getReviewShow())             ?    $set[] = "`review_show`=".             $this->db->escape($entity->getReviewShow())         : "";
         ! is_null($entity->getVodShow())                ?    $set[] = "`vod_show`=".                $this->db->escape($entity->getVodShow())            : "";
         ! is_null($entity->getMapShow())                ?    $set[] = "`map_show`=".                $this->db->escape($entity->getMapShow())            : "";
+        ! is_null($entity->getPropertyShow())           ?    $set[] = "`property_show`=".           $this->db->escape($entity->getPropertyShow())       : "";
 
         ! is_null($entity->getLinkMenuShow())           ?    $set[] = "`link_menu_show`=".          $this->db->escape($entity->getLinkMenuShow())       : "";
 

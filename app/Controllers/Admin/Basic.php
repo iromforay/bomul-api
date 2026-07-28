@@ -98,7 +98,7 @@ class Basic extends BaseController
     private function validate_required($data)
     {
         $required = [
-            'company_name'       => '상호명',
+          //  'company_name'       => '상호명',
             'broker_office_name' => '중개사무소 명칭',
             'broker_address'     => '중개사무소 소재지',
             'broker_phone'       => '중개사무소 연락처',
