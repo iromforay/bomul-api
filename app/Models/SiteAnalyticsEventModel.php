@@ -38,4 +38,21 @@ class SiteAnalyticsEventModel extends CI_Model
         }
         return $event_no;
     }
+
+    // 새벽 배치(AnalyticsAggregateService)용 - 특정 날짜의 행동 이벤트 집계.
+    public function getDailyEventStats($date)
+    {
+        $escDate = $this->db->escape($date);
+
+        $sql = "
+            SELECT
+                SUM(CASE WHEN event_type = 'pageview' THEN 1 ELSE 0 END) AS pageview_count,
+                SUM(CASE WHEN event_type = 'click' AND click_action = 'tel' THEN 1 ELSE 0 END) AS phone_click_count
+            FROM ".$this->table."
+            WHERE DATE(occurred_at) = $escDate
+            ";
+        $rows = $this->getExecQuery($sql);
+
+        return $rows[0] ?? [];
+    }
 }

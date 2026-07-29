@@ -58,4 +58,30 @@ class SiteAnalyticsVisitModel extends CI_Model
         }
         return $rows[0]['visit_id'] ?? null;
     }
+
+    // 새벽 배치(AnalyticsAggregateService)용 - 특정 날짜의 방문 단위 집계 한 방에 계산.
+    // 네이버 판별은 넓게 잡는 원칙(app/sql/site_analytics.sql 상단 주석 참고): referrer_url이
+    // naver.com/naver.me 서브도메인 전부 매칭 + utm_source=naver 보완.
+    public function getDailyVisitorStats($date)
+    {
+        $escDate = $this->db->escape($date);
+
+        $sql = "
+            SELECT
+                COUNT(*) AS visitor_count,
+                SUM(CASE WHEN is_returning = 'N' THEN 1 ELSE 0 END) AS new_visitor_count,
+                SUM(CASE WHEN is_returning = 'Y' THEN 1 ELSE 0 END) AS returning_visitor_count,
+                SUM(CASE
+                        WHEN referrer_url LIKE '%naver.com%' OR referrer_url LIKE '%naver.me%' OR utm_source = 'naver'
+                        THEN 1 ELSE 0
+                    END) AS naver_referral_count,
+                SUM(CASE WHEN referrer_url IS NULL OR referrer_url = '' THEN 1 ELSE 0 END) AS direct_referral_count,
+                SUM(CASE WHEN user_agent LIKE '%Mobile%' THEN 1 ELSE 0 END) AS mobile_count
+            FROM ".$this->table."
+            WHERE DATE(occurred_at) = $escDate
+            ";
+        $rows = $this->getExecQuery($sql);
+
+        return $rows[0] ?? [];
+    }
 }

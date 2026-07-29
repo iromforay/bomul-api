@@ -28,7 +28,8 @@
 -- 방문(세션) - 방문 1회당 1행, 이후 UPDATE 없음
 -- ============================================================
 CREATE TABLE `site_analytics_visit` (
-  `visit_id` VARCHAR(64) NOT NULL COMMENT '클라이언트 발급 방문 식별키 (UUID)',
+  `visit_id` VARCHAR(64) NOT NULL COMMENT '서버 발급 방문 식별키',
+  `client_key` VARCHAR(64) DEFAULT NULL COMMENT 'FE 자체 발급 임시키. visit_id 응답 전 페이지 이동 시 중복 신규등록 방지용',
 
   `occurred_at` DATETIME NOT NULL COMMENT '최초 진입시각',
 
@@ -47,6 +48,7 @@ CREATE TABLE `site_analytics_visit` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수집(적재)시각',
 
   PRIMARY KEY (`visit_id`),
+  UNIQUE KEY `uk_client_key` (`client_key`),
   KEY `idx_occurred_at` (`occurred_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 방문(세션) 단위 원본 수집';
 
@@ -76,3 +78,58 @@ CREATE TABLE `site_analytics_event` (
   KEY `idx_occurred_at` (`occurred_at`),
   KEY `idx_property_no` (`property_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 행동 이벤트 원본 (append-only)';
+
+-- ============================================================
+-- 아래부터는 위 원본 수집 테이블과 반대로 "가공된 일별 집계" 테이블이다.
+--
+-- 왜 필요한가: site_analytics_event는 계속 쌓이기만 하는 시계열 테이블이라
+-- "이번 달 추이" 같은 실시간 GROUP BY 쿼리는 시간이 지날수록 스캔 범위가
+-- 계속 늘어난다. 새벽 배치가 원본을 하루 단위로 미리 집계해서 여기 넣어두면,
+-- 대시보드는 원본을 조회하지 않고 이 테이블만 날짜 범위로 읽는다 - 조회 비용이
+-- 원본 누적량과 무관하게 "조회하는 날짜 수"에만 비례하게 된다.
+--
+-- 네이버 유입 판별 규칙(배치 스크립트에서 사용, 넓게 잡는 원칙):
+--   referrer_url LIKE '%naver.com%' OR referrer_url LIKE '%naver.me%' OR utm_source = 'naver'
+--   (검색/블로그/카페/지도/부동산/예약 등 naver.com 서브도메인 전부 포함,
+--    naver.me는 카카오톡/문자 공유용 네이버 단축링크)
+-- ============================================================
+
+-- ============================================================
+-- 사이트 종합 일별 통계 - 1행/일, 새벽 배치가 매일 INSERT
+-- ============================================================
+CREATE TABLE `site_analytics_daily_stats` (
+  `stat_date` DATE NOT NULL COMMENT '집계 대상 날짜',
+
+  `visitor_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '고유 방문자수 (그날 visit_id 수)',
+  `pageview_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '페이지뷰수 (pageview 이벤트 수)',
+  `new_visitor_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '신규 방문자수 (is_returning=N)',
+  `returning_visitor_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '재방문자수 (is_returning=Y)',
+
+  `naver_referral_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '네이버 유입 방문자수 (판별 규칙은 위 주석 참고)',
+  `direct_referral_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '직접 유입 (referrer_url 없음)',
+  `other_referral_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '기타 유입 (네이버/직접 외)',
+
+  `pc_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'PC 방문자수 (user_agent 기준)',
+  `mobile_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '모바일 방문자수 (user_agent 기준)',
+
+  `phone_click_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '전화클릭 수 (click_action=tel)',
+
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '배치 적재시각',
+
+  PRIMARY KEY (`stat_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 사이트 종합 일별 집계 (새벽 배치 생성)';
+
+-- ============================================================
+-- 매물별 일별 통계 - 1행/매물/일, 새벽 배치가 매일 INSERT
+-- ============================================================
+CREATE TABLE `property_analytics_daily` (
+  `stat_date` DATE NOT NULL COMMENT '집계 대상 날짜',
+  `property_no` INT UNSIGNED NOT NULL COMMENT 'property.property_no',
+
+  `view_count` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '그날 조회수 (pageview 이벤트 수)',
+  `avg_dwell_ms` INT UNSIGNED DEFAULT NULL COMMENT '그날 평균 체류시간(ms), dwell 이벤트 기준',
+
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '배치 적재시각',
+
+  PRIMARY KEY (`stat_date`, `property_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 매물별 일별 집계 (새벽 배치 생성)';

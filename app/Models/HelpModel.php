@@ -34,4 +34,13 @@ class HelpModel  extends CI_Model
         return $rows[0]??array();
         exit;
     }
+
+    // 새벽 배치(app/batch/analy.php)가 순회할 대상 - service='Y'인(서비스 이용중인) 중개사의 fid 전체.
+    // BasicService::352에서 로그인 게이트로 쓰는 것과 동일한 컬럼/조건.
+    public function get_active_fids()
+    {
+        $sql = "SELECT fid FROM bomul.member WHERE service = 'Y'";
+        $rows = $this->getExecQuery($sql);
+        return array_column($rows, 'fid');
+    }
 }
