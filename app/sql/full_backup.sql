@@ -59,12 +59,13 @@ CREATE TABLE `basic` (
   `menu_bg_transparent` varchar(10) DEFAULT NULL,
   `main_menu_color` varchar(20) DEFAULT NULL,
   `sub_menu_focus_color` varchar(20) DEFAULT NULL,
-  `notice_show` varchar(10) DEFAULT NULL,
-  `around_show` varchar(10) DEFAULT NULL,
-  `charge_show` varchar(10) DEFAULT NULL,
-  `review_show` varchar(10) DEFAULT NULL,
-  `vod_show` varchar(10) DEFAULT NULL,
-  `map_show` varchar(10) DEFAULT NULL,
+  `property_show` varchar(10) DEFAULT 'Y' COMMENT '매물보기',
+  `notice_show` varchar(10) DEFAULT 'Y',
+  `around_show` varchar(10) DEFAULT 'Y',
+  `charge_show` varchar(10) DEFAULT 'Y',
+  `review_show` varchar(10) DEFAULT 'Y',
+  `vod_show` varchar(10) DEFAULT 'Y',
+  `map_show` varchar(10) DEFAULT 'Y',
   `link_menu_show` varchar(10) DEFAULT NULL,
   `naver_reserve` varchar(255) DEFAULT NULL,
   `naver_reserve_show` varchar(10) DEFAULT NULL,
@@ -84,8 +85,8 @@ CREATE TABLE `basic` (
 
 /*Data for the table `basic` */
 
-insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`) values 
-(1,'foray','','로고','N','#006eff','50','#e0e0e0',NULL,'#000000','#000000','Y','N','Y','Y','N','Y','Y','','Y','','Y','25시 부동산',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'대표이사 : 나병연 | 개인정보관리책임자 : 나병연 | 사업자등록번호 : 000-00-00000 | 주소 경기 부천시 | TEL 02-1234-5678');
+insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`property_show`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`) values 
+(1,'foray','','로고','N','#006eff','50','#e0e0e0',NULL,'#000000','#000000','Y','Y','N','Y','Y','Y','N','Y','','Y','','Y','25시 부동산','중개사무소 명칭 테스트','서울 동작구','02-1234-5678','000-00-00000','foray','foray','02-1234-5678','대표이사 : 나병연 | 개인정보관리책임자 : 나병연 | 사업자등록번호 : 000-00-00000 | 주소 경기 부천시 | TEL 02-1234-5678');
 
 /*Table structure for table `board` */
 
@@ -196,8 +197,8 @@ insert  into `function_menu`(`function_menu_no`,`function_menu_key`,`function_me
 (24,'loan_amount','융자금','N','2026-07-08 04:56:44'),
 (25,'maintenance_fee','관리비','N','2026-07-08 04:56:44'),
 (26,'status','거래상태','Y','2026-07-08 04:56:44'),
-(27,'display_yn','홈페이지노출','N','2026-07-08 04:56:44'),
-(28,'summary','한줄소개','N','2026-07-08 04:56:44'),
+(27,'display_yn','홈페이지노출','Y','2026-07-08 04:56:44'),
+(28,'summary','한줄소개','Y','2026-07-08 04:56:44'),
 (29,'description','상세설명','N','2026-07-08 04:56:44'),
 (30,'thumbnail_image','대표이미지','N','2026-07-08 04:56:44'),
 (31,'detail_images','추가이미지','N','2026-07-08 04:56:44');
@@ -214,14 +215,24 @@ CREATE TABLE `img` (
   `img_dir` varchar(255) DEFAULT NULL,
   `write_date` datetime DEFAULT NULL,
   PRIMARY KEY (`img_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 /*Data for the table `img` */
 
 insert  into `img`(`img_no`,`parent_table`,`parent_no`,`img_name`,`img_dir`,`write_date`) values 
 (3,'property',17,'9ad37ee9301db5ac9fd56817332256c7.png','foray/property/17/','2026-07-23 07:09:47'),
 (4,'property',17,'dc1cef4c8acd604b4ad800b88269dff7.png','foray/property/17/','2026-07-23 07:09:47'),
-(5,'property',17,'fc5c09f9b4ea7356a0623e88f2ef86c3.png','foray/property/17/','2026-07-23 07:09:47');
+(5,'property',17,'fc5c09f9b4ea7356a0623e88f2ef86c3.png','foray/property/17/','2026-07-23 07:09:47'),
+(6,'property',19,'d81121ac4d4f5115237d9f14e944e9aa.png','foray/property/19/','2026-07-27 13:23:13'),
+(7,'property',19,'103bd7944070f8b01cea76f66dbc8e7b.png','foray/property/19/','2026-07-27 13:23:13'),
+(8,'property',19,'63051b66c1824fac2c3d5b8d19fc94f9.png','foray/property/19/','2026-07-27 13:23:13'),
+(9,'property',19,'d12d9c81821ff1762561607a43b2539a.png','foray/property/19/','2026-07-27 13:23:13'),
+(10,'property',19,'d5bd3f22748d79f49b10c34bbc169431.png','foray/property/19/','2026-07-27 13:23:13'),
+(11,'property',19,'9e352f52484d090dba6993564141ee82.png','foray/property/19/','2026-07-27 13:23:13'),
+(12,'property',19,'89bddaaf01f85f38e55c946355175879.png','foray/property/19/','2026-07-27 13:23:13'),
+(13,'property',19,'ad764b684ce0e502dbcd5b3d9d9e64ef.png','foray/property/19/','2026-07-27 13:23:13'),
+(14,'property',19,'87cb56fd5eb512b10cbb74c5cd697eef.png','foray/property/19/','2026-07-27 13:23:13'),
+(15,'property',19,'c35c90a57a7ee3968c1530b85d14d159.png','foray/property/19/','2026-07-27 13:23:13');
 
 /*Table structure for table `login_session` */
 
@@ -274,17 +285,19 @@ CREATE TABLE `menu` (
   `bgcolor_show` varchar(10) DEFAULT NULL,
   `write_date` datetime DEFAULT NULL,
   PRIMARY KEY (`menu_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 /*Data for the table `menu` */
 
 insert  into `menu`(`menu_no`,`name`,`code`,`bgcolor`,`transparent`,`title`,`title_show`,`bgcolor_show`,`write_date`) values 
 (1,'메인','main','#bc2020','46','<h5>타이틀문구&nbsp;- 보이는 매물</h5>','Y','N',NULL),
-(2,'공지사항','notice','#de0d0d','29',NULL,NULL,NULL,NULL),
-(3,'둘러보기','around',NULL,NULL,NULL,NULL,NULL,NULL),
+(2,'공지사항','notice','#de0d0d','42',NULL,NULL,NULL,NULL),
+(3,'둘러보기','around','#000000','50',NULL,'N',NULL,NULL),
 (4,'이용요금','charge','#000000','60',NULL,'N',NULL,NULL),
 (5,'후기','review','#000000','62',NULL,'N',NULL,NULL),
-(6,'오시는길','map','#000000','36',NULL,NULL,NULL,NULL);
+(6,'오시는길','map','#000000','36',NULL,NULL,NULL,NULL),
+(7,'홍보영상','vod','#000000','0',NULL,'N','N',NULL),
+(8,'매물관리','property','#427cf0','0',NULL,'N','N',NULL);
 
 /*Table structure for table `note` */
 
@@ -455,7 +468,7 @@ CREATE TABLE `property` (
   KEY `idx_sale_price` (`sale_price`),
   KEY `idx_jeonse_price` (`jeonse_price`),
   KEY `idx_monthly_rent` (`monthly_rent`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_nopad_ci COMMENT='매물 정보';
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_nopad_ci COMMENT='매물 정보';
 
 /*Data for the table `property` */
 
@@ -471,7 +484,66 @@ insert  into `property`(`property_no`,`property_type`,`transaction_type`,`proper
 (15,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:09:11','2026-07-23 04:09:11'),
 (16,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:13:06','2026-07-23 04:13:06'),
 (17,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,'2d2ea918023d17aead7e5829ef2a9fa2.png','foray/property/17/',0,'2026-07-23 04:14:37','2026-07-23 06:18:11'),
-(18,'apt','sale','ㅂㅇㄹ',NULL,'서울','영등포구','대림동','서울 영등포구 가마산로 311',0,0,0,0,0,0,'Y',0,'2026-07-27 02:02:28','2026-07-27 02:02:28','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-27 02:02:28','2026-07-27 02:02:28');
+(18,'apt','sale','ㅂㅇㄹ',NULL,'서울','영등포구','대림동','서울 영등포구 가마산로 311',0,0,0,0,0,0,'Y',0,'2026-07-27 02:02:28','2026-07-27 02:02:28','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-27 02:02:28','2026-07-27 02:02:28'),
+(19,'apt','sale','사진 test',NULL,'경남','창녕군','반포리','경남 창녕군 남지읍 골담실길 16',0,0,0,0,0,0,'Y',0,'2026-07-27 13:23:13','2026-07-27 13:23:13','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,'a1c96fcdd536eb0304df01dbac0174c9.png','foray/property/19/',14,'2026-07-27 13:23:13','2026-07-28 08:56:10'),
+(20,'officetel','monthly','사진 상세 테스트',NULL,'서울','강남구','신사동','서울 강남구 가로수길 5',2,0,0,0,0,0,'Y',0,'2026-07-27 00:00:00','2026-07-27 00:00:00','S',1,1,30000,0,5000,20,0,15,2,1,'한줄소개 테스트','<p>상세설명 테스트</p>',NULL,NULL,23,'2026-07-27 17:48:40','2026-07-29 04:02:37');
+
+/*Table structure for table `site_analytics_event` */
+
+DROP TABLE IF EXISTS `site_analytics_event`;
+
+CREATE TABLE `site_analytics_event` (
+  `event_no` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '이벤트번호',
+  `visit_id` varchar(64) NOT NULL COMMENT '소속 방문 (site_analytics_visit.visit_id)',
+  `event_type` varchar(16) NOT NULL COMMENT '이벤트종류 (pageview/dwell/click)',
+  `occurred_at` datetime NOT NULL COMMENT '발생시각 (클라이언트 기준)',
+  `page_type` varchar(32) DEFAULT NULL COMMENT '요청 처리한 페이지종류 (home/list/detail/notice 등, 코드상 직접 결정되는 값)',
+  `property_no` int(10) unsigned DEFAULT NULL COMMENT '매물 상세 조회시 property.property_no',
+  `request_url` varchar(500) DEFAULT NULL COMMENT '요청 URL 원본 (쿼리스트링 포함)',
+  `dwell_ms` int(10) unsigned DEFAULT NULL COMMENT '체류시간(ms), event_type=dwell 일 때만 사용',
+  `click_action` varchar(32) DEFAULT NULL COMMENT '클릭행동 (tel/favorite/share 등), event_type=click 일 때만 사용',
+  `search_filter` text DEFAULT NULL COMMENT '검색 필터 입력값 원본(JSON), 검색/목록 페이지에서만 사용',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT '수집(적재)시각',
+  PRIMARY KEY (`event_no`),
+  KEY `idx_visit_id` (`visit_id`),
+  KEY `idx_event_type` (`event_type`),
+  KEY `idx_occurred_at` (`occurred_at`),
+  KEY `idx_property_no` (`property_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 행동 이벤트 원본 (append-only)';
+
+/*Data for the table `site_analytics_event` */
+
+insert  into `site_analytics_event`(`event_no`,`visit_id`,`event_type`,`occurred_at`,`page_type`,`property_no`,`request_url`,`dwell_ms`,`click_action`,`search_filter`,`created_at`) values 
+(1,'79d1967707a0d88f16d855de1c4cd850','pageview','2026-07-29 13:02:34','property',20,'/property/view/20/%EC%8B%A0%EC%82%AC%EB%8F%99%20%EC%9B%94%EC%84%B8',0,NULL,NULL,'2026-07-29 04:02:37'),
+(2,'79d1967707a0d88f16d855de1c4cd850','dwell','2026-07-29 13:02:35','property',20,'/property/view/20/%EC%8B%A0%EC%82%AC%EB%8F%99%20%EC%9B%94%EC%84%B8',1163,NULL,NULL,'2026-07-29 04:02:38');
+
+/*Table structure for table `site_analytics_visit` */
+
+DROP TABLE IF EXISTS `site_analytics_visit`;
+
+CREATE TABLE `site_analytics_visit` (
+  `visit_id` varchar(64) NOT NULL COMMENT '클라이언트 발급 방문 식별키 (UUID)',
+  `client_key` varchar(64) DEFAULT NULL COMMENT 'FE 자체 발급 임시키. visit_id 응답 전 페이지 이동 시 중복 신규등록 방지용',
+  `occurred_at` datetime NOT NULL COMMENT '최초 진입시각',
+  `ip` varchar(45) DEFAULT NULL COMMENT '접속 IP 원본 (IPv4/IPv6). region 변환은 별도 단계',
+  `referrer_url` varchar(500) DEFAULT NULL COMMENT 'HTTP Referer 원본. 유입경로 분류는 별도 단계',
+  `utm_source` varchar(100) DEFAULT NULL COMMENT 'UTM 파라미터 원본 - 유입채널 (예: naver, kakao)',
+  `utm_medium` varchar(100) DEFAULT NULL COMMENT 'UTM 파라미터 원본 - 매체 (예: cpc, banner)',
+  `utm_campaign` varchar(100) DEFAULT NULL COMMENT 'UTM 파라미터 원본 - 캠페인명',
+  `user_agent` varchar(255) DEFAULT NULL COMMENT 'User-Agent 원본. 기기/브라우저 판별은 별도 단계',
+  `viewport_w` smallint(5) unsigned DEFAULT NULL COMMENT '뷰포트 가로(px)',
+  `viewport_h` smallint(5) unsigned DEFAULT NULL COMMENT '뷰포트 세로(px)',
+  `is_returning` varchar(1) DEFAULT NULL COMMENT '재방문여부 Y/N (쿠키/localStorage 존재 여부 그대로)',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT '수집(적재)시각',
+  PRIMARY KEY (`visit_id`),
+  UNIQUE KEY `uk_client_key` (`client_key`),
+  KEY `idx_occurred_at` (`occurred_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 방문(세션) 단위 원본 수집';
+
+/*Data for the table `site_analytics_visit` */
+
+insert  into `site_analytics_visit`(`visit_id`,`client_key`,`occurred_at`,`ip`,`referrer_url`,`utm_source`,`utm_medium`,`utm_campaign`,`user_agent`,`viewport_w`,`viewport_h`,`is_returning`,`created_at`) values 
+('79d1967707a0d88f16d855de1c4cd850',NULL,'2026-07-29 13:02:34','114.201.4.34','http://foray.bomul.co.kr/property',NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0',883,616,'N','2026-07-29 04:02:37');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

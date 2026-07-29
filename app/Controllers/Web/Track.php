@@ -26,14 +26,22 @@ use Monolog\Logger;
  * FE가 발급받은 visit_id를 sessionStorage에 저장해두고, 같은 세션 동안(홈→목록→상세 이동해도)
  * 계속 재사용해서 매 요청에 실어보낸다. 그래야 방문 여정(퍼널) 추적이 가능하다.
  *
- * 수집 흐름 (footer.php에 들어갈 JS 쪽, 아직 미구현):
+ * 수집 흐름 (footer.php + track.js):
  *   1. 페이지 로드 시 sessionStorage에 visit_id 있는지 확인
  *   2. 없으면(신규 방문) visit_id 없이 pageview 이벤트 전송 → 이 컨트롤러가 새로 발급해서 응답으로 내려줌
  *      → FE는 응답받은 visit_id를 sessionStorage에 저장
  *   3. 있으면 그 visit_id를 그대로 실어서 pageview(페이지 이동)/dwell(이탈시)/click(클릭시) 전송
  *   4. dwell은 폴링(setInterval) 없이 `visibilitychange`(hidden)/`pagehide` 이벤트 시점에만 전송
  *      (dwell_ms는 FE가 진입~이탈 시각차를 직접 계산해서 실어보냄 - 서버는 그냥 저장만 함)
- *   5. 모든 전송은 `navigator.sendBeacon()` (unload 중에도 유실 없이 fire-and-forget)
+ *   5. 모든 전송은 `navigator.sendBeacon()` (unload 중에도 유실 없이 fire-and-forget).
+ *      단, 신규 방문의 첫 pageview만 응답(visit_id)을 읽어야 해서 fetch를 쓴다 (아래 client_key 참고)
+ *
+ * client_key - visit_id 응답 전 페이지 이동 대응:
+ *   2번 응답을 받기 전에 FE가 페이지를 이동하면, 다음 페이지도 여전히 visit_id가 없어 또 신규로
+ *   잡힐 수 있다. 그래서 FE는 visit_id가 없는 동안 자신이 즉시 생성해 sessionStorage에 박아둔
+ *   client_key를 매 요청에 같이 실어보낸다(같은 세션이면 항상 같은 값). 서버는 client_key에 건
+ *   UNIQUE 인덱스로 중복 신규등록을 걸러내고 기존 visit_id를 재사용한다 (TrackService::collect()
+ *   / resolveVisitId() 참고). visit_id가 응답으로 확정되면 그 뒤로 client_key는 더 보내지 않는다.
  *
  * referrer_url / user_agent / ip 를 누가 채우는가:
  *   - ip, user_agent: 이 컨트롤러가 이 요청 자체에서 직접 읽는다 (아래 postCollect 참고).
@@ -48,9 +56,19 @@ use Monolog\Logger;
  * region(GeoIP)/referrer_source(naver 분류)/device_type(web/mobile 분류) 같은 가공값은
  * 저장하지 않는다 - 원본만 저장, 분류는 이후 조회/배치 단계 몫 (site_analytics.sql 헤더 참고).
  *
+ * 완료된 것:
+ *   - JS 수집 스크립트: public/resources/js/common/track.js (정적 파일) - visit_id 발급/보관,
+ *     pagehide/visibilitychange 기반 dwell, sendBeacon 전송까지 구현됨.
+ *     common/footer.php가 페이지별 값(page_type/property_no/referrer)을 BOMUL_TRACK_CONFIG로
+ *     심어준 뒤 track.js를 include한다 (정적 파일이라 PHP 값을 직접 embed할 수 없어서 분리).
+ *     click 수집은 data-track-click 속성 위임 방식 - 현재는 footer의 예약하기/카톡채널추가
+ *     버튼에만 붙어있음. 다른 클릭 포인트(매물 전화/찜 등) 생기면 같은 속성만 추가하면 됨.
+ *   - Entity: SiteAnalyticsVisit_Entity / SiteAnalyticsEvent_Entity. Service->Model 전달은
+ *     다른 기능들과 동일하게 배열이 아닌 Entity 객체로 한다(TrackService::collect() 참고).
+ *     단, visit_id는 auto_increment PK가 아닌 클라이언트 발급 값이라 SiteAnalyticsVisitModel::
+ *     register()는 toSqlSet()에서 primary_key를 제외하지 않는다 - 다른 register()들과 다른 점.
+ *
  * 아직 안 만든 것:
- *   - footer.php에 들어갈 실제 JS 수집 스크립트
- *   - Entity (지시받은 것만 생성하기로 합의 - 이 컨트롤러/서비스/모델은 배열을 그대로 사용)
  *   - GeoIP 배치, 일/월 집계 테이블(site_analytics_daily_stats 등) - 수집과는 별개 작업
  *
  * Web\BaseController를 상속하지 않은 이유:
@@ -88,6 +106,7 @@ class Track extends Controller
     {
         $data = [
             'visit_id'    => $this->request->getVar('visit_id'),
+            'client_key'  => $this->request->getVar('client_key'), // visit_id 없을 때만 사용 (중복 신규등록 방지)
             'event_type'  => $this->request->getVar('event_type'), // pageview / dwell / click
             'occurred_at' => $this->request->getVar('occurred_at'),
 

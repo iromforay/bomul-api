@@ -2,37 +2,60 @@
 
 namespace App\Models;
 
+use App\Entity\SiteAnalyticsVisit_Entity;
+
 class SiteAnalyticsVisitModel extends CI_Model
 {
+    private $log;
+
     public function __construct($dbs)
     {
         parent::__construct($dbs, "site_analytics_visit", "visit_id");
         return $this;
     }
 
-    // 방문(세션) 1회 = 1행. 이후 이 행에 대한 UPDATE는 없음 (append-only, insert-once).
-    // 엔티티 없이 배열을 직접 받는다 (entity 생성은 지시받은 것만 - 진행 중 합의사항).
-    public function sql_save($data)
+    public function getLog($log)
     {
-        $osql = " INSERT INTO `$this->table` SET
-                        `visit_id`=%s, `occurred_at`=%s, `ip`=%s,
-                        `referrer_url`=%s, `utm_source`=%s, `utm_medium`=%s, `utm_campaign`=%s,
-                        `user_agent`=%s, `viewport_w`=%s, `viewport_h`=%s, `is_returning`=%s
-                ";
-        $sql = sprintf($osql,
-            $this->db->escape($data['visit_id'] ?? null),
-            $this->db->escape($data['occurred_at'] ?? null),
-            $this->db->escape($data['ip'] ?? null),
-            $this->db->escape($data['referrer_url'] ?? null),
-            $this->db->escape($data['utm_source'] ?? null),
-            $this->db->escape($data['utm_medium'] ?? null),
-            $this->db->escape($data['utm_campaign'] ?? null),
-            $this->db->escape($data['user_agent'] ?? null),
-            $this->db->escape($data['viewport_w'] ?? null),
-            $this->db->escape($data['viewport_h'] ?? null),
-            $this->db->escape($data['is_returning'] ?? null)
-        );
+        $this->log = $log;
+        return $this;
+    }
 
-        return $this->safeExecQuery($sql);
+    // 방문(세션) 1회 = 1행. 이후 이 행에 대한 UPDATE는 없음 (append-only, insert-once).
+    // visit_id는 auto_increment가 아닌 서버 발급 PK라 toSqlSet()에서 제외하면 안 됨
+    // (다른 register()들과 달리 primary_key 인자를 넘기지 않는 이유).
+    //
+    // INSERT IGNORE를 쓰는 이유: visit_id 응답 전에 FE가 페이지를 이동하면 같은 client_key로
+    // "신규 방문" 요청이 두 번 들어올 수 있다(TrackService::collect() 참고). client_key에 UNIQUE
+    // 인덱스가 걸려있어 두 번째 INSERT는 자동으로 무시되고, affectedRows로 그걸 구분한다
+    // - 반환값 true=이번 요청으로 새로 등록됨, false=이미 존재(중복 or 실패, 호출부에서
+    //   getVisitIdByClientKey()로 기존 visit_id를 다시 조회해야 함).
+    public function register(SiteAnalyticsVisit_Entity $entity)
+    {
+        $value = $entity->toSqlSet($this);
+
+        $sql = "
+            INSERT IGNORE INTO ".$this->table."
+            SET
+            $value
+            ";
+        $this->safeExecQuery($sql);
+
+        $inserted = $this->getAffectedRows() > 0;
+        if (isset($this->log)) {
+            $this->log->info("[visit register] inserted=".var_export($inserted, true)." dbError=".var_export($this->getDbError(), true));
+        }
+        return $inserted;
+    }
+
+    // register()가 false(=client_key 중복)를 반환했을 때만 호출 - 먼저 등록된 visit_id를 조회.
+    public function getVisitIdByClientKey($client_key)
+    {
+        $sql = "SELECT visit_id FROM ".$this->table." WHERE client_key = ".$this->db->escape($client_key)." LIMIT 1";
+        $rows = $this->getExecQuery($sql);
+
+        if (isset($this->log)) {
+            $this->log->info("[visit lookup by client_key] client_key=".var_export($client_key, true)." result=".var_export($rows, true));
+        }
+        return $rows[0]['visit_id'] ?? null;
     }
 }

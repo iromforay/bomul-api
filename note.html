@@ -187,7 +187,14 @@
     gap: 4px;
     font-size: 12px;
     color: var(--text-muted);
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
   }
+  .memo-count:hover { background: var(--surface-sunken); color: var(--accent); }
   .memo-count svg { width: 13px; height: 13px; opacity: 0.7; }
 
   .row-actions { display: flex; gap: 6px; justify-content: center; }
@@ -206,71 +213,67 @@
   }
   .page-btn.active { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
 
-  /* ---- 노트 상세 / 메모 슬라이드오버 ---- */
-  .overlay {
+  /* 노트 등록/수정은 note_register.html, 상세페이지 전체 정보는 note_detail.html 참고.
+     이 팝업은 리스트에서 메모만 빠르게 보고/남기기 위한 용도. */
+  .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(15, 17, 22, 0.42);
     display: none;
-    align-items: stretch;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
     z-index: 50;
+    padding: 24px;
   }
-  .overlay.open { display: flex; }
+  .modal-overlay.open { display: flex; }
 
-  .drawer {
-    width: min(460px, 100%);
+  .memo-modal {
+    width: min(480px, 100%);
+    max-height: min(600px, 100%);
     background: var(--surface);
-    height: 100%;
-    box-shadow: -12px 0 32px rgba(0,0,0,0.18);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
     display: flex;
     flex-direction: column;
-    animation: slidein 0.18s ease;
+    animation: popin 0.15s ease;
   }
-  @keyframes slidein { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes popin { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-  .drawer-head {
-    padding: 20px 22px 16px;
+  .memo-modal-head {
+    padding: 18px 20px 14px;
     border-bottom: 1px solid var(--border);
     display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
   }
-  .drawer-title { font-size: 18px; font-weight: 800; margin: 0 0 4px; }
-  .drawer-phone { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-  .drawer-close {
+  .memo-modal-head h2 { font-size: 16px; font-weight: 800; margin: 0 0 3px; }
+  .memo-modal-head .phone { font-size: 12.5px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .memo-modal-head .head-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+  .memo-modal-head .detail-link { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 700; white-space: nowrap; }
+  .memo-modal-close {
     border: none; background: var(--surface-sunken); color: var(--text-muted);
-    width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 15px; flex: 0 0 auto;
+    width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 14px; flex: 0 0 auto;
   }
 
-  .drawer-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px 18px; padding: 16px 22px; border-bottom: 1px solid var(--border); font-size: 13px;
-  }
-  .drawer-grid dt { color: var(--text-faint); font-size: 11.5px; margin-bottom: 2px; }
-  .drawer-grid dd { margin: 0; font-weight: 600; }
-
-  .memo-wrap { padding: 18px 22px; flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .memo-wrap h3 { font-size: 14px; font-weight: 800; margin: 0 0 12px; }
-  .memo-thread { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
-
-  .memo-item { display: flex; gap: 10px; }
-  .memo-avatar {
-    width: 28px; height: 28px; border-radius: 50%;
+  .memo-modal-body { padding: 16px 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; min-height: 80px; }
+  .memo-modal .memo-item { display: flex; gap: 10px; }
+  .memo-modal .memo-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
     background: var(--accent-soft); color: var(--accent);
     display: flex; align-items: center; justify-content: center;
-    font-size: 11.5px; font-weight: 800; flex: 0 0 auto;
+    font-size: 11px; font-weight: 800; flex: 0 0 auto;
   }
-  .memo-bubble { background: var(--surface-sunken); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-size: 13px; line-height: 1.55; }
-  .memo-byline { display: flex; gap: 8px; align-items: baseline; margin-bottom: 3px; }
-  .memo-writer { font-size: 12.5px; font-weight: 700; }
-  .memo-time { font-size: 10.5px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+  .memo-modal .memo-bubble { background: var(--surface-sunken); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-size: 13px; line-height: 1.55; }
+  .memo-modal .memo-byline { display: flex; gap: 8px; align-items: baseline; margin-bottom: 3px; }
+  .memo-modal .memo-writer { font-size: 12.5px; font-weight: 700; }
+  .memo-modal .memo-time { font-size: 10.5px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+  .memo-modal .memo-empty { font-size: 13px; color: var(--text-faint); margin: 0; }
 
-  .memo-form { display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 14px; }
-  .memo-form textarea {
+  .memo-modal-form { display: flex; gap: 8px; border-top: 1px solid var(--border); padding: 14px 20px; }
+  .memo-modal-form textarea {
     flex: 1; font-family: inherit; font-size: 13px; color: var(--text);
     background: var(--surface-sunken); border: 1px solid var(--border); border-radius: 8px;
     padding: 9px 11px; resize: none; min-height: 40px; max-height: 100px; line-height: 1.5;
   }
-  .memo-form textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
-  .memo-form button { flex: 0 0 auto; }
+  .memo-modal-form textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+  .memo-modal-form button { flex: 0 0 auto; align-self: flex-end; }
 </style>
 </head>
 <body>
@@ -323,7 +326,7 @@
       <input class="text-input" type="text" placeholder="연락처">
       <button class="btn btn-muted" type="button">검색</button>
       <button class="btn btn-muted" type="button">초기화</button>
-      <button class="btn btn-primary" type="button">노트 등록</button>
+      <a class="btn btn-primary" href="note_register.html">노트 등록</a>
     </div>
 
     <table>
@@ -352,9 +355,9 @@
   </div>
 </div>
 
-<!-- 노트 상세 / 메모 슬라이드오버 -->
-<div class="overlay" id="overlay">
-  <div class="drawer" id="drawer"></div>
+<!-- 리스트에서 메모만 빠르게 보고/등록하는 레이어 팝업 (전체 정보는 note_detail.html) -->
+<div class="modal-overlay" id="memoModalOverlay">
+  <div class="memo-modal" id="memoModal"></div>
 </div>
 
 <script>
@@ -404,16 +407,16 @@
         '<tr>' +
           '<td>' + n.note_no + '</td>' +
           '<td><span class="tag ' + VISIT_TAG[n.visit_type] + '">' + VISIT_LABEL[n.visit_type] + '</span></td>' +
-          '<td class="col-visitor">' + n.visitor_name + '<span class="phone">' + n.visitor_phone + '</span></td>' +
+          '<td class="col-visitor"><a href="note_detail.html?note_no=' + n.note_no + '" style="color:inherit;text-decoration:none;">' + n.visitor_name + '</a><span class="phone">' + n.visitor_phone + '</span></td>' +
           '<td>' + TXN_LABEL[n.transaction_type] + '</td>' +
           '<td class="col-area">' + n.property_name + '</td>' +
           '<td class="col-area">' + n.preferred_area + '</td>' +
           '<td><span class="pill ' + STATUS_PILL[n.status] + '">' + STATUS_LABEL[n.status] + '</span></td>' +
-          '<td><span class="memo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4z"/></svg>' + n.memos.length + '</span></td>' +
+          '<td><button type="button" class="memo-count" onclick="openMemoPopup(' + n.note_no + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4z"/></svg>' + n.memos.length + '</button></td>' +
           '<td class="col-date">' + n.visit_date + '</td>' +
           '<td class="col-date">' + n.created_at + '</td>' +
           '<td><div class="row-actions">' +
-            '<button class="btn btn-muted" type="button" onclick="openDrawer(' + n.note_no + ')">글수정</button>' +
+            '<a class="btn btn-muted" href="note_register.html?note_no=' + n.note_no + '">글수정</a>' +
             '<button class="btn btn-muted" type="button" onclick="if(confirm(\'삭제하시겠습니까?\')) this.closest(\'tr\').remove();">글삭제</button>' +
           '</div></td>' +
         '</tr>'
@@ -423,16 +426,13 @@
 
   function initials(name) { return name ? name.slice(-2) : '?'; }
 
-  function openDrawer(note_no) {
-    var n = notes.find(function (x) { return x.note_no === note_no; });
-    if (!n) return;
-
+  function renderMemoModal(n) {
     var memosHtml = n.memos.length
       ? n.memos.map(function (m) {
           return (
             '<div class="memo-item">' +
               '<div class="memo-avatar">' + initials(m.name) + '</div>' +
-              '<div>' +
+              '<div style="flex:1;">' +
                 '<div class="memo-bubble">' +
                   '<div class="memo-byline"><span class="memo-writer">' + m.name + '</span><span class="memo-time">' + m.write_date + '</span></div>' +
                   m.memo +
@@ -441,47 +441,48 @@
             '</div>'
           );
         }).join('')
-      : '<p style="font-size:13px;color:var(--text-faint);margin:0;">아직 등록된 메모가 없습니다.</p>';
+      : '<p class="memo-empty">아직 등록된 메모가 없습니다.</p>';
 
-    document.getElementById('drawer').innerHTML =
-      '<div class="drawer-head">' +
-        '<div><h2 class="drawer-title">' + n.visitor_name + '</h2><div class="drawer-phone">' + n.visitor_phone + '</div></div>' +
-        '<button class="drawer-close" type="button" onclick="closeDrawer()">✕</button>' +
+    document.getElementById('memoModal').innerHTML =
+      '<div class="memo-modal-head">' +
+        '<div><h2>' + n.visitor_name + '</h2><div class="phone">' + n.visitor_phone + '</div></div>' +
+        '<div class="head-actions">' +
+          '<a class="detail-link" href="note_detail.html?note_no=' + n.note_no + '">상세보기 →</a>' +
+          '<button class="memo-modal-close" type="button" onclick="closeMemoPopup()">✕</button>' +
+        '</div>' +
       '</div>' +
-      '<dl class="drawer-grid">' +
-        '<dt>방문형태</dt><dd>' + VISIT_LABEL[n.visit_type] + '</dd>' +
-        '<dt>거래방식</dt><dd>' + TXN_LABEL[n.transaction_type] + '</dd>' +
-        '<dt>관심매물</dt><dd>' + n.property_name + '</dd>' +
-        '<dt>희망지역</dt><dd>' + n.preferred_area + '</dd>' +
-        '<dt>방문예정일</dt><dd>' + n.visit_date + '</dd>' +
-        '<dt>접수자</dt><dd>' + n.agent_name + '</dd>' +
-      '</dl>' +
-      '<div class="memo-wrap">' +
-        '<h3>상담 메모 (' + n.memos.length + ')</h3>' +
-        '<div class="memo-thread" id="memoThread">' + memosHtml + '</div>' +
-        '<form class="memo-form" id="memoForm">' +
-          '<textarea placeholder="메모를 입력하세요" required></textarea>' +
-          '<button class="btn btn-primary" type="submit" style="margin-left:0;">등록</button>' +
-        '</form>' +
-      '</div>';
+      '<div class="memo-modal-body" id="memoModalBody">' + memosHtml + '</div>' +
+      '<form class="memo-modal-form" id="memoModalForm">' +
+        '<textarea placeholder="메모를 입력하세요" required></textarea>' +
+        '<button class="btn btn-primary" type="submit">등록</button>' +
+      '</form>';
 
-    document.getElementById('memoForm').addEventListener('submit', function (e) {
+    document.getElementById('memoModalForm').addEventListener('submit', function (e) {
       e.preventDefault();
       var ta = e.target.querySelector('textarea');
       var text = ta.value.trim();
       if (!text) return;
       n.memos.push({ name: 'foray', write_date: new Date().toISOString().slice(0, 16).replace('T', ' '), memo: text });
-      openDrawer(note_no);
+      renderMemoModal(n);
+      renderRows(); // 리스트의 메모 카운트도 갱신
+      document.getElementById('memoModalBody').scrollTop = document.getElementById('memoModalBody').scrollHeight;
     });
-
-    document.getElementById('overlay').classList.add('open');
   }
 
-  function closeDrawer() {
-    document.getElementById('overlay').classList.remove('open');
+  function openMemoPopup(note_no) {
+    var n = notes.find(function (x) { return x.note_no === note_no; });
+    if (!n) return;
+    renderMemoModal(n);
+    document.getElementById('memoModalOverlay').classList.add('open');
   }
-  document.getElementById('overlay').addEventListener('click', function (e) {
-    if (e.target === this) closeDrawer();
+  function closeMemoPopup() {
+    document.getElementById('memoModalOverlay').classList.remove('open');
+  }
+  document.getElementById('memoModalOverlay').addEventListener('click', function (e) {
+    if (e.target === this) closeMemoPopup();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMemoPopup();
   });
 
   Array.prototype.forEach.call(document.querySelectorAll('.status-tab'), function (tab) {

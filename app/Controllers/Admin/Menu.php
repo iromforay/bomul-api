@@ -56,6 +56,11 @@ class Menu extends BaseController
         if($code=="property"){
             $rows = $this->property_service->get_list();
             $oResult = AT_Result::toSuccessData("",$rows);
+            $data = $oResult['RECORD']['rows'];
+
+            $oResult = $this->service->getBycode($code);
+            $oResult['RECORD']['data'] = $data;
+
         }elseif($code =="button") $oResult=$this->service->getButton_menu();
         elseif ($code=="map"){
             $oResult=$this->service->getLocation($this->session_id);
@@ -72,12 +77,6 @@ class Menu extends BaseController
             $file = $_FILES['file'];
         }else $file=null;
 
-        if ($this->request->getVar("code") =="property"){
-            $post = $this->request->getPost();
-            $oResult = $this->FMservice->save($post);
-            $this->view($oResult);
-            exit;
-        }
 
         $data['name']=$this->request->getVar("name");
         $data['code']=$this->request->getVar("code");
@@ -88,6 +87,12 @@ class Menu extends BaseController
         $data['bgcolor_show']=$this->request->getVar("bgcolor_show");
 
         $oResult = $this->service->edit($data,$file); //추가는 안되고, 기존 메뉴 수정만 가능
+
+        /*if ($data['code'] =="property"){ //FunctionMenu/save_property 에서 처리중.
+            $post = $this->request->getPost();
+            $oResult_1 = $this->FMservice->save($post);
+        }*/
+
         //오시는길설정에는 위치정보 추가 정보도 함께 등록(수정).
         if($data['code'] =="map"){
             $this->add_service = new AddMenuService($this->log,$this->session_id);
