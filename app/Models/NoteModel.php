@@ -20,6 +20,22 @@ class NoteModel extends CI_Model
         return $this;
     }
 
+    // 부모 CI_Model::get_list()는 $start>0 일 때만 LIMIT을 붙여서 1페이지(start=0)에서
+    // 전체 행이 다 나오는 버그가 있음(PropertyModel과 동일 이유로 오버라이드).
+    public function get_list($start=0,$limit=0)
+    {
+        $_limit = ($limit>0) ? " LIMIT $start,$limit " : "";
+        $sql = "SELECT * FROM `$this->table` ORDER BY `$this->primaryKey` DESC $_limit";
+        return $this->getExecQuery($sql);
+    }
+
+    public function get_count()
+    {
+        $sql = "SELECT count(*) as 'cnt' FROM `$this->table`";
+        $rows = $this->getExecQuery($sql);
+        return $rows[0]['cnt'] ?? 0;
+    }
+
     public function register(Note_Entity $entity)
     {
         $value = $entity->toSqlSet($this,$this->primaryKey);

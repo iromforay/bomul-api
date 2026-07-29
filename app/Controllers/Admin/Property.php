@@ -50,27 +50,6 @@ class Property extends BaseController
     * $block_size : 페이지 블럭사이즈(기본:10)
     * $limit : 페이지당 매물수 (기본:10)
     * */
-    public function calPaging($page_num = 1, $total_items, $block_size = 10, $limit = 5)
-    {
-        $items_per_page = $limit;
-        $total_pages = ceil($total_items / $items_per_page);
-
-        $block_start = max(1, $page_num - $block_size);
-        $block_end = min($total_pages, $page_num + $block_size);
-
-        $item_num_start = $total_items - ($page_num - 1) * $limit;
-
-        return array(
-            'item_num_start' => $item_num_start,
-            'now_page'       => $page_num,
-            'total_items'    => $total_items,
-            'total_page'     => $total_pages,
-            'page_per_items' => $items_per_page,
-            'block_start'    => $block_start,
-            'block_end'      => $block_end
-        );
-    }
-
     public function getDetail()
     {
         $this->log->info("[REV] property detail : ".json_encode($_GET, JSON_UNESCAPED_UNICODE));

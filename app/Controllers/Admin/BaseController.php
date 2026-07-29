@@ -104,6 +104,28 @@ abstract class BaseController extends Controller
 
         return $log;
     }
+    // 리스트 API 페이징 계산 (Board/Property/Note 등에서 공통으로 씀 - 예전엔 각 컨트롤러에 복붙돼 있었음)
+    public function calPaging($page_num=1, $total_items=0, $block_size=10, $limit=10)
+    {
+        $items_per_page = $limit;
+        $total_pages = ceil($total_items / $items_per_page);
+
+        $block_start = max(1, $page_num - $block_size);
+        $block_end = min($total_pages, $page_num + $block_size);
+
+        $item_num_start = $total_items - ($page_num-1)*$limit;
+
+        return array(
+            'item_num_start' => $item_num_start,
+            'now_page'       => $page_num,
+            'total_items'    => $total_items,
+            'total_page'     => $total_pages,
+            'page_per_items' => $items_per_page,
+            'block_start'    => $block_start,
+            'block_end'      => $block_end
+        );
+    }
+
     public function is_login()
     {
         $login = new LoginService();

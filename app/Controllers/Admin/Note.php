@@ -24,12 +24,19 @@ class Note extends BaseController
     public function getList()
     {
         $this->log->info("[REV] note listing : ".json_encode($_GET, JSON_UNESCAPED_UNICODE));
-        $page  = $this->request->getGet('page') ?? 1;
-        $limit = $this->request->getGet('limit') ?? 10;
+        $page  = (int) ($this->request->getGet('page') ?? 1);
+        $limit = (int) ($this->request->getGet('limit') ?? 50); // 현재 전체를 한 페이지에 보여주기 위해 50으로 설정
 
         $rows = $this->service->get_list($page, $limit);
+        $total = $rows['total'];
+        $pager_links = $this->calPaging($page, $total, 10, $limit);
 
-        $oResult = AT_Result::toSuccessData("", $rows);
+        $data = array(
+            'rows'  => $rows['rows'],
+            'pager' => $pager_links
+        );
+
+        $oResult = AT_Result::toSuccessData("", $data);
         $this->view($oResult);
     }
 

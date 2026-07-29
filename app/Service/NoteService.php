@@ -70,10 +70,13 @@ class NoteService extends CI_Service
         $start = ($page -1)*$perPage;
 
         $total_count = $this->model->get_count();
-        $row = $this->model->get_list($start,$perPage,$where);
+        $row = $this->model->get_list($start,$perPage);
 
         $this->log->info("note list Query : ".$this->model->getQuery());
-        $row = $this->after_process($row);
+
+        // 내림차순 넘버링: 이 페이지 첫 행이 total_count-start번, 아래로 갈수록 1씩 감소
+        $item_num_start = $total_count - $start;
+        $row = $this->after_process($row, $item_num_start);
 
         return array("total"=>$total_count, "rows"=>$row);
     }
@@ -85,16 +88,17 @@ class NoteService extends CI_Service
         return $row;
     }
 
-    public function after_process($data)
+    public function after_process($data, $item_num_start=null)
     {
         $property_list = [];
+        $num = $item_num_start;
         foreach($data as $k=>$v){
             $value = $v;
             $value['visit_type_txt'] = $this->model->get_visit_type($v['visit_type']);
             $value['transaction_type_txt'] = $this->model->get_transaction_type($v['transaction_type']);
             $value['status_txt'] = $this->model->get_status($v['status']);
             $value['inflow_type_txt'] = $this->model->get_inflow_type($v['inflow_type']);
-
+            $value['num'] = $num !== null ? $num-- : null;
             $value['memos'] = $this->build_memos($v['note_no']);
 
             $property_list[$k] = $value;
