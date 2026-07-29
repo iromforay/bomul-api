@@ -84,8 +84,11 @@
         pageview.is_returning = localStorage.getItem(RETURN_KEY) ? 'Y' : 'N';
         localStorage.setItem(RETURN_KEY, '1');
 
-        // 신규 방문은 서버가 발급한 visit_id를 응답으로 받아야 하므로 sendBeacon이 아닌 fetch 사용
-        fetch(TRACK_URL, { method: 'POST', body: toFormData(pageview) })
+        // 신규 방문은 서버가 발급한 visit_id를 응답으로 받아야 하므로 sendBeacon이 아닌 fetch 사용.
+        // keepalive: true 필수 - 없으면 응답 전에 페이지가 언로드(뒤로가기 등)될 때 요청 자체가
+        // 중단돼 방문/첫 pageview가 통째로 유실된다 (매물상세 직링크 진입처럼 빠른 이탈이 흔한
+        // 페이지에서 특히 치명적).
+        fetch(TRACK_URL, { method: 'POST', body: toFormData(pageview), keepalive: true })
             .then(function(res){ return res.json(); })
             .then(function(json){
                 if (json && json.RECORD && json.RECORD.visit_id) setVisitId(json.RECORD.visit_id);
