@@ -61,7 +61,7 @@
                 <div class="desc"><?= nl2br($row['description'] ?? '') ?></div>
 
                 <?php if (!empty($row['lat']) && !empty($row['lng'])): ?>
-                <div class="map_con">
+                <div class="property_map">
                     <h3>위치</h3>
                     <img src="http://api.bomul.co.kr/admin/map/image?lat=<?= urlencode($row['lat']) ?>&lng=<?= urlencode($row['lng']) ?>" alt="매물 위치 지도">
                 </div>
@@ -77,7 +77,7 @@
                 <?php if ($hasBrokerInfo): ?>
                 <div class="broker_info">
                     <h3>중개사무소 정보</h3>
-                    <dl>
+                    <dl class="info_grid">
                         <?php if (!empty($common['broker_office_name'])): ?><div><dt>상호명</dt><dd><?= $common['broker_office_name'] ?></dd></div><?php endif; ?>
                         <?php if (!empty($common['broker_reg_no'])): ?><div><dt>등록번호</dt><dd><?= $common['broker_reg_no'] ?></dd></div><?php endif; ?>
                         <?php if (!empty($common['broker_ceo_name'])): ?><div><dt>대표자</dt><dd><?= $common['broker_ceo_name'] ?></dd></div><?php endif; ?>
