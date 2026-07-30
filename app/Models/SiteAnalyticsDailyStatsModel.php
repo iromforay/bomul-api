@@ -40,4 +40,36 @@ class SiteAnalyticsDailyStatsModel extends CI_Model
         }
         return ($this->getDbError()['code'] ?? 0) == 0;
     }
+
+    // 대시보드 KPI용 - 기간(포함) 내 합계. 이번달/전월 비교에 그대로 재사용.
+    public function getTotals($startDate, $endDate)
+    {
+        $sql = "
+            SELECT
+                COALESCE(SUM(visitor_count), 0) AS visitor_count,
+                COALESCE(SUM(pageview_count), 0) AS pageview_count,
+                COALESCE(SUM(new_visitor_count), 0) AS new_visitor_count,
+                COALESCE(SUM(returning_visitor_count), 0) AS returning_visitor_count,
+                COALESCE(SUM(naver_referral_count), 0) AS naver_referral_count,
+                COALESCE(SUM(direct_referral_count), 0) AS direct_referral_count,
+                COALESCE(SUM(other_referral_count), 0) AS other_referral_count,
+                COALESCE(SUM(phone_click_count), 0) AS phone_click_count
+            FROM ".$this->table."
+            WHERE stat_date BETWEEN ".$this->db->escape($startDate)." AND ".$this->db->escape($endDate)."
+            ";
+        $rows = $this->getExecQuery($sql);
+        return $rows[0] ?? [];
+    }
+
+    // 대시보드 방문자 추이 차트용 - 기간 내 일별 행 그대로.
+    public function getDailyRange($startDate, $endDate)
+    {
+        $sql = "
+            SELECT stat_date, visitor_count
+            FROM ".$this->table."
+            WHERE stat_date BETWEEN ".$this->db->escape($startDate)." AND ".$this->db->escape($endDate)."
+            ORDER BY stat_date ASC
+            ";
+        return $this->getExecQuery($sql);
+    }
 }

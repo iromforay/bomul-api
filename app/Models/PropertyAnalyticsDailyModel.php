@@ -47,4 +47,32 @@ class PropertyAnalyticsDailyModel extends CI_Model
         }
         return ($this->getDbError()['code'] ?? 0) == 0;
     }
+
+    // 대시보드 "인기매물 TOP N"용 - 기간 내 조회수 합산 기준 상위 N개, property 테이블과 조인해서
+    // 표시용 필드(매물명/주소)까지 한 번에 가져온다. 문의수는 여기 없음 - 고객노트 시스템과
+    // 아직 연동이 없어서 이 쿼리만으로는 알 수 없다(호출부에서 inquiry_count는 null로 채움).
+    public function getTopByViews($startDate, $endDate, $limit = 5)
+    {
+        $escStart = $this->db->escape($startDate);
+        $escEnd = $this->db->escape($endDate);
+
+        $sql = "
+            SELECT
+                p.property_no,
+                p.property_name,
+                p.addr_sido,
+                p.addr_sigungu,
+                p.addr_dong,
+                SUM(pad.view_count) AS view_count,
+                ROUND(AVG(pad.avg_dwell_ms)) AS avg_dwell_ms
+            FROM ".$this->table." pad
+            JOIN property p ON p.property_no = pad.property_no
+            WHERE pad.stat_date BETWEEN $escStart AND $escEnd
+              AND p.display_yn = 1 AND p.status != 5
+            GROUP BY pad.property_no
+            ORDER BY view_count DESC
+            LIMIT " . (int)$limit;
+
+        return $this->getExecQuery($sql);
+    }
 }
