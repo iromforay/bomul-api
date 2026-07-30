@@ -2,85 +2,60 @@
 
 /*
  * 새벽 배치 - 중개사별 일별 통계 집계 dispatcher.
- * app/batch/batch.php(마더)가 스케줄 시각에 이 파일을 require한다.
+ * app/batch/batch.php(마더)가 활성 시간대(예: 02:00~02:30) 동안 매분 이 파일을 require한다.
  *
- * 프레임웍을 부팅하지 않고 순수 curl만 쓴다 - 실제 집계 로직은 app/Controllers/Cron/*가
- * CI 프레임웍을 100% 태워 처리하고, 이 파일은 "누구를 부를지"만 담당한다 (member 목록도
- * DB 직결이 아니라 Cron\Member 엔드포인트를 curl로 불러서 얻는다 - 그래야 이 파일이 진짜로
- * 가벼운 스크립트로 남는다).
+ * 완료 확인은 콜백 기반이라(api.bomul.co.kr/callback/complete, Cron\Analytics가 집계를 끝내면
+ * 직접 호출) 이 스크립트는 curl 응답을 기다리지 않는다 - 그 순간 "몇 개가 아직 처리중인지"는
+ * bomul.analytics_batch_schedule 테이블을 보고 판단한다 (AnalyticsBatchScheduleModel 참고).
+ * 매분 재실행돼도 안전하도록 설계됨:
+ *   - 오늘자(run_date) 시딩은 최초 1회만 (existsForDate로 가드)
+ *   - 동시 처리 개수를 MAX_CONCURRENT로 제한 (in-flight 개수만큼 다음 배치에서 빼고 보냄)
+ *
+ * Model/DB 접근이 필요해서 CI4를 CLI 모드로 부팅한다 - spark가 쓰는 bootSpark()보다 가벼운
+ * bootConsole()만 사용 (커맨드 라우팅 없이 서비스/설정/오토로더만 필요).
  */
 
-$BASE_DOMAIN = 'bomul.co.kr';
-$TIMEOUT_SEC = 30;
+define('FCPATH', __DIR__ . '/../../public' . DIRECTORY_SEPARATOR);
+chdir(FCPATH);
+require FCPATH . '../app/Config/Paths.php';
+$paths = new \Config\Paths();
+require $paths->systemDirectory . '/Boot.php';
+\CodeIgniter\Boot::bootConsole($paths);
 
-// .env는 프레임웍이 쓰는 것과 동일한 파일을 그대로 읽는다 (CRON_SECRET만 필요)
-$envPath = __DIR__ . '/../../.env';
-$cronSecret = '';
-if (is_file($envPath)) {
-    foreach (file($envPath, FILE_IGNORE_NEW_LINES) as $line) {
-        $line = trim($line);
-        if ($line === '' || $line[0] === '#' || !str_contains($line, '=')) {
-            continue;
-        }
-        [$k, $v] = explode('=', $line, 2);
-        if (trim($k) === 'CRON_SECRET') {
-            $cronSecret = trim($v);
-            break;
-        }
-    }
+const MAX_CONCURRENT = 3;
+const BASE_DOMAIN = 'bomul.co.kr';
+const FIRE_TIMEOUT_MS = 300; // fire-and-forget - 요청이 서버에 도달할 정도만 기다리고 응답은 안 기다림
+
+$runDate = date('Y-m-d', strtotime('-1 day')); // AnalyticsAggregateService 기본값과 동일 (어제)
+
+$db = db_connect('default');
+$scheduleModel = model('App\Models\AnalyticsBatchScheduleModel', true, $db);
+$helpModel = model('App\Models\HelpModel', true, $db);
+
+// 1. 오늘자 시딩 (최초 1회만)
+if (!$scheduleModel->existsForDate($runDate)) {
+    $fids = $helpModel->get_active_fids();
+    $scheduleModel->seed($runDate, $fids);
 }
-if ($cronSecret === '') {
-    error_log('[analy.php] CRON_SECRET 미설정 - 배치 중단');
+
+// 2. 남은 작업 없으면 조용히 종료 (batch.php가 활성창 내내 매분 불러도 여기서 바로 빠짐)
+if (!$scheduleModel->hasRemainingWork($runDate)) {
     return;
 }
 
-function analy_curl_get($url, $timeout)
-{
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => $timeout,
-    ]);
-    $body = curl_exec($ch);
-    curl_close($ch);
-    return $body;
-}
+// 3. 동시처리 한도만큼만 다음 배치를 뽑아서 fire-and-forget
+$inFlight = $scheduleModel->countInFlight($runDate);
+$capacity = MAX_CONCURRENT - $inFlight;
+$fids = $scheduleModel->claimNextBatch($runDate, $capacity);
 
-// 1. 활성 중개사(fid) 목록 조회 - 중앙(bomul) DB는 api.bomul.co.kr을 통해서만 접근
-$listUrl = "http://api.{$BASE_DOMAIN}/cron/member/activefids?token=" . urlencode($cronSecret);
-$listJson = json_decode(analy_curl_get($listUrl, $TIMEOUT_SEC), true);
-$fids = $listJson['RECORD']['fids'] ?? [];
-
-if (empty($fids)) {
-    error_log('[analy.php] 활성 중개사 목록이 비어있음 - 배치 중단');
-    return;
-}
-
-// 2. 중개사별 병렬 curl - 서로 다른 DB만 건드리므로 병렬로 쏴도 서로 부하를 안 줌
-$mh = curl_multi_init();
-$handles = [];
 foreach ($fids as $fid) {
-    $url = "http://{$fid}.{$BASE_DOMAIN}/cron/analytics/daily-aggregate?token=" . urlencode($cronSecret);
+    $url = "http://{$fid}." . BASE_DOMAIN . "/cron/analytics/daily-aggregate?date=" . urlencode($runDate);
     $ch = curl_init($url);
     curl_setopt_array($ch, [
+        CURLOPT_TIMEOUT_MS => FIRE_TIMEOUT_MS,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => $TIMEOUT_SEC,
     ]);
-    curl_multi_add_handle($mh, $ch);
-    $handles[$fid] = $ch;
-}
-
-$running = null;
-do {
-    curl_multi_exec($mh, $running);
-    curl_multi_select($mh);
-} while ($running > 0);
-
-foreach ($handles as $fid => $ch) {
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $result = curl_multi_getcontent($ch);
-    error_log("[analy.php] fid={$fid} http={$httpCode} result=" . substr((string)$result, 0, 300));
-    curl_multi_remove_handle($mh, $ch);
+    curl_exec($ch); // 타임아웃으로 끊겨도 무방 - 서버 쪽은 ignore_user_abort(true)로 계속 실행됨
     curl_close($ch);
+    log_message('info', "[analy.php] fid={$fid} 발송 (run_date={$runDate})");
 }
-curl_multi_close($mh);

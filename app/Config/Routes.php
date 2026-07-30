@@ -9,6 +9,14 @@ use CodeIgniter\Router\RouteCollection;
 $host = $_SERVER['HTTP_HOST'] ?? '';
 if ($host !== 'api.bomul.co.kr') {
 
+    // setDefaultNamespace('App\Controllers\Web') 호출 *전에* 등록 - RouteCollection::create()가
+    // 라우트 등록 시점의 defaultNamespace를 그 자리에서 핸들러 문자열에 구워넣기 때문에, 이 한 줄만
+    // 앱 전역 기본값(Config\Routing::$defaultNamespace = 'App\Controllers')으로 풀리고 아래
+    // setDefaultNamespace('App\Controllers\Web')의 영향을 안 받는다. App\Controllers\Cron
+    // 네임스페이스로 맞추기 위한 의도적 배치 순서.
+    // 새벽 배치(app/batch/analy.php)가 중개사 서브도메인({fid}.bomul.co.kr)으로 curl 호출.
+    $routes->get('cron/analytics/daily-aggregate', 'Cron\Analytics::getDailyAggregate');
+
     // 🌐 WEB 전용: 모든 요청을 Web namespace로 자동 라우팅
     $routes->setDefaultNamespace('App\Controllers\Web');
 
@@ -28,11 +36,6 @@ if ($host !== 'api.bomul.co.kr') {
     // 방문자 트래킹 수집 (sendBeacon)
     $routes->post('track/collect', 'Track::postCollect');
     $routes->options('track/collect', 'Track::optionsCollect');
-
-    // 새벽 배치(app/batch/analy.php)가 중개사 서브도메인({fid}.bomul.co.kr)으로 curl 호출.
-    // 이 web 브랜치는 오토라우팅이 꺼져있고 기본 네임스페이스도 App\Controllers\Web이라
-    // App\Controllers\Cron\Analytics는 풀네임스페이스(맨 앞 \)로 명시해야 한다.
-    $routes->get('cron/analytics/daily-aggregate', '\App\Controllers\Cron\Analytics::getDailyAggregate');
 
     // 기본 자동 라우터 활성화
     //$routes->setAutoRoute(true);
