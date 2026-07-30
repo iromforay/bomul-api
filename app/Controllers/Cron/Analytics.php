@@ -23,9 +23,10 @@ use Monolog\Logger;
  * Track.php와 동일하게 Web\BaseController::set_domain()을 거치지 않고 직접 최소 해석한다.
  *
  * 완료 콜백: analy.php는 이 요청의 응답을 기다리지 않는 fire-and-forget이라(짧은 타임아웃),
- * 완료 여부는 bomul.analytics_batch_schedule을 봐야 안다 - 그래서 집계가 끝나면 이 컨트롤러가
- * 직접 api.bomul.co.kr/callback/complete를 호출해서 그 테이블을 갱신시킨다. analy.php가 먼저
- * 연결을 끊어도 이 요청 자체(및 콜백 발신)는 끝까지 실행되도록 ignore_user_abort(true) 필수.
+ * 완료 여부는 bomul.batch_schedule을 봐야 안다 (job_type='analytics_daily') - 그래서 집계가
+ * 끝나면 이 컨트롤러가 직접 api.bomul.co.kr/callback/complete를 호출해서 그 테이블을 갱신시킨다.
+ * analy.php가 먼저 연결을 끊어도 이 요청 자체(및 콜백 발신)는 끝까지 실행되도록
+ * ignore_user_abort(true) 필수.
  *
  * 인증: 생성자에서 호출 IP가 .env의 CRON_ALLOWED_IPS(내부 서버 IP만) 목록에 없으면 즉시 차단
  * (analy.php가 아닌 곳에서 이 요청이 올 수 없게 문 앞에서 막음). 이 서브도메인의 나머지
@@ -37,6 +38,9 @@ use Monolog\Logger;
  */
 class Analytics extends Controller
 {
+    // bomul.batch_schedule에서 이 job을 구분하는 값 (app/batch/analy.php의 JOB_TYPE과 일치해야 함)
+    private const JOB_TYPE = 'analytics_daily';
+
     private $log;
 
     public function __construct()
@@ -98,7 +102,8 @@ class Analytics extends Controller
     private function sendCallback($fid, $ok)
     {
         $secret = env('CRON_SECRET', '');
-        $url = 'http://api.bomul.co.kr/callback/complete?ok=' . ($ok ? '1' : '0') . '&fid=' . urlencode($fid);
+        $url = 'http://api.bomul.co.kr/callback/complete?ok=' . ($ok ? '1' : '0')
+            . '&fid=' . urlencode($fid) . '&job_type=' . urlencode(self::JOB_TYPE);
 
         $ch = curl_init($url);
         curl_setopt_array($ch, [

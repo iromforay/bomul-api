@@ -3,12 +3,12 @@
 namespace App\Controllers;
 
 use App\Libraries\AT_Result;
-use App\Models\AnalyticsBatchScheduleModel;
+use App\Models\BatchScheduleModel;
 use CodeIgniter\Controller;
 
 /*
- * api.bomul.co.kr/callback/complete - Cron\Analytics가 중개사별 집계를 끝낸 뒤 호출하는
- * 완료 콜백. bomul.analytics_batch_schedule의 해당 fid 행을 done/failed로 갱신한다.
+ * api.bomul.co.kr/callback/complete - 각 배치 워커(Cron\Analytics 등)가 중개사별 처리를 끝낸 뒤
+ * 호출하는 범용 완료 콜백. bomul.batch_schedule의 해당 job_type+fid 행을 done/failed로 갱신한다.
  *
  * analy.php(마더 쪽)는 이 콜백을 기다리지 않는다 - Cron\Analytics가 직접 여기로 다시 호출해서
  * "끝났다"를 알리는 구조 (app/Controllers/Cron/Analytics.php 주석 참고).
@@ -37,17 +37,18 @@ class Callback extends Controller
         }
 
         $fid = (string)$this->request->getVar('fid');
+        $jobType = (string)$this->request->getVar('job_type');
         $ok = $this->request->getVar('ok') === '1';
         $runDate = date('Y-m-d', strtotime('-1 day')); // AnalyticsAggregateService 기본값과 동일 (어제)
 
-        if ($fid === '') {
-            echo AT_Result::toJson(AT_Result::toFailData('fid required'));
+        if ($fid === '' || $jobType === '') {
+            echo AT_Result::toJson(AT_Result::toFailData('fid and job_type required'));
             return;
         }
 
         $db = db_connect('default');
-        $scheduleModel = model(AnalyticsBatchScheduleModel::class, true, $db);
-        $result = $scheduleModel->markDone($runDate, $fid, $ok);
+        $scheduleModel = model(BatchScheduleModel::class, true, $db);
+        $result = $scheduleModel->markDone($jobType, $runDate, $fid, $ok);
 
         echo AT_Result::toJson(AT_Result::toSuccessData("", ["updated" => $result]));
     }
