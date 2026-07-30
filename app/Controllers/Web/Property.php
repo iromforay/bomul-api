@@ -57,7 +57,14 @@ class Property extends BaseController
 
         $service->viewcount($property_no);
 
-        $this->set_title($row['property_name']);
+        $slugs = $service->build_url_slug($row);
+        $this->set_title($slugs);
+        // summary(한줄소개)가 있으면 그걸 우선 쓰고, 없으면 주소 기반으로 간단히 생성
+        $description = trim((string)($row['summary'] ?? ''));
+        if ($description === '') {
+            $description = trim(($row['addr_sido'] ?? '') . ' ' . ($row['addr_sigungu'] ?? '') . ' ' . ($row['addr_dong'] ?? '') . ' ' . ($row['property_name'] ?? ''));
+        }
+        $this->set_description($description);
 
         $data = array(
             'active'=> $this->get_code(),

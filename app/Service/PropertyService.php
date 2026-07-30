@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Property_Entity;
 use App\Libraries\AT_Result;
 use App\Libraries\File_Upload;
+use App\Libraries\NaverGeocoder;
 
 class PropertyService extends CI_Service
 {
@@ -32,6 +33,8 @@ class PropertyService extends CI_Service
         $detail_images = json_decode($post['detail_images'] ?? '', true) ?? [];
         $del_img       = json_decode($post['del_img'] ?? '', true) ?? [];
         unset($post['main_image'], $post['detail_images'], $post['del_img']);
+
+        $post = $this->resolveLatLng($post);
 
         $oResult = $this->exec($post);
         $this->log->info("[save_property] result : ".var_export($oResult, true));
@@ -77,6 +80,39 @@ class PropertyService extends CI_Service
         }
 
         return $oResult;
+    }
+
+    // BO 화면에서 주소검색(Admin\Map) 위젯으로 이미 확인된 lat/lng을 그대로 실어보내는 게 기본
+    // 경로 - FE가 확인한 좌표를 서버가 다시 지오코딩해서 덮어쓰면 사용자가 고른 것과 달라질 수
+    // 있으므로 post에 lat/lng이 오면 그대로 믿고 쓴다(Property_Entity 컬럼명인 latitude/longitude로
+    // 매핑만 함). 아직 그 위젯을 안 붙였거나 값이 비어오면, 주소 필드로 서버가 직접 지오코딩해서
+    // 채워주는 걸로 폴백한다 - 실패해도(주소 못 찾음 등) 저장 자체는 계속 진행한다(지도 표시는
+    // 부가기능이지 매물 저장을 막을 이유가 아님). Property/view.php가 latitude/longitude 있을
+    // 때만 지도를 보여주므로 값이 없어도 안전하다.
+    private function resolveLatLng($post)
+    {
+        if (!empty($post['lat']) && !empty($post['lng'])) {
+            $post['latitude'] = $post['lat'];
+            $post['longitude'] = $post['lng'];
+            unset($post['lat'], $post['lng']);
+            return $post;
+        }
+
+        $address = trim(($post['addr_sido'] ?? '') . ' ' . ($post['addr_sigungu'] ?? '') . ' ' . ($post['addr_dong'] ?? '') . ' ' . ($post['addr_road'] ?? ''));
+        if ($address === '') {
+            return $post;
+        }
+
+        $geo = NaverGeocoder::geocode($address);
+        if ($geo !== null) {
+            $post['latitude'] = $geo['lat'];
+            $post['longitude'] = $geo['lng'];
+            $this->log->info('[REV] property 주소 지오코딩 성공 address=' . $address . ' lat=' . $geo['lat'] . ' lng=' . $geo['lng']);
+        } else {
+            $this->log->info('[REV] property 주소 지오코딩 실패 address=' . $address);
+        }
+
+        return $post;
     }
 
     public function exec($data)
@@ -168,14 +204,18 @@ class PropertyService extends CI_Service
             if(!empty($v['main_image']) && !empty($v['main_path'])) {
                 $value['main_image_url'] = SITE_PDS.rtrim($v['main_path'], '/')."/".$v['main_image'];
             }
+            // BO가 저장할 때 lat/lng으로 보내니(resolveLatLng() 참고), 조회 응답도 같은 이름으로
+            // 맞춰서 내려준다 - FE가 편집화면 지도 위젯에 그대로 채워 쓸 수 있게.
+            $value['lat'] = $v['latitude'] ?? null;
+            $value['lng'] = $v['longitude'] ?? null;
             $value['url_slug'] = $this->build_url_slug($value);
             $property_list[$k] =  $value;
         }
         return $property_list;
     }
 
-    // 공개 웹 상세보기 URL 뒤에 붙는 장식용 슬러그(지역+거래방식+금액). 라우팅엔 쓰이지 않음.
-    private function build_url_slug($row)
+    // 공개 웹 상세보기 URL 뒤에 붙는 장식용 슬러그(지역+거래방식). 라우팅엔 쓰이지 않음.
+    public function build_url_slug($row)
     {
         switch ($row['transaction_type']) {
             case 'sale':

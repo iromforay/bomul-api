@@ -20,12 +20,15 @@ if ($host !== 'api.bomul.co.kr') {
     // 🌐 WEB 전용: 모든 요청을 Web namespace로 자동 라우팅
     $routes->setDefaultNamespace('App\Controllers\Web');
 
+    $routes->get('mapsearchtest', 'MapSearchTest::getIndex');
     $routes->get('/',        'Home::getindex');
     $routes->get('around',   'Around::getindex');
     $routes->get('charge',   'Charge::getindex');
     $routes->get('map',      'Map::getindex');
     $routes->get('notice',   'Notice::getindex');
     $routes->get('review',   'Review::getindex');
+    $routes->get('sitemap',   'Sitemap::getIndex');
+    $routes->get('roboots',   'Robots::getIndex');
     $routes->get('property', 'Property::getindex');
     //상세보기
     $routes->get('notice/view/([0-9]+)(?:/[^/]*)?', 'Notice::getview/$1');
@@ -36,6 +39,14 @@ if ($host !== 'api.bomul.co.kr') {
     // 방문자 트래킹 수집 (sendBeacon)
     $routes->post('track/collect', 'Track::postCollect');
     $routes->options('track/collect', 'Track::optionsCollect');
+
+    // Admin\Map(네이버 지도 주소검색 API) 개발용 테스트 페이지 - 정식 FE 생기면 제거
+    $routes->get('map-search-test', 'MapSearchTest::getIndex');
+
+    // SEO - 검색엔진 크롤링용. 중개사마다 내용이 달라서 정적 파일이 아니라 동적 생성
+    // (public/robots.txt는 삭제함 - 있으면 nginx가 그걸 먼저 서빙해서 이 라우트까지 안 옴)
+    $routes->get('robots.txt', 'Robots::getIndex');
+    $routes->get('sitemap.xml', 'Sitemap::getIndex');
 
     // 기본 자동 라우터 활성화
     //$routes->setAutoRoute(true);

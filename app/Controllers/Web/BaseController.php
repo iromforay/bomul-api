@@ -15,6 +15,7 @@ class BaseController extends Controller
     private $sub_body;
     private $code;
     private $title;
+    private $description = '';
     public function __construct()
     {
         header('Access-Control-Allow-Origin: *' );
@@ -65,6 +66,12 @@ class BaseController extends Controller
         $this->title = $title;
     }
 
+    // <meta name="Description">/og:description용 - 미설정 시 header.php가 site_name 기반 기본값을 씀
+    public function set_description($description): void
+    {
+        $this->description = $description;
+    }
+
 
 
     public function get_header()
@@ -109,6 +116,7 @@ class BaseController extends Controller
         $data['common']= $this->body; // 공통 변수값 입력.
         $data['sub']= $this->sub_body; // 전용 변수값 입력.
         $data['common']['title']= $this->title; //헤더영역내 title
+        $data['common']['description']= $this->description; //meta description / og:description
         if($layout=="") $layout="default";
         else $layout=$layout ;
 

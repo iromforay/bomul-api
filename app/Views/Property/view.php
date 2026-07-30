@@ -60,6 +60,34 @@
                 <?php endif; ?>
                 <div class="desc"><?= nl2br($row['description'] ?? '') ?></div>
 
+                <?php if (!empty($row['lat']) && !empty($row['lng'])): ?>
+                <div class="map_con">
+                    <h3>위치</h3>
+                    <img src="http://api.bomul.co.kr/admin/map/image?lat=<?= urlencode($row['lat']) ?>&lng=<?= urlencode($row['lng']) ?>" alt="매물 위치 지도">
+                </div>
+                <?php endif; ?>
+
+                <?php
+                    // 부동산 표시·광고 법정 고지사항 - 중개사무소 정보. basic 테이블 값이라 $common에
+                    // 이미 들어있음(BasicService::get_by_basic()가 SELECT *) - 렌더링만 추가.
+                    $hasBrokerInfo = !empty($common['broker_office_name']) || !empty($common['broker_reg_no'])
+                        || !empty($common['broker_ceo_name']) || !empty($common['broker_address'])
+                        || !empty($common['broker_phone']);
+                ?>
+                <?php if ($hasBrokerInfo): ?>
+                <div class="broker_info">
+                    <h3>중개사무소 정보</h3>
+                    <dl>
+                        <?php if (!empty($common['broker_office_name'])): ?><div><dt>상호명</dt><dd><?= $common['broker_office_name'] ?></dd></div><?php endif; ?>
+                        <?php if (!empty($common['broker_reg_no'])): ?><div><dt>등록번호</dt><dd><?= $common['broker_reg_no'] ?></dd></div><?php endif; ?>
+                        <?php if (!empty($common['broker_ceo_name'])): ?><div><dt>대표자</dt><dd><?= $common['broker_ceo_name'] ?></dd></div><?php endif; ?>
+                        <?php if (!empty($common['broker_address'])): ?><div><dt>소재지</dt><dd><?= $common['broker_address'] ?></dd></div><?php endif; ?>
+                        <?php if (!empty($common['broker_phone'])): ?><div><dt>연락처</dt><dd><?= $common['broker_phone'] ?></dd></div><?php endif; ?>
+                        <?php if (!empty($common['broker_agent_name'])): ?><div><dt>소속공인중개사</dt><dd><?= $common['broker_agent_name'] ?><?= !empty($common['broker_agent_phone']) ? ' ('.$common['broker_agent_phone'].')' : '' ?></dd></div><?php endif; ?>
+                    </dl>
+                </div>
+                <?php endif; ?>
+
                 <div class="btn_con">
                     <a href="/property">목록으로</a>
                 </div>

@@ -116,6 +116,9 @@ class Property_Entity extends CI_Entity
         'addr_dong' => null,                // 읍면동
         'addr_road' => null,                // 도로명
 
+        'latitude' => null,                 // 위도 - 주소 저장/수정 시 지오코딩으로 채워짐
+        'longitude' => null,                // 경도
+
         'supply_area' => null,              // 공급면적(㎡)
         'exclusive_area' => null,           // 전용면적(㎡)
 
@@ -171,6 +174,9 @@ class Property_Entity extends CI_Entity
         'addr_sigungu' => 'string',
         'addr_dong' => 'string',
         'addr_road' => 'string',
+
+        'latitude' => 'string',
+        'longitude' => 'string',
 
         'supply_area' => 'integer',
         'exclusive_area' => 'integer',
