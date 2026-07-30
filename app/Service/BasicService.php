@@ -192,6 +192,8 @@ class BasicService extends CI_Service
     {
         $this->entity->setCompanyName($data['company_name']);
         $this->entity->setFooterCopy($data['footer_copy']);
+        // 네이버 서치어드바이저 사이트 소유권 확인용 코드 - 등록 안 했으면 비워두면 됨
+        $this->entity->setNaverSiteVerification($data['naver_site_verification'] ?? null);
 
         return $this;
     }

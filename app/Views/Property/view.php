@@ -20,7 +20,12 @@
                 </div>
 
                 <span class="type"><?= $row['property_type_txt'] ?: $row['property_type'] ?> · <?= $row['transaction_type_txt'] ?></span>
-                <h1><?= $row['property_name'] ?></h1>
+                <?php // title(set_title()가 url_slug로 채움)과 핵심 키워드를 맞춰야 검색엔진이
+                      // 페이지 주제를 일관되게 인식한다 - h1도 같은 slug 기준, 매물명은 부제로. ?>
+                <h1><?= $row['url_slug'] ?? $row['property_name'] ?></h1>
+                <?php if (!empty($row['property_name'])): ?>
+                    <p class="property_name_sub"><?= $row['property_name'] ?></p>
+                <?php endif; ?>
                 <p class="addr"><?= trim($row['addr_sido'].' '.$row['addr_sigungu'].' '.$row['addr_dong'].' '.$row['addr_road']) ?></p>
 
                 <div class="price">
@@ -63,7 +68,8 @@
                 <?php if (!empty($row['lat']) && !empty($row['lng'])): ?>
                 <div class="property_map">
                     <h3>위치</h3>
-                    <img src="http://api.bomul.co.kr/admin/map/image?lat=<?= urlencode($row['lat']) ?>&lng=<?= urlencode($row['lng']) ?>" alt="매물 위치 지도">
+                    <?php $mapScheme = (($_SERVER['HTTPS'] ?? 'off') !== 'off') ? 'https' : 'http'; ?>
+                    <img src="<?= $mapScheme ?>://api.bomul.co.kr/admin/map/image?lat=<?= urlencode($row['lat']) ?>&lng=<?= urlencode($row['lng']) ?>" alt="매물 위치 지도">
                 </div>
                 <?php endif; ?>
 
@@ -97,3 +103,39 @@
     </section>
     <!-- //section -->
 </div>
+
+<?php
+    // 검색엔진 리치스니펫용 구조화 데이터(schema.org RealEstateListing). 매물 상세페이지 전용이라
+    // 공용 header.php가 아니라 여기(Property/view.php)에 둔다.
+    $scheme = (($_SERVER['HTTPS'] ?? 'off') !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    $slugPath = !empty($row['url_slug']) ? '/' . rawurlencode($row['url_slug']) : '';
+    $canonicalPropertyUrl = $scheme . '://' . $host . '/property/view/' . $row['property_no'] . $slugPath;
+
+    $jsonLd = [
+        '@context' => 'https://schema.org',
+        '@type' => 'RealEstateListing',
+        // title/h1과 동일 기준(url_slug)으로 통일 - 구조화 데이터의 name이 실제 h1/title과
+        // 다르면 검색엔진이 불일치로 보고 리치스니펫 신뢰도를 낮출 수 있다.
+        'name' => $row['url_slug'] ?? $row['property_name'],
+        'description' => !empty($row['summary']) ? $row['summary'] : strip_tags($row['description'] ?? ''),
+        'url' => $canonicalPropertyUrl,
+        'address' => [
+            '@type' => 'PostalAddress',
+            'addressRegion' => $row['addr_sido'] ?? '',
+            'addressLocality' => trim(($row['addr_sigungu'] ?? '') . ' ' . ($row['addr_dong'] ?? '')),
+            'streetAddress' => $row['addr_road'] ?? '',
+        ],
+    ];
+    if (!empty($row['main_image_url'])) {
+        $jsonLd['image'] = $row['main_image_url'];
+    }
+    if (!empty($row['lat']) && !empty($row['lng'])) {
+        $jsonLd['geo'] = [
+            '@type' => 'GeoCoordinates',
+            'latitude' => $row['lat'],
+            'longitude' => $row['lng'],
+        ];
+    }
+?>
+<script type="application/ld+json"><?= json_encode($jsonLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>

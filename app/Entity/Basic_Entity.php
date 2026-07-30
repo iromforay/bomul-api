@@ -37,6 +37,7 @@ class Basic_Entity
     private $broker_agent_name;
     private $broker_agent_phone;
     private $footer_copy;
+    private $naver_site_verification;
 
     /**
      * @return mixed
@@ -436,7 +437,24 @@ class Basic_Entity
     public function setFooterCopy($footer_copy): void
     {
         $this->footer_copy = $footer_copy;
-    }/**
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNaverSiteVerification()
+    {
+        return $this->naver_site_verification;
+    }
+
+    /**
+     * @param mixed $naver_site_verification
+     */
+    public function setNaverSiteVerification($naver_site_verification): void
+    {
+        $this->naver_site_verification = $naver_site_verification;
+    }
+/**
  * @return mixed
  */
 public function getLogoShow()

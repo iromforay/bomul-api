@@ -68,6 +68,7 @@ class BasicModel extends CI_Model
         ! is_null($entity->getBrokerAgentName())        ?    $set[] = "`broker_agent_name`=".       $this->db->escape($entity->getBrokerAgentName())    : "";
         ! is_null($entity->getBrokerAgentPhone())       ?    $set[] = "`broker_agent_phone`=".      $this->db->escape($entity->getBrokerAgentPhone())   : "";
         ! is_null($entity->getFooterCopy())             ?    $set[] = "`footer_copy`=".             $this->db->escape($entity->getFooterCopy())         : "";
+        ! is_null($entity->getNaverSiteVerification())  ?    $set[] = "`naver_site_verification`=". $this->db->escape($entity->getNaverSiteVerification()) : "";
 
 
         $sql .= implode(",", $set);

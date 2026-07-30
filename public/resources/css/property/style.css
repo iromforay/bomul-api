@@ -6,6 +6,7 @@
 .property_view .gallery .thumbs div{aspect-ratio:1/1;background:#f2f4f7 center/cover no-repeat;border-radius:8px;}
 .property_view .type{display:inline-block;font-size:12px;font-weight:700;color:#006eff;background:#eaf2ff;border-radius:5px;padding:3px 10px;margin-bottom:10px;}
 .property_view h1{font-size:24px;font-weight:800;margin:0 0 6px;}
+.property_view .property_name_sub{font-size:15px;color:#6b7280;margin:0 0 4px;}
 .property_view .addr{font-size:14px;color:#6b7280;margin:0 0 16px;}
 .property_view .price{font-size:22px;font-weight:800;color:#16181d;margin-bottom:24px;}
 .property_view .info_grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 12px;border-top:1px solid #e4e7ec;border-bottom:1px solid #e4e7ec;padding:20px 0;margin-bottom:24px;}

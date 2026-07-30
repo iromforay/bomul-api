@@ -18,12 +18,15 @@ class Robots extends Controller
 {
     public function getIndex()
     {
+        // 실제 서비스 URL(HTTPS 여부)과 일치시켜야 한다 - sitemap.xml/header.php의 canonical과
+        // 동일한 이유로 하드코딩하지 않는다.
+        $scheme = (($_SERVER['HTTPS'] ?? 'off') !== 'off') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? '';
 
         $body = "User-agent: *\n";
         $body .= "Allow: /\n";
         $body .= "\n";
-        $body .= "Sitemap: http://{$host}/sitemap.xml\n";
+        $body .= "Sitemap: {$scheme}://{$host}/sitemap.xml\n";
 
         return $this->response->setContentType('text/plain')->setBody($body);
     }

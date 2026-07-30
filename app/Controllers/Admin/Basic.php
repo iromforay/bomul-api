@@ -80,6 +80,8 @@ class Basic extends BaseController
         $data['broker_agent_name'] = $this->request->getVar("broker_agent_name");
         $data['broker_agent_phone'] = $this->request->getVar("broker_agent_phone");
         $data['footer_copy'] = $this->request->getVar("footer_copy");
+        // 네이버 서치어드바이저 사이트 소유권 확인 코드 (HTML 태그 방식)
+        $data['naver_site_verification'] = $this->request->getVar("naver_site_verification");
 
         $data['logo_del'] = $this->request->getVar("logo_del"); //로고삭제
 

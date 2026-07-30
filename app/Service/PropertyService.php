@@ -215,21 +215,28 @@ class PropertyService extends CI_Service
     }
 
     // 공개 웹 상세보기 URL 뒤에 붙는 장식용 슬러그(지역+거래방식). 라우팅엔 쓰이지 않음.
+    // 가격은 일부러 안 넣는다 - number_format()이 만드는 콤마(예: "30,000")가 URL에 그대로 들어가면
+    // 인코딩 안 된 콤마 때문에 "disallowed characters" 오류가 나고, 매물마다 가격이 바뀌어서
+    // 검색엔진 매칭율도 떨어진다.
     public function build_url_slug($row)
     {
         switch ($row['transaction_type']) {
             case 'sale':
-                $price = number_format($row['sale_price']).'만원';
+                $price = $row['sale_price']> 10000 ? ($row['sale_price']/10000)."억원" : $row['sale_price']."만원";
+
+                    //$price = number_format($row['sale_price']).'만원';
                 break;
             case 'jeonse':
-                $price = number_format($row['jeonse_price']).'만원';
+                $price = $row['jeonse_price']> 10000 ? ($row['jeonse_price']/10000)."억원" : $row['jeonse_price']."만원";
+             //   $price = number_format($row['jeonse_price']).'만원';
                 break;
             case 'monthly':
-                $price = number_format($row['monthly_rent']).'만원';
+                $price = $row['monthly_rent']> 10000 ? ($row['monthly_rent']/10000.)."억원" : $row['monthly_rent']."만원";
+              //  $price = number_format($row['monthly_rent']).'만원';
                 break;
             default:
                 $price = '';
         }
-        return trim($row['addr_dong'].' '.($row['transaction_type_txt'] ?: $row['transaction_type'])); // 가격은 매칭율 저하로 제거
+        return trim($row['addr_dong'].' '.($row['transaction_type_txt'] ?: $row['transaction_type']))." ".$price; // 가격은 매칭율 저하로 제거
     }
 }

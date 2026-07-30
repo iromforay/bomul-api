@@ -34,8 +34,11 @@ class Sitemap extends Controller
 
         $this->log = $this->getMonoLog('sitemap');
 
+        // 실제 서비스 URL(HTTPS 여부)과 일치시켜야 한다 - 하드코딩하면 실제 서빙 방식과 달라져서
+        // 검색엔진이 sitemap에 등재된 URL과 실제 페이지 URL을 다르게 보고 신뢰도를 낮출 수 있다.
+        $scheme = (($_SERVER['HTTPS'] ?? 'off') !== 'off') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? '';
-        $base = 'http://' . $host;
+        $base = $scheme . '://' . $host;
 
         // 관리자가 basic 설정에서 꺼둔 메뉴는 sitemap에도 안 실어야 한다 (Admin\Menu가 다루는
         // property_show/notice_show/charge_show/review_show/around_show/map_show 그 플래그).
@@ -55,7 +58,10 @@ class Sitemap extends Controller
                 $propertyService = new PropertyService($this->log, '');
                 $properties = $propertyService->get_list(1, 10000, ["display_yn = 1", "status != 5"]);
                 foreach ($properties['rows'] as $row) {
-                    $urls[] = $base . '/property/view/' . $row['property_no'];
+                    // 실제 서비스가 슬러그(지역+거래방식)를 붙여서 링크하므로 sitemap도 같은 URL로
+                    // 맞춰야 한다 - 안 맞으면 슬러그 있는/없는 두 URL이 중복 콘텐츠로 보일 위험이 있다.
+                    $slugPath = !empty($row['url_slug']) ? '/' . rawurlencode($row['url_slug']) : '';
+                    $urls[] = $base . '/property/view/' . $row['property_no'] . $slugPath;
                 }
             } catch (\Throwable $e) {
                 $this->log->error('[REV] sitemap property 조회 실패: ' . $e->getMessage());
