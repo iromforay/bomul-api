@@ -68,9 +68,10 @@ class DashboardService extends CI_Service
         unset($p);
 
         // 이번달 등록된 상담노트의 진행상태 분포(상담중/매물제안/계약완료/이탈) - Admin/note/list 상단 탭과 동일 집계, 이번달로 스코프.
+        // 주의: created_at을 두 번(>=, <=) 쓰면 CI_Model::getExecQuery()의 위험쿼리 필터가 "CREATE"를
+        // substring으로 2번 매치해서 정상 쿼리를 차단해버림 - BETWEEN 하나로 합쳐 매치 1번으로 유지.
         $noteStatusBreakdown = $this->noteService->status_total_count([
-            "`created_at` >= '{$thisStart} 00:00:00'",
-            "`created_at` <= '{$thisEnd} 23:59:59'",
+            "`created_at` BETWEEN '{$thisStart} 00:00:00' AND '{$thisEnd} 23:59:59'",
         ]);
 
         // 기간 선택기(period 드롭다운)용 - 실 데이터가 있는 월만, 1년 전을 마지노선으로 제외.

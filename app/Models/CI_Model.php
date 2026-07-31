@@ -77,7 +77,9 @@ class CI_Model extends Model
     {
         $seq_no=0;
         $deny_query = array("DROP","ALTER","CREATE");
-        $deny_str = "/".implode("|",$deny_query)."/";
+        // \b(단어경계)를 안 걸면 created_at/is_deleted처럼 이 키워드를 부분포함하는
+        // 흔한 컬럼명만으로도 오탐(false positive)이 나서 정상 쿼리가 막힘.
+        $deny_str = "/\\b(?:".implode("|",$deny_query).")\\b/";
         $SQL = strtoupper($sql);
         $this->query=$sql;
         preg_match_all ("$deny_str" ,trim($SQL),$result); //$sql
@@ -108,7 +110,9 @@ class CI_Model extends Model
     public function getExecQuery($sql)
     {
         $deny_query = array("INSERT","DELETE","UPDATE","ALTER","CREATE");
-        $deny_str = "/".implode("|",$deny_query)."/";
+        // \b(단어경계)를 안 걸면 created_at/is_deleted처럼 이 키워드를 부분포함하는
+        // 흔한 컬럼명만으로도 오탐(false positive)이 나서 정상 쿼리가 막힘.
+        $deny_str = "/\\b(?:".implode("|",$deny_query).")\\b/";
         $SQL = strtoupper($sql);
         $this->query=$sql;
         preg_match_all ("$deny_str" ,trim($SQL),$result); //$sql
