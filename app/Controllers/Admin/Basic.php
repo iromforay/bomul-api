@@ -97,11 +97,16 @@ class Basic extends BaseController
 
     // <meta name="naver-site-verification" content="XXXX"> 형태로 통째로 붙여넣었으면 content
     // 값만 추출, 이미 코드값만 왔으면(정상 케이스) 트림만 해서 그대로 반환.
+    // null(필드 자체를 안 보냄)과 ''(필드는 보냈지만 비움)을 구분해서 반환한다 - sql_edit()의
+    // is_null() 체크가 null이면 SET절에서 빼서 기존값 유지, ''이면 SET절에 넣어서 실제로 비운다.
     private function extract_naver_verification_code($value)
     {
+        if ($value === null) {
+            return null;
+        }
         $value = trim((string)$value);
         if ($value === '') {
-            return null;
+            return '';
         }
         if (preg_match('/content\s*=\s*["\']([^"\']+)["\']/i', $value, $matches)) {
             return trim($matches[1]);
