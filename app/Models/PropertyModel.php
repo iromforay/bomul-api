@@ -86,11 +86,25 @@ class PropertyModel extends CI_Model
         return $rows[0]['cnt'] ?? 0;
     }
 
+    // soft delete된 매물은 목록/카운트에서 항상 제외.
     private function build_where($where)
     {
-        if (empty($where)) return "";
-        $conditions = is_array($where) ? $where : [$where];
+        $conditions = empty($where) ? [] : (is_array($where) ? $where : [$where]);
+        $conditions[] = "`is_deleted` = 0";
         return "WHERE ".implode(" AND ", $conditions);
+    }
+
+    // soft delete된 매물은 상세조회에서도 제외 (Board::Postboard_del() 패턴 참고)
+    public function findbyid($seq_no)
+    {
+        $sql = "SELECT * FROM `$this->table` WHERE `$this->primaryKey` = ".$this->db->escape($seq_no)." AND `is_deleted` = 0";
+        return $this->getExecQuery($sql);
+    }
+
+    public function sql_del(Property_Entity $entity)
+    {
+        $sql = "UPDATE `$this->table` SET `is_deleted`=1 WHERE `$this->primaryKey` = ".$this->db->escape($entity->property_no);
+        return $this->safeExecQuery($sql);
     }
 
     public function viewcount($property_no)

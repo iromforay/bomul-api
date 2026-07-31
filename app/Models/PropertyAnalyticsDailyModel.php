@@ -68,7 +68,7 @@ class PropertyAnalyticsDailyModel extends CI_Model
             FROM ".$this->table." pad
             JOIN property p ON p.property_no = pad.property_no
             WHERE pad.stat_date BETWEEN $escStart AND $escEnd
-              AND p.display_yn = 1 AND p.status != 5
+              AND p.display_yn = 1 AND p.status != 5 AND p.is_deleted = 0
             GROUP BY pad.property_no
             ORDER BY view_count DESC
             LIMIT " . (int)$limit;

@@ -83,6 +83,21 @@ class Note extends BaseController
         exit;
     }
 
+    public function PostDelete() // Board::Postboard_del() 참고 - soft delete
+    {
+        $this->log->info("[REV] note delete : ".json_encode($_GET, JSON_UNESCAPED_UNICODE));
+        $note_no = $this->request->getVar('note_no');
+
+        if ($note_no != "" && $note_no > 0) {
+            $oResult = $this->service->del($note_no);
+        } else {
+            $oResult = AT_Result::toFailData("삭제할 노트가 없습니다.");
+        }
+
+        $this->view($oResult);
+        exit;
+    }
+
     // agent_no/property_no만 선택, 나머지는 전부 필수
     private function validate_required($post)
     {
@@ -118,6 +133,10 @@ class Note extends BaseController
         return $this;
     }
     public function optionsSave()
+    {
+        return $this;
+    }
+    public function optionsDelete()
     {
         return $this;
     }

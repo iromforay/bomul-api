@@ -159,13 +159,16 @@ class PropertyService extends CI_Service
         return array_intersect_key($data, $entity->toRawArray());
     }
 
-    public function get_list($page=1,$perPage=10,$where="")
+    public function get_list($page=1,$perPage=10,$where="",$search=array())
     {
         $start = ($page -1)*$perPage;
 
-        $total_count  = $this->model->get_count($where);
+        $conditions = empty($where) ? [] : (is_array($where) ? $where : [$where]);
+        $conditions = array_merge($conditions, $this->build_search_where($search));
+
+        $total_count  = $this->model->get_count($conditions);
        // $this->log->info("매물 count Query : ".$this->model->getQuery());
-        $row = $this->model->get_list($start,$perPage,$where);
+        $row = $this->model->get_list($start,$perPage,$conditions);
 
         $this->log->info("board list Query : ".$this->model->getQuery());
         $row = $this->after_process($row);
@@ -173,9 +176,56 @@ class PropertyService extends CI_Service
         return array("total"=>$total_count, "rows"=>$row);
     }
 
+    // 매물종류/거래방식/거래상태 = equal, 지역/매물명 = like. 값이 비었거나 "all"이면 그 조건은 제외(전체 검색).
+    private function build_search_where($search=array())
+    {
+        $property_type    = $search['property_type'] ?? "";
+        $transaction_type = $search['transaction_type'] ?? "";
+        $status           = $search['status'] ?? "";
+        $region           = $search['region'] ?? "";
+        $property_name    = $search['property_name'] ?? "";
+
+        $where = array();
+
+        if ($property_type !== "" && $property_type !== "all") {
+            $where[] = "`property_type` = ".$this->db->escape($property_type);
+        }
+        if ($transaction_type !== "" && $transaction_type !== "all") {
+            $where[] = "`transaction_type` = ".$this->db->escape($transaction_type);
+        }
+        if ($status !== "" && $status !== "all") {
+            $where[] = "`status` = ".$this->db->escape($status);
+        }
+        if ($region !== "" && $region !== "all") {
+            $kw = $this->db->escapeLikeString($region);
+            $where[] = "(`addr_sido` LIKE '%$kw%' OR `addr_sigungu` LIKE '%$kw%' OR `addr_dong` LIKE '%$kw%' OR `addr_road` LIKE '%$kw%')";
+        }
+        if ($property_name !== "" && $property_name !== "all") {
+            $kw = $this->db->escapeLikeString($property_name);
+            $where[] = "`property_name` LIKE '%$kw%'";
+        }
+
+        return $where;
+    }
+
     public function viewcount($property_no)
     {
         return $this->model->viewcount($property_no);
+    }
+
+    // Board::Postboard_del() 참고 - soft delete (is_deleted=1로만 세우고 row는 남김)
+    public function del($property_no)
+    {
+        $entity = new Property_Entity();
+        $entity->fill(['property_no' => $property_no]);
+
+        $result = $this->model->sql_del($entity);
+        $this->log->info("[Query] ".$this->model->getQuery());
+
+        if ($result) {
+            return AT_Result::toSuccessData();
+        }
+        return AT_Result::toFailData();
     }
 
     public function getbyid($property_no)

@@ -102,6 +102,10 @@ body.open_nav {
 .footer_con .width_con .tit p {font-size: 0.7rem; line-height: 1.1rem; font-weight: 400; color: #999;}
 .footer_con .width_con p.footer_desc {height: auto; font-size: 0.6rem; line-height: 1rem; font-weight: 400; color: #999; opacity: 1;}
 .footer_con.folding .width_con p.footer_desc {height: 0; opacity: 0;}
+.footer_con .width_con .tit p a,
+.footer_con .width_con p.footer_desc a {color: #6FA8DC; text-decoration: underline;}
+.footer_con .width_con .tit p a:hover,
+.footer_con .width_con p.footer_desc a:hover {color: #9CC5F0;}
 .footer_con .bottom_btn_con {position: absolute;  top: -62px; right: 0;}
 .footer_con.folding .bottom_btn_con {top: -51px;}
 .footer_con .bottom_btn_con .inner {position: relative; display: flex; justify-content: center;}

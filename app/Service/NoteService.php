@@ -142,6 +142,23 @@ class NoteService extends CI_Service
         return $row;
     }
 
+    // Board::Postboard_del() 참고 - soft delete (is_deleted=1로만 세우고 row는 남김)
+    public function del($note_no)
+    {
+        $entity = new Note_Entity();
+        $entity->fill(['note_no' => $note_no]);
+
+        $result = $this->model->sql_del($entity);
+        $this->log->info("[Query] ".$this->model->getQuery());
+
+        if ($result) {
+            // 노트가 삭제되면 딸린 메모도 같이 안 보여야 하니 일괄 soft delete
+            $this->memoService->del_memos_by_parent('note', $note_no);
+            return AT_Result::toSuccessData();
+        }
+        return AT_Result::toFailData();
+    }
+
     public function after_process($data, $item_num_start=null)
     {
         $property_list = [];

@@ -71,4 +71,10 @@ class MemoService extends CI_Service
         }
         return AT_Result::toFailData();
     }
+
+    // 부모(note 등)가 삭제될 때 딸린 메모를 일괄 soft delete
+    public function del_memos_by_parent($parent_table, $parent_no)
+    {
+        return $this->model->delete_by_parent($parent_table, $parent_no);
+    }
 }

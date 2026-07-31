@@ -33,7 +33,17 @@ class Property extends BaseController
         $limit = $this->request->getGet('limit') ?? 10;
         $debug = $this->request->getGet('debug') ?? 0;
 
-        $rows = $this->service->get_list($page, $limit);
+        // 검색조건: 매물종류/거래방식/거래상태는 equal, 지역/매물명은 like.
+        // "all"이거나 값이 없으면 해당 조건은 제외(전체 검색).
+        $search = array(
+            'property_type'    => $this->request->getGet('property_type') ?? "",
+            'transaction_type' => $this->request->getGet('transaction_type') ?? "",
+            'status'           => $this->request->getGet('status') ?? "",
+            'region'           => $this->request->getGet('region') ?? "",
+            'property_name'    => $this->request->getGet('property_name') ?? "",
+        );
+
+        $rows = $this->service->get_list($page, $limit, "", $search);
         $pager_links = $this->calPaging($page, $rows['total'], 10, $limit);
 
         $data = array(
@@ -94,6 +104,27 @@ class Property extends BaseController
 
         $this->view($oResult);
         exit;
+    }
+
+    public function PostDelete() // Board::Postboard_del() 참고 - soft delete
+    {
+        $this->log->info("[REV] property delete : ".json_encode($_GET, JSON_UNESCAPED_UNICODE));
+        $property_no = $this->request->getVar('property_no');
+
+        if ($property_no != "" && $property_no > 0) {
+            $oResult = $this->service->del($property_no);
+        } else {
+            $oResult = AT_Result::toFailData("삭제할 매물이 없습니다.");
+        }
+
+        $this->view($oResult);
+        exit;
+    }
+
+    /*preflight*/
+    public function optionsDelete()
+    {
+        return $this;
     }
 
     // property 테이블 NOT NULL(기본값 없음) 컬럼과 동일한 필수값 검증

@@ -39,9 +39,12 @@ class NoteModel extends CI_Model
     }
 
     // 검색조건은 배열로 전달(예: "`status` = 'consulting'"). 상세검색(방문형태/거래방식/방문자명/연락처) 추가 시 이 배열에 조건만 추가하면 됨.
+    // soft delete된 노트는 목록/카운트에서 항상 제외하기 위해 is_deleted=0 조건을 여기서 강제로 추가.
     public function get_where($where=array())
     {
-        return (is_array($where) and count($where)>0) ? "WHERE ".implode(" AND ",$where) : "";
+        $conditions = is_array($where) ? $where : array();
+        $conditions[] = "`is_deleted` = 0";
+        return "WHERE ".implode(" AND ",$conditions);
     }
 
     // $where로 기간 등 조건을 걸 수 있음(예: 대시보드에서 이번달 등록건만 집계). 기본은 전체.
@@ -50,6 +53,19 @@ class NoteModel extends CI_Model
         $where_ = $this->get_where($where);
         $sql = "SELECT `status`, count(*) as 'total_count' FROM `$this->table` $where_ GROUP BY `status`";
         return $this->getExecQuery($sql);
+    }
+
+    // soft delete된 노트는 상세조회에서도 제외 (Board::Postboard_del() 패턴 참고 - status/is_deleted 플래그만 세우고 실제 삭제하지 않음)
+    public function findbyid($seq_no)
+    {
+        $sql = "SELECT * FROM `$this->table` WHERE `$this->primaryKey` = ".$this->db->escape($seq_no)." AND `is_deleted` = 0";
+        return $this->getExecQuery($sql);
+    }
+
+    public function sql_del(Note_Entity $entity)
+    {
+        $sql = "UPDATE `$this->table` SET `is_deleted`=1 WHERE `$this->primaryKey` = ".$this->db->escape($entity->note_no);
+        return $this->safeExecQuery($sql);
     }
 
     public function get_all_status()
