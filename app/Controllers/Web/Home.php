@@ -31,7 +31,9 @@ class Home extends BaseController
 
 
         $data = array(
-            "img"=>RS_IMG."/sec_02/img_sec2.jpg"
+            // 기존 img_sec2.jpg는 이전(스터디룸) 프로젝트의 내부 사진이 그대로 남아있던 것이라 교체함.
+            // 실제 매물/사무소 사진이 준비되면 이 경로를 그 사진으로 바꾸면 됨.
+            "img"=>RS_IMG."/sec_02/hero_skyline.svg"
         );
         $this->view("",'Home/index',$data);
     }
