@@ -43,12 +43,15 @@ class Property extends BaseController
             'property_name'    => $this->request->getGet('property_name') ?? "",
         );
 
+        $counts = $this->service->status_total_count(); //거래상태별 전체 매물수.
+
         $rows = $this->service->get_list($page, $limit, "", $search);
         $pager_links = $this->calPaging($page, $rows['total'], 10, $limit);
 
         $data = array(
-            'rows'  => $rows['rows'],
-            'pager' => $pager_links
+            'rows'   => $rows['rows'],
+            'pager'  => $pager_links,
+            'counts' => $counts
         );
 
         $oResult = AT_Result::toSuccessData("", $data);

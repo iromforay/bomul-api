@@ -86,6 +86,14 @@ class PropertyModel extends CI_Model
         return $rows[0]['cnt'] ?? 0;
     }
 
+    // NoteModel::status_total_count()와 동일한 패턴. is_deleted=0은 build_where()가 항상 붙여줌.
+    public function status_total_count($where="")
+    {
+        $where_sql = $this->build_where($where);
+        $sql = "SELECT `status`, count(*) as 'total_count' FROM `$this->table` $where_sql GROUP BY `status`";
+        return $this->getExecQuery($sql);
+    }
+
     // soft delete된 매물은 목록/카운트에서 항상 제외.
     private function build_where($where)
     {

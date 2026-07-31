@@ -159,6 +159,27 @@ class PropertyService extends CI_Service
         return array_intersect_key($data, $entity->toRawArray());
     }
 
+    // NoteService::status_total_count()와 동일한 패턴 - 거래상태별(거래가능/거래중/거래완료/거래보류/비공개) 전체 매물수.
+    public function status_total_count($where=array())
+    {
+        $rows = $this->model->status_total_count($where);
+        $_status = array();
+        foreach ($rows as $v) {
+            $_status[$v['status']] = $v['total_count'];
+        }
+
+        $total = 0;
+        foreach ($this->model->get_status("all") as $code => $title) {
+            $status[$code]['title'] = $title;
+            $status[$code]['total_count'] = $_status[$code] ?? 0;
+            $total += $status[$code]['total_count'];
+        }
+        $status['all']['title'] = "전체";
+        $status['all']['total_count'] = $total;
+
+        return $status;
+    }
+
     public function get_list($page=1,$perPage=10,$where="",$search=array())
     {
         $start = ($page -1)*$perPage;
@@ -246,6 +267,7 @@ class PropertyService extends CI_Service
             $value['heating_fuel_txt'] = $this->model->get_heating_fuel($v['heating_fuel']);
             $value['heating_type_txt'] = $this->model->get_heating_type($v['heating_type']);
             $value['status_txt'] = $this->model->get_status($v['status']);
+            $value['status_stamp_txt'] = $this->build_status_stamp_txt($v['status']);
             $value['display_yn_txt'] = $this->model->get_display_yn($v['display_yn']);
             $value['property_type_txt'] = $this->model->get_property_type($v['property_type']);
             $value['transaction_type_txt'] = $this->model->get_transaction_type($v['transaction_type']);
@@ -262,6 +284,14 @@ class PropertyService extends CI_Service
             $property_list[$k] =  $value;
         }
         return $property_list;
+    }
+
+    // 공개 웹에서 매물사진 위에 도장처럼 찍는 문구. 거래가능(1)/비공개(5)는 도장 없음(null).
+    // 거래보류(4)는 사유가 다양해 그대로 노출하면 오해 소지가 있어 "확인중"으로 순화해서 보여줌.
+    private function build_status_stamp_txt($status)
+    {
+        $map = [2 => '거래중', 3 => '거래완료', 4 => '확인중'];
+        return $map[$status] ?? null;
     }
 
     // 공개 웹 상세보기 URL 뒤에 붙는 장식용 슬러그(지역+거래방식). 라우팅엔 쓰이지 않음.
