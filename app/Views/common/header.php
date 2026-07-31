@@ -35,14 +35,14 @@ $ogImage = !empty($row['main_image_url'])
 <meta name="Description" content="<?=htmlspecialchars($pageDescription, ENT_QUOTES)?>">
 
 <?php if (!empty($common['naver_site_verification'])): ?>
-<meta name="naver-site-verification" content="<?=htmlspecialchars($common['naver_site_verification'], ENT_QUOTES)?>">
+<meta name="naver-site-verification" content="<?=htmlspecialchars($common['naver_site_verification'], ENT_QUOTES)?>" />
 <?php endif; ?>
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="<?=htmlspecialchars($pageTitle, ENT_QUOTES)?>">
-<meta property="og:description" content="<?=htmlspecialchars($pageDescription, ENT_QUOTES)?>">
-<meta property="og:image" content="<?=htmlspecialchars($ogImage, ENT_QUOTES)?>">
-<meta property="og:url" content="<?=htmlspecialchars($currentFullUrl, ENT_QUOTES)?>">
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="<?=htmlspecialchars($pageTitle, ENT_QUOTES)?>"/>
+<meta property="og:description" content="<?=htmlspecialchars($pageDescription, ENT_QUOTES)?>"/>
+<meta property="og:image" content="<?=htmlspecialchars($ogImage, ENT_QUOTES)?>"/>
+<meta property="og:url" content="<?=htmlspecialchars($currentFullUrl, ENT_QUOTES)?>"/>
 
 <title><?=$common['title']?></title>
 <style>
