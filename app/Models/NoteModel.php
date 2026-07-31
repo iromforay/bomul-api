@@ -22,18 +22,39 @@ class NoteModel extends CI_Model
 
     // 부모 CI_Model::get_list()는 $start>0 일 때만 LIMIT을 붙여서 1페이지(start=0)에서
     // 전체 행이 다 나오는 버그가 있음(PropertyModel과 동일 이유로 오버라이드).
-    public function get_list($start=0,$limit=0)
+    public function get_list($start=0,$limit=0,$where=array())
     {
+        $where_ = $this->get_where($where);
         $_limit = ($limit>0) ? " LIMIT $start,$limit " : "";
-        $sql = "SELECT * FROM `$this->table` ORDER BY `$this->primaryKey` DESC $_limit";
+        $sql = "SELECT * FROM `$this->table` $where_ ORDER BY `$this->primaryKey` DESC $_limit";
         return $this->getExecQuery($sql);
     }
 
-    public function get_count()
+    public function get_count($where=array())
     {
-        $sql = "SELECT count(*) as 'cnt' FROM `$this->table`";
+        $where_ = $this->get_where($where);
+        $sql = "SELECT count(*) as 'cnt' FROM `$this->table` $where_";
         $rows = $this->getExecQuery($sql);
         return $rows[0]['cnt'] ?? 0;
+    }
+
+    // 검색조건은 배열로 전달(예: "`status` = 'consulting'"). 상세검색(방문형태/거래방식/방문자명/연락처) 추가 시 이 배열에 조건만 추가하면 됨.
+    public function get_where($where=array())
+    {
+        return (is_array($where) and count($where)>0) ? "WHERE ".implode(" AND ",$where) : "";
+    }
+
+    // $where로 기간 등 조건을 걸 수 있음(예: 대시보드에서 이번달 등록건만 집계). 기본은 전체.
+    public function status_total_count($where=array())
+    {
+        $where_ = $this->get_where($where);
+        $sql = "SELECT `status`, count(*) as 'total_count' FROM `$this->table` $where_ GROUP BY `status`";
+        return $this->getExecQuery($sql);
+    }
+
+    public function get_all_status()
+    {
+        return array("consulting", "proposed", "contracted", "lost");
     }
 
     public function register(Note_Entity $entity)

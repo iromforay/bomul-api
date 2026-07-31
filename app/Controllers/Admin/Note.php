@@ -24,16 +24,28 @@ class Note extends BaseController
     public function getList()
     {
         $this->log->info("[REV] note listing : ".json_encode($_GET, JSON_UNESCAPED_UNICODE));
-        $page  = (int) ($this->request->getGet('page') ?? 1);
-        $limit = (int) ($this->request->getGet('limit') ?? 50); // 현재 전체를 한 페이지에 보여주기 위해 50으로 설정
+        $page   = (int) ($this->request->getGet('page') ?? 1);
+        $limit  = (int) ($this->request->getGet('limit') ?? 50); // 현재 전체를 한 페이지에 보여주기 위해 50으로 설정
+        $status = $this->request->getGet('status') ?? ""; // 상단 상태 탭(all/consulting/proposed/contracted/lost)
 
-        $rows = $this->service->get_list($page, $limit);
+        // 상세검색
+        $search = array(
+            'visit_type'       => $this->request->getGet('visit_type') ?? "",
+            'transaction_type' => $this->request->getGet('transaction_type') ?? "",
+            'visitor_name'     => $this->request->getGet('visitor_name') ?? "",
+            'visitor_phone'    => $this->request->getGet('visitor_phone') ?? "",
+        );
+
+        $counts = $this->service->status_total_count(); //진행상태별 전체 노트수.
+
+        $rows = $this->service->get_list($page, $limit, $status, $search);
         $total = $rows['total'];
         $pager_links = $this->calPaging($page, $total, 10, $limit);
 
         $data = array(
-            'rows'  => $rows['rows'],
-            'pager' => $pager_links
+            'rows'   => $rows['rows'],
+            'pager'  => $pager_links,
+            'counts' => $counts
         );
 
         $oResult = AT_Result::toSuccessData("", $data);

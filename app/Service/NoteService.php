@@ -65,12 +65,14 @@ class NoteService extends CI_Service
         return array_intersect_key($data, $entity->toRawArray());
     }
 
-    public function get_list($page=1,$perPage=10,$where="")
+    public function get_list($page=1,$perPage=10,$status="",$search=array())
     {
         $start = ($page -1)*$perPage;
 
-        $total_count = $this->model->get_count();
-        $row = $this->model->get_list($start,$perPage);
+        $where = $this->build_where($status,$search);
+
+        $total_count = $this->model->get_count($where);
+        $row = $this->model->get_list($start,$perPage,$where);
 
         $this->log->info("note list Query : ".$this->model->getQuery());
 
@@ -79,6 +81,58 @@ class NoteService extends CI_Service
         $row = $this->after_process($row, $item_num_start);
 
         return array("total"=>$total_count, "rows"=>$row);
+    }
+
+    // status 그룹 탭 + 상세검색(방문형태/거래방식/방문자명/연락처) 조건 조립
+    private function build_where($status="",$search=array())
+    {
+        $visit_type       = $search['visit_type'] ?? "";
+        $transaction_type = $search['transaction_type'] ?? "";
+        $visitor_name     = $search['visitor_name'] ?? "";
+        $visitor_phone    = $search['visitor_phone'] ?? "";
+
+        $where = array();
+
+        if ($status !== "" && $status !== "all" && in_array($status, $this->model->get_all_status())) {
+            $where[] = "`status` = '".$status."'";
+        }
+        if ($visit_type !== "" && array_key_exists($visit_type, $this->model->get_visit_type("all"))) {
+            $where[] = "`visit_type` = '".$visit_type."'";
+        }
+        if ($transaction_type !== "" && array_key_exists($transaction_type, $this->model->get_transaction_type("all"))) {
+            $where[] = "`transaction_type` = '".$transaction_type."'";
+        }
+        if ($visitor_name !== "") {
+            $where[] = "`visitor_name` LIKE '%".$this->db->escapeLikeString($visitor_name)."%'";
+        }
+        if ($visitor_phone !== "") {
+            $phone_digits = str_replace('-', '', $visitor_phone);
+            $where[] = "REPLACE(`visitor_phone`,'-','') LIKE '%".$this->db->escapeLikeString($phone_digits)."%'";
+        }
+
+        return $where;
+    }
+
+    // 상단 상태 탭(상담중/매물제안/계약완료/이탈 + 전체)별 카운트. board_total_count()와 동일한 방식.
+    // $where로 기간 등 조건을 걸 수 있음(예: 대시보드에서 이번달 등록건만 집계). 기본은 전체.
+    public function status_total_count($where=array())
+    {
+        $rows = $this->model->status_total_count($where);
+        $_status = array();
+        foreach ($rows as $v) {
+            $_status[$v['status']] = $v['total_count'];
+        }
+
+        $total = 0;
+        foreach ($this->model->get_all_status() as $v) {
+            $status[$v]['title'] = $this->model->get_status($v);
+            $status[$v]['total_count'] = $_status[$v] ?? 0;
+            $total += $status[$v]['total_count'];
+        }
+        $status['all']['title'] = "전체";
+        $status['all']['total_count'] = $total;
+
+        return $status;
     }
 
     public function getbyid($note_no)
