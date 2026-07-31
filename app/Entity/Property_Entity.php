@@ -147,7 +147,7 @@ class Property_Entity extends CI_Entity
         'maintenance_fee' => null,          // 관리비(만원)
 
         'status' => 1,                      // 거래상태
-        'display_yn' => true,               // 홈페이지노출
+        'display_yn' => 1,                  // 홈페이지노출
 
         'summary' => null,                  // 한줄소개
         'description' => null,              // 상세설명
@@ -206,7 +206,7 @@ class Property_Entity extends CI_Entity
         'maintenance_fee' => 'integer',
 
         'status' => 'integer',
-        'display_yn' => 'boolean',
+        'display_yn' => 'integer',
 
         'summary' => 'string',
         'description' => 'string',

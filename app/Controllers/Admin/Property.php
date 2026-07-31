@@ -3,6 +3,8 @@
 namespace App\Controllers\Admin;
 
 use App\Libraries\AT_Result;
+use App\Libraries\ImageWatermark;
+use App\Service\BasicService;
 use App\Service\PropertyService;
 use App\Service\ImgService;
 
@@ -130,11 +132,22 @@ class Property extends BaseController
         $oResult = $this->imgService->upload_file($file, SHOP_CODE."/temp_property/");
 
         if ($oResult['SUCCESS'] === 'TRUE') {
+            $fullPath = APP_PDS . rtrim($oResult['RECORD']['file_path'], '/') . '/' . $oResult['RECORD']['file_name'];
+            $companyName = $this->getCompanyName();
+            $watermarked = ImageWatermark::apply($fullPath, $companyName);
+            $this->log->info("[REV] watermark 적용 file=".$oResult['RECORD']['file_name']." company=".var_export($companyName, true)." applied=".var_export($watermarked, true));
+
             $oResult['RECORD']['file_url'] = SITE_PDS.rtrim($oResult['RECORD']['file_path'], '/')."/".$oResult['RECORD']['file_name'];
         }
 
         return $this->response->setJSON($oResult);
     }
 
-
+    // basic.company_name(부동산명) 조회 - 워터마크 텍스트로 씀
+    private function getCompanyName()
+    {
+        $basicService = new BasicService($this->log, $this->session_id);
+        $basic = $basicService->get_by_basic();
+        return $basic['company_name'] ?? '';
+    }
 }
