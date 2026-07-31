@@ -80,13 +80,14 @@ CREATE TABLE `basic` (
   `broker_agent_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '소속공인중개사 성명 (있는 경우만)',
   `broker_agent_phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '소속공인중개사 연락처 (있는 경우만)',
   `footer_copy` varchar(255) DEFAULT NULL,
+  `naver_site_verification` varchar(255) DEFAULT NULL COMMENT '네이버 서치어드바이저 사이트 소유권 확인 코드',
   PRIMARY KEY (`basic_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 /*Data for the table `basic` */
 
-insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`property_show`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`) values 
-(1,'foray','','로고','N','#006eff','50','#e0e0e0',NULL,'#000000','#000000','Y','Y','N','Y','Y','Y','N','Y','','Y','','Y','25시 부동산','중개사무소 명칭 테스트','서울 동작구','02-1234-5678','000-00-00000','foray','foray','02-1234-5678','대표이사 : 나병연 | 개인정보관리책임자 : 나병연 | 사업자등록번호 : 000-00-00000 | 주소 경기 부천시 | TEL 02-1234-5678');
+insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`property_show`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`,`naver_site_verification`) values 
+(1,'foray','','로고','N','#006eff','50','#e0e0e0',NULL,'#000000','#000000','Y','Y','N','Y','Y','Y','N','Y','','Y','','Y','25시 부동산','중개사무소 명칭 테스트','서울 동작구','02-1234-5678','000-00-00000','foray','foray','02-1234-5678','대표이사 : 나병연 | 개인정보관리책임자 : 나병연 | 사업자등록번호 : 000-00-00000 | 주소 경기 부천시 | TEL 02-1234-5678','7848e6654dbff7b0a931f47a50e402d7d681bc06');
 
 /*Table structure for table `board` */
 
@@ -215,7 +216,7 @@ CREATE TABLE `img` (
   `img_dir` varchar(255) DEFAULT NULL,
   `write_date` datetime DEFAULT NULL,
   PRIMARY KEY (`img_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 /*Data for the table `img` */
 
@@ -263,12 +264,19 @@ CREATE TABLE `memo` (
   `write_date` datetime DEFAULT NULL COMMENT '메모등록일',
   PRIMARY KEY (`memo_no`),
   KEY `idx_parent` (`parent_table`,`parent_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='메모 (1:N, 상담노트 등에서 사용)';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='메모 (1:N, 상담노트 등에서 사용)';
 
 /*Data for the table `memo` */
 
 insert  into `memo`(`memo_no`,`parent_table`,`parent_no`,`writer_no`,`writer_name`,`memo_text`,`write_date`) values 
-(1,'note',1,NULL,NULL,'foray','2026-07-24 08:25:12');
+(1,'note',1,NULL,NULL,'foray','2026-07-24 08:25:12'),
+(2,'note',1,NULL,'','메모 수정 버튼 테스트','2026-07-29 13:18:13'),
+(3,'note',1,NULL,'','3','2026-07-29 13:22:12'),
+(4,'note',1,NULL,'','4','2026-07-29 13:22:21'),
+(5,'note',1,NULL,'','5','2026-07-29 13:23:34'),
+(6,'note',1,NULL,'','6','2026-07-29 13:23:56'),
+(7,'note',1,NULL,'','노트관리>팝업 메모 등록 test\r\n-','2026-07-29 13:45:29'),
+(8,'note',4,NULL,NULL,'12','2026-07-29 16:25:40');
 
 /*Table structure for table `menu` */
 
@@ -297,7 +305,7 @@ insert  into `menu`(`menu_no`,`name`,`code`,`bgcolor`,`transparent`,`title`,`tit
 (5,'후기','review','#000000','62',NULL,'N',NULL,NULL),
 (6,'오시는길','map','#000000','36',NULL,NULL,NULL,NULL),
 (7,'홍보영상','vod','#000000','0',NULL,'N','N',NULL),
-(8,'매물관리','property','#427cf0','0',NULL,'N','N',NULL);
+(8,'매물관리','property','#ff0000','100',NULL,'N','Y',NULL);
 
 /*Table structure for table `note` */
 
@@ -324,13 +332,15 @@ CREATE TABLE `note` (
   KEY `idx_property` (`property_no`),
   KEY `idx_status` (`status`),
   KEY `idx_visit_date` (`visit_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='고객노트(방문일지)';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='고객노트(방문일지)';
 
 /*Data for the table `note` */
 
 insert  into `note`(`note_no`,`agent_no`,`property_no`,`visitor_name`,`visitor_phone`,`visit_type`,`transaction_type`,`budget`,`preferred_area`,`inflow_type`,`status`,`visit_date`,`next_contact_date`,`created_at`,`updated_at`) values 
 (1,0,0,'foray','010-1234-5678','tenant','sale\n',3000,'서울 동작구','visit','conulting','2026-07-24 00:00:00','2026-07-27','2026-07-24 08:13:18','2026-07-24 08:13:18'),
-(2,0,0,'foray','010-1234-5678','tenant','sale\n',3000,'서울 동작구','visit','conulting','2026-07-24 00:00:00','2026-07-27','2026-07-24 08:14:35','2026-07-24 08:14:35');
+(2,1,0,'예린','010-1234-5678','landlord','jeonse',3000,'서울 동작구','visit','consulting','2026-07-24 00:00:00','2026-07-30','2026-07-24 08:14:35','2026-07-29 15:45:01'),
+(3,0,0,'노트등록','010-3949-3434','tenant','sale',100000,'서울 동작구','visit','consulting','2026-07-30 12:44:00','2026-07-10','2026-07-29 15:44:18','2026-07-29 15:44:18'),
+(4,0,0,'옵션','010-1234-5678','tenant','sale',23,'서울 동작구','visit','consulting','2026-07-30 00:51:00','2026-07-30','2026-07-29 15:50:18','2026-07-29 15:50:18');
 
 /*Table structure for table `pager_detail` */
 
@@ -435,6 +445,8 @@ CREATE TABLE `property` (
   `addr_sigungu` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '시군구',
   `addr_dong` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '읍면동',
   `addr_road` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '도로명',
+  `latitude` varchar(20) DEFAULT NULL COMMENT '위도',
+  `longitude` varchar(20) DEFAULT NULL COMMENT '경도',
   `supply_area` int(10) unsigned DEFAULT NULL COMMENT '공급면적(㎡)',
   `exclusive_area` int(10) unsigned DEFAULT NULL COMMENT '전용면적(㎡)',
   `total_floor` smallint(5) unsigned DEFAULT NULL COMMENT '총층수',
@@ -472,21 +484,64 @@ CREATE TABLE `property` (
 
 /*Data for the table `property` */
 
-insert  into `property`(`property_no`,`property_type`,`transaction_type`,`property_name`,`building_name`,`addr_sido`,`addr_sigungu`,`addr_dong`,`addr_road`,`supply_area`,`exclusive_area`,`total_floor`,`current_floor`,`room_count`,`bathroom_count`,`parking_available`,`parking_count`,`completion_date`,`move_in_date`,`direction`,`heating_fuel`,`heating_type`,`sale_price`,`jeonse_price`,`deposit_price`,`monthly_rent`,`loan_amount`,`maintenance_fee`,`status`,`display_yn`,`summary`,`description`,`main_image`,`main_path`,`view_count`,`created_at`,`updated_at`) values 
-(1,'villa','jeonse','테스트 ',NULL,'서울시','동작구','',NULL,0,0,3,0,4,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,'테스트용 매물입니다.',NULL,NULL,NULL,0,'2026-07-09 07:47:18','2026-07-22 07:42:12'),
-(2,'apt','sale','test',NULL,'','','',NULL,0,0,0,0,0,0,'Y',0,'2026-07-22 07:34:56','2026-07-22 07:34:56','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-22 07:34:56','2026-07-22 07:41:58'),
-(3,'apt','monthly','1122',NULL,'','','',NULL,0,0,0,0,0,0,'Y',0,'2026-07-22 07:35:35','2026-07-22 07:35:35','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-22 07:35:35','2026-07-22 07:42:03'),
-(10,'factory','0','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:38:10','2026-07-23 03:38:10'),
-(11,'factory','0','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:42:51','2026-07-23 03:42:51'),
-(12,'factory','0','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:46:17','2026-07-23 03:46:17'),
-(13,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:48:37','2026-07-23 03:48:37'),
-(14,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:56:04','2026-07-23 03:56:04'),
-(15,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:09:11','2026-07-23 04:09:11'),
-(16,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:13:06','2026-07-23 04:13:06'),
-(17,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,'2d2ea918023d17aead7e5829ef2a9fa2.png','foray/property/17/',0,'2026-07-23 04:14:37','2026-07-23 06:18:11'),
-(18,'apt','sale','ㅂㅇㄹ',NULL,'서울','영등포구','대림동','서울 영등포구 가마산로 311',0,0,0,0,0,0,'Y',0,'2026-07-27 02:02:28','2026-07-27 02:02:28','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-27 02:02:28','2026-07-27 02:02:28'),
-(19,'apt','sale','사진 test',NULL,'경남','창녕군','반포리','경남 창녕군 남지읍 골담실길 16',0,0,0,0,0,0,'Y',0,'2026-07-27 13:23:13','2026-07-27 13:23:13','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,'a1c96fcdd536eb0304df01dbac0174c9.png','foray/property/19/',14,'2026-07-27 13:23:13','2026-07-28 08:56:10'),
-(20,'officetel','monthly','사진 상세 테스트',NULL,'서울','강남구','신사동','서울 강남구 가로수길 5',2,0,0,0,0,0,'Y',0,'2026-07-27 00:00:00','2026-07-27 00:00:00','S',1,1,30000,0,5000,20,0,15,2,1,'한줄소개 테스트','<p>상세설명 테스트</p>',NULL,NULL,23,'2026-07-27 17:48:40','2026-07-29 04:02:37');
+insert  into `property`(`property_no`,`property_type`,`transaction_type`,`property_name`,`building_name`,`addr_sido`,`addr_sigungu`,`addr_dong`,`addr_road`,`latitude`,`longitude`,`supply_area`,`exclusive_area`,`total_floor`,`current_floor`,`room_count`,`bathroom_count`,`parking_available`,`parking_count`,`completion_date`,`move_in_date`,`direction`,`heating_fuel`,`heating_type`,`sale_price`,`jeonse_price`,`deposit_price`,`monthly_rent`,`loan_amount`,`maintenance_fee`,`status`,`display_yn`,`summary`,`description`,`main_image`,`main_path`,`view_count`,`created_at`,`updated_at`) values 
+(1,'villa','jeonse','테스트 ',NULL,'서울시','동작구','',NULL,NULL,NULL,0,0,3,0,4,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,'테스트용 매물입니다.',NULL,NULL,NULL,0,'2026-07-09 07:47:18','2026-07-22 07:42:12'),
+(2,'apt','sale','test',NULL,'','','',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,'2026-07-22 07:34:56','2026-07-22 07:34:56','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-22 07:34:56','2026-07-22 07:41:58'),
+(3,'apt','monthly','1122',NULL,'','','',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,'2026-07-22 07:35:35','2026-07-22 07:35:35','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-22 07:35:35','2026-07-22 07:42:03'),
+(10,'factory','0','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:38:10','2026-07-23 03:38:10'),
+(11,'factory','0','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:42:51','2026-07-23 03:42:51'),
+(12,'factory','0','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:46:17','2026-07-23 03:46:17'),
+(13,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,4,'2026-07-23 03:48:37','2026-07-30 06:09:30'),
+(14,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 03:56:04','2026-07-23 03:56:04'),
+(15,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:09:11','2026-07-23 04:09:11'),
+(16,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-23 04:13:06','2026-07-23 04:13:06'),
+(17,'factory','sale','test',NULL,'서울시','영등포구','여의도동  45-3',NULL,NULL,NULL,0,0,0,0,0,0,'Y',0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,NULL,NULL,'2d2ea918023d17aead7e5829ef2a9fa2.png','foray/property/17/',0,'2026-07-23 04:14:37','2026-07-23 06:18:11'),
+(18,'apt','sale','ㅂㅇㄹ',NULL,'서울','영등포구','대림동','서울 영등포구 가마산로 311',NULL,NULL,0,0,0,0,0,0,'Y',0,'2026-07-27 02:02:28','2026-07-27 02:02:28','S',1,1,0,0,0,0,0,0,1,1,NULL,NULL,NULL,NULL,0,'2026-07-27 02:02:28','2026-07-27 02:02:28'),
+(19,'apt','sale','창녕군 반포리 아파트 매매',NULL,'경남','창녕군','반포리','경남 창녕군 남지읍 골담실길 16',NULL,NULL,0,0,0,0,0,0,'Y',0,'2026-07-27 13:23:13','2026-07-27 13:23:13','S',1,1,30000,0,0,0,0,0,1,1,NULL,NULL,'a1c96fcdd536eb0304df01dbac0174c9.png','foray/property/19/',25,'2026-07-27 13:23:13','2026-07-30 06:47:07'),
+(20,'officetel','monthly','사진 상세 테스트',NULL,'서울','강남구','도곡동','서울 강남구 강남대로 238-2','37.4847867','127.0345711',2,0,0,0,0,0,'Y',0,'2026-07-27 00:00:00','2026-07-27 00:00:00','S',1,1,30000,0,5000,20,0,15,2,1,'한줄소개 테스트','<p>상세설명 테스트</p>',NULL,NULL,1,'2026-07-27 17:48:40','2026-07-30 07:44:47');
+
+/*Table structure for table `property_analytics_daily` */
+
+DROP TABLE IF EXISTS `property_analytics_daily`;
+
+CREATE TABLE `property_analytics_daily` (
+  `stat_date` date NOT NULL COMMENT '집계 대상 날짜',
+  `property_no` int(10) unsigned NOT NULL COMMENT 'property.property_no',
+  `view_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '그날 조회수 (pageview 이벤트 수)',
+  `avg_dwell_ms` int(10) unsigned DEFAULT NULL COMMENT '그날 평균 체류시간(ms), dwell 이벤트 기준',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT '배치 적재시각',
+  PRIMARY KEY (`stat_date`,`property_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 매물별 일별 집계 (새벽 배치 생성)';
+
+/*Data for the table `property_analytics_daily` */
+
+insert  into `property_analytics_daily`(`stat_date`,`property_no`,`view_count`,`avg_dwell_ms`,`created_at`) values 
+('2026-07-29',20,1,2821,'2026-07-30 01:36:17');
+
+/*Table structure for table `site_analytics_daily_stats` */
+
+DROP TABLE IF EXISTS `site_analytics_daily_stats`;
+
+CREATE TABLE `site_analytics_daily_stats` (
+  `stat_date` date NOT NULL COMMENT '집계 대상 날짜',
+  `visitor_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '고유 방문자수 (그날 visit_id 수)',
+  `pageview_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '페이지뷰수 (pageview 이벤트 수)',
+  `new_visitor_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '신규 방문자수 (is_returning=N)',
+  `returning_visitor_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '재방문자수 (is_returning=Y)',
+  `naver_referral_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '네이버 유입 방문자수 (판별 규칙은 위 주석 참고)',
+  `direct_referral_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '직접 유입 (referrer_url 없음)',
+  `other_referral_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '기타 유입 (네이버/직접 외)',
+  `pc_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'PC 방문자수 (user_agent 기준)',
+  `mobile_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '모바일 방문자수 (user_agent 기준)',
+  `phone_click_count` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '전화클릭 수 (click_action=tel)',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT '배치 적재시각',
+  PRIMARY KEY (`stat_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 사이트 종합 일별 집계 (새벽 배치 생성)';
+
+/*Data for the table `site_analytics_daily_stats` */
+
+insert  into `site_analytics_daily_stats`(`stat_date`,`visitor_count`,`pageview_count`,`new_visitor_count`,`returning_visitor_count`,`naver_referral_count`,`direct_referral_count`,`other_referral_count`,`pc_count`,`mobile_count`,`phone_click_count`,`created_at`) values 
+('2026-07-29',1,1,1,0,0,0,1,1,0,0,'2026-07-30 01:36:17');
 
 /*Table structure for table `site_analytics_event` */
 
@@ -509,13 +564,117 @@ CREATE TABLE `site_analytics_event` (
   KEY `idx_event_type` (`event_type`),
   KEY `idx_occurred_at` (`occurred_at`),
   KEY `idx_property_no` (`property_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 행동 이벤트 원본 (append-only)';
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방문자 트래킹 - 행동 이벤트 원본 (append-only)';
 
 /*Data for the table `site_analytics_event` */
 
 insert  into `site_analytics_event`(`event_no`,`visit_id`,`event_type`,`occurred_at`,`page_type`,`property_no`,`request_url`,`dwell_ms`,`click_action`,`search_filter`,`created_at`) values 
-(1,'79d1967707a0d88f16d855de1c4cd850','pageview','2026-07-29 13:02:34','property',20,'/property/view/20/%EC%8B%A0%EC%82%AC%EB%8F%99%20%EC%9B%94%EC%84%B8',0,NULL,NULL,'2026-07-29 04:02:37'),
-(2,'79d1967707a0d88f16d855de1c4cd850','dwell','2026-07-29 13:02:35','property',20,'/property/view/20/%EC%8B%A0%EC%82%AC%EB%8F%99%20%EC%9B%94%EC%84%B8',1163,NULL,NULL,'2026-07-29 04:02:38');
+(1,'10ffd2e6700487fca539e58f459821d9','pageview','2026-07-29 13:31:51','property',20,'/property/view/20/%EC%8B%A0%EC%82%AC%EB%8F%99%20%EC%9B%94%EC%84%B8',0,NULL,NULL,'2026-07-29 04:31:53'),
+(2,'10ffd2e6700487fca539e58f459821d9','dwell','2026-07-29 13:31:54','property',20,'/property/view/20/%EC%8B%A0%EC%82%AC%EB%8F%99%20%EC%9B%94%EC%84%B8',2821,NULL,NULL,'2026-07-29 04:31:56'),
+(3,'eb4fe97c8f851cdb4d28d70a3fbb5fbf','pageview','2026-07-30 10:29:05','main',0,'/',0,NULL,NULL,'2026-07-30 01:29:07'),
+(4,'eb4fe97c8f851cdb4d28d70a3fbb5fbf','dwell','2026-07-30 10:29:06','main',0,'/',1076,NULL,NULL,'2026-07-30 01:29:08'),
+(5,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 14:29:07','main',0,'/',0,NULL,NULL,'2026-07-30 05:29:08'),
+(6,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 14:29:09','main',0,'/',2060,NULL,NULL,'2026-07-30 05:29:11'),
+(7,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 14:29:09','property',0,'/property',0,NULL,NULL,'2026-07-30 05:29:11'),
+(8,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 14:29:10','property',0,'/property',831,NULL,NULL,'2026-07-30 05:29:11'),
+(9,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 14:30:36','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 05:30:37'),
+(10,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 14:30:47','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',11492,NULL,NULL,'2026-07-30 05:30:49'),
+(11,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 14:30:47','property',0,'/property',0,NULL,NULL,'2026-07-30 05:30:49'),
+(12,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 14:30:51','property',0,'/property',3610,NULL,NULL,'2026-07-30 05:30:53'),
+(13,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 14:30:51','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 05:30:53'),
+(14,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 14:31:01','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',9817,NULL,NULL,'2026-07-30 05:31:02'),
+(15,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:04:49','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:04:51'),
+(16,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:04:54','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',5102,NULL,NULL,'2026-07-30 06:04:56'),
+(17,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:08:15','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:08:17'),
+(18,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:08:25','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',10058,NULL,NULL,'2026-07-30 06:08:27'),
+(19,'bf8e20fbf1e18f76c5e5c57ec2f3919d','pageview','2026-07-30 15:09:28','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:09:30'),
+(20,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:18:35','property',0,'/property',0,NULL,NULL,'2026-07-30 06:18:37'),
+(21,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:18:40','property',0,'/property',4569,NULL,NULL,'2026-07-30 06:18:42'),
+(22,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:18:40','property',0,'/property?page=2',0,NULL,NULL,'2026-07-30 06:18:42'),
+(23,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:18:54','property',0,'/property?page=2',13887,NULL,NULL,'2026-07-30 06:18:55'),
+(24,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:18:54','property',0,'/property?page=1',0,NULL,NULL,'2026-07-30 06:18:55'),
+(25,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:19:00','property',0,'/property?page=1',6088,NULL,NULL,'2026-07-30 06:19:02'),
+(26,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:19:00','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:19:02'),
+(27,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:19:07','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',6964,NULL,NULL,'2026-07-30 06:19:09'),
+(28,'bf8e20fbf1e18f76c5e5c57ec2f3919d','dwell','2026-07-30 15:20:09','property',13,'/property/view/13/%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%20%2045-3%20%EB%A7%A4%EB%A7%A4',640137,NULL,NULL,'2026-07-30 06:20:10'),
+(29,'bf8e20fbf1e18f76c5e5c57ec2f3919d','pageview','2026-07-30 15:20:09','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:20:10'),
+(30,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:27:34','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:27:36'),
+(31,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:27:40','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',6081,NULL,NULL,'2026-07-30 06:27:42'),
+(32,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:29:29','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:29:31'),
+(33,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:30:02','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',32733,NULL,NULL,'2026-07-30 06:30:04'),
+(34,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:30:02','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',0,NULL,NULL,'2026-07-30 06:30:04'),
+(35,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:30:32','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4',30233,NULL,NULL,'2026-07-30 06:30:34'),
+(36,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:30:32','property',0,'/property?page=1',0,NULL,NULL,'2026-07-30 06:30:34'),
+(37,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:30:33','property',0,'/property?page=1',734,NULL,NULL,'2026-07-30 06:30:35'),
+(38,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:37:03','property',0,'/property?page=1',0,NULL,NULL,'2026-07-30 06:37:05'),
+(39,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:37:04','property',0,'/property?page=1',1182,NULL,NULL,'2026-07-30 06:37:06'),
+(40,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:37:04','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4%203%EC%96%B5%EC%9B%90',0,NULL,NULL,'2026-07-30 06:37:06'),
+(41,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:37:11','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4%203%EC%96%B5%EC%9B%90',6452,NULL,NULL,'2026-07-30 06:37:12'),
+(42,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:47:06','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4%203%EC%96%B5%EC%9B%90',0,NULL,NULL,'2026-07-30 06:47:07'),
+(43,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:47:07','property',19,'/property/view/19/%EB%B0%98%ED%8F%AC%EB%A6%AC%20%EB%A7%A4%EB%A7%A4%203%EC%96%B5%EC%9B%90',1278,NULL,NULL,'2026-07-30 06:47:09'),
+(44,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:47:07','main',0,'/',0,NULL,NULL,'2026-07-30 06:47:09'),
+(45,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:47:08','main',0,'/',918,NULL,NULL,'2026-07-30 06:47:10'),
+(46,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:47:08','main',0,'/',0,NULL,NULL,'2026-07-30 06:47:10'),
+(47,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:47:10','main',0,'/',2293,NULL,NULL,'2026-07-30 06:47:12'),
+(48,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:54:20','main',0,'/',0,NULL,NULL,'2026-07-30 06:54:21'),
+(49,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 15:57:41','main',0,'/',200962,NULL,NULL,'2026-07-30 06:57:41'),
+(50,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 15:59:23','main',0,'/',0,NULL,NULL,'2026-07-30 06:59:23'),
+(51,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:00:27','main',0,'/',63743,NULL,NULL,'2026-07-30 07:00:27'),
+(52,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:28','main',0,'/',0,NULL,NULL,'2026-07-30 07:44:28'),
+(53,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:29','main',0,'/',901,NULL,NULL,'2026-07-30 07:44:29'),
+(54,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:37','property',0,'/property',0,NULL,NULL,'2026-07-30 07:44:37'),
+(55,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:42','property',0,'/property',5282,NULL,NULL,'2026-07-30 07:44:42'),
+(56,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:42','notice',0,'/notice',0,NULL,NULL,'2026-07-30 07:44:42'),
+(57,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:46','notice',0,'/notice',3665,NULL,NULL,'2026-07-30 07:44:46'),
+(58,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:46','property',0,'/property',0,NULL,NULL,'2026-07-30 07:44:46'),
+(59,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:47','property',0,'/property',1425,NULL,NULL,'2026-07-30 07:44:47'),
+(60,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:47','property',20,'/property/view/20/%EB%8F%84%EA%B3%A1%EB%8F%99%20%EC%9B%94%EC%84%B8%2020%EB%A7%8C%EC%9B%90',0,NULL,NULL,'2026-07-30 07:44:47'),
+(61,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:53','property',20,'/property/view/20/%EB%8F%84%EA%B3%A1%EB%8F%99%20%EC%9B%94%EC%84%B8%2020%EB%A7%8C%EC%9B%90',5234,NULL,NULL,'2026-07-30 07:44:53'),
+(62,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:53','main',0,'/',0,NULL,NULL,'2026-07-30 07:44:53'),
+(63,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:56','main',0,'/',3285,NULL,NULL,'2026-07-30 07:44:56'),
+(64,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:56','notice',0,'/notice',0,NULL,NULL,'2026-07-30 07:44:56'),
+(65,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:44:59','notice',0,'/notice',2799,NULL,NULL,'2026-07-30 07:44:59'),
+(66,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 16:44:59','property',0,'/property',0,NULL,NULL,'2026-07-30 07:44:59'),
+(67,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 16:45:13','property',0,'/property',14429,NULL,NULL,'2026-07-30 07:45:13'),
+(68,'c5f5e45b36a83a6353fd472ed0a10f01','pageview','2026-07-30 16:48:55','main',0,'/',0,NULL,NULL,'2026-07-30 07:48:55'),
+(69,'c5f5e45b36a83a6353fd472ed0a10f01','dwell','2026-07-30 16:49:05','main',0,'/',9488,NULL,NULL,'2026-07-30 07:49:05'),
+(70,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:16:00','main',0,'/',0,NULL,NULL,'2026-07-30 08:16:00'),
+(71,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:16:02','main',0,'/',2398,NULL,NULL,'2026-07-30 08:16:02'),
+(72,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:19:41','main',0,'/',0,NULL,NULL,'2026-07-30 08:19:41'),
+(73,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:19:42','main',0,'/',1025,NULL,NULL,'2026-07-30 08:19:42'),
+(74,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:19:42','main',0,'/',0,NULL,NULL,'2026-07-30 08:19:42'),
+(75,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:19:43','main',0,'/',373,NULL,NULL,'2026-07-30 08:19:43'),
+(76,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:19:43','main',0,'/',0,NULL,NULL,'2026-07-30 08:19:43'),
+(77,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:19:59','main',0,'/',15925,NULL,NULL,'2026-07-30 08:19:59'),
+(78,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:19:59','main',0,'/',0,NULL,NULL,'2026-07-30 08:19:59'),
+(79,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:20:01','main',0,'/',2446,NULL,NULL,'2026-07-30 08:20:01'),
+(80,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:20:01','main',0,'/',0,NULL,NULL,'2026-07-30 08:20:01'),
+(81,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:20:21','main',0,'/',19484,NULL,NULL,'2026-07-30 08:20:21'),
+(82,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:20:21','main',0,'/',0,NULL,NULL,'2026-07-30 08:20:21'),
+(83,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:20:21','main',0,'/',449,NULL,NULL,'2026-07-30 08:20:21'),
+(84,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:20:21','main',0,'/',0,NULL,NULL,'2026-07-30 08:20:21'),
+(85,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:20:22','main',0,'/',348,NULL,NULL,'2026-07-30 08:20:22'),
+(86,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:20:22','main',0,'/',0,NULL,NULL,'2026-07-30 08:20:22'),
+(87,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:16','main',0,'/',54287,NULL,NULL,'2026-07-30 08:21:16'),
+(88,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:16','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:16'),
+(89,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:16','main',0,'/',484,NULL,NULL,'2026-07-30 08:21:16'),
+(90,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:16','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:16'),
+(91,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:17','main',0,'/',311,NULL,NULL,'2026-07-30 08:21:17'),
+(92,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:17','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:17'),
+(93,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:17','main',0,'/',242,NULL,NULL,'2026-07-30 08:21:17'),
+(94,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:17','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:17'),
+(95,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:17','main',0,'/',349,NULL,NULL,'2026-07-30 08:21:17'),
+(96,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:17','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:17'),
+(97,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:34','main',0,'/',16674,NULL,NULL,'2026-07-30 08:21:34'),
+(98,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:34','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:34'),
+(99,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:35','main',0,'/',762,NULL,NULL,'2026-07-30 08:21:35'),
+(100,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:35','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:35'),
+(101,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:40','main',0,'/',4793,NULL,NULL,'2026-07-30 08:21:40'),
+(102,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','pageview','2026-07-30 17:21:40','main',0,'/',0,NULL,NULL,'2026-07-30 08:21:40'),
+(103,'f4de97381ef1ad3ec2bc2b7b1d1d5a8f','dwell','2026-07-30 17:21:45','main',0,'/',5641,NULL,NULL,'2026-07-30 08:21:45'),
+(104,'c9cf43b34ee8279c8d63f706e0a11584','pageview','2026-07-30 17:27:41','main',0,'/',0,NULL,NULL,'2026-07-30 08:27:41'),
+(105,'c9cf43b34ee8279c8d63f706e0a11584','dwell','2026-07-30 17:28:05','main',0,'/',23887,NULL,NULL,'2026-07-30 08:28:05'),
+(106,'c9cf43b34ee8279c8d63f706e0a11584','pageview','2026-07-30 17:28:05','property',0,'/property',0,NULL,NULL,'2026-07-30 08:28:05');
 
 /*Table structure for table `site_analytics_visit` */
 
@@ -543,7 +702,12 @@ CREATE TABLE `site_analytics_visit` (
 /*Data for the table `site_analytics_visit` */
 
 insert  into `site_analytics_visit`(`visit_id`,`client_key`,`occurred_at`,`ip`,`referrer_url`,`utm_source`,`utm_medium`,`utm_campaign`,`user_agent`,`viewport_w`,`viewport_h`,`is_returning`,`created_at`) values 
-('79d1967707a0d88f16d855de1c4cd850',NULL,'2026-07-29 13:02:34','114.201.4.34','http://foray.bomul.co.kr/property',NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0',883,616,'N','2026-07-29 04:02:37');
+('10ffd2e6700487fca539e58f459821d9','ms5l8fi3vkpbzk5za7','2026-07-29 13:31:51','114.201.4.34','http://foray.bomul.co.kr/property',NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0',883,616,'N','2026-07-29 04:31:53'),
+('bf8e20fbf1e18f76c5e5c57ec2f3919d','ms745tm2hrk7pukttk8','2026-07-30 15:09:28','114.201.4.34',NULL,NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.24012.9 Chrome/148.0.7778.280 Electron/42.7.0 Safari/537.36 MSIX',0,0,'N','2026-07-30 06:09:30'),
+('c5f5e45b36a83a6353fd472ed0a10f01','ms77ppg3p03ag83koip','2026-07-30 16:48:55','59.25.162.138','http://localhost:3000/',NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',1707,781,'N','2026-07-30 07:48:55'),
+('c9cf43b34ee8279c8d63f706e0a11584','ms793k0p7rqrc9srve8','2026-07-30 17:27:41','114.201.4.34',NULL,NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.24012.9 Chrome/148.0.7778.280 Electron/42.7.0 Safari/537.36 MSIX',0,0,'Y','2026-07-30 08:27:41'),
+('eb4fe97c8f851cdb4d28d70a3fbb5fbf','ms6u58m3yuq2kktcq2f','2026-07-30 10:29:05','114.201.4.34',NULL,NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0',883,616,'Y','2026-07-30 01:29:07'),
+('f4de97381ef1ad3ec2bc2b7b1d1d5a8f','ms72px0ftx4q4hcggc','2026-07-30 14:29:07','114.201.4.34',NULL,NULL,NULL,NULL,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0',883,616,'Y','2026-07-30 05:29:08');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
