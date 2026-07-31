@@ -72,4 +72,17 @@ class SiteAnalyticsDailyStatsModel extends CI_Model
             ";
         return $this->getExecQuery($sql);
     }
+
+    // 대시보드 기간 선택기(period 드롭다운)용 - 실제로 데이터가 있는 월(YYYYMM)만, $sinceDate 이전은 제외(마지노선).
+    public function getAvailableMonths($sinceDate)
+    {
+        $sql = "
+            SELECT DISTINCT DATE_FORMAT(stat_date, '%Y%m') AS ym
+            FROM ".$this->table."
+            WHERE stat_date >= ".$this->db->escape($sinceDate)."
+            ORDER BY ym DESC
+            ";
+        $rows = $this->getExecQuery($sql);
+        return array_column($rows, 'ym');
+    }
 }

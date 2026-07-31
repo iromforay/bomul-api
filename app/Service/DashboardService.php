@@ -17,6 +17,7 @@ class DashboardService extends CI_Service
     private $log;
     private $dailyStatsModel;
     private $propertyDailyModel;
+    private $noteService;
 
     public function __construct($log = "", $session_id = "")
     {
@@ -26,17 +27,27 @@ class DashboardService extends CI_Service
         $this->dailyStatsModel->getLog($log);
         $this->propertyDailyModel = model('App\Models\PropertyAnalyticsDailyModel', true, $this->db);
         $this->propertyDailyModel->getLog($log);
+        $this->noteService = new NoteService($log, $session_id);
         return $this;
     }
 
-    public function getSummary($year, $month)
+    // $day: 숨은 기능(현재 FE 미사용, html 시안에도 미노출) - 넘기면 그 하루만, 전일 대비로 조회.
+    public function getSummary($year, $month, $day = null)
     {
-        $thisStart = sprintf('%04d-%02d-01', $year, $month);
-        $thisEnd = date('Y-m-t', strtotime($thisStart));
+        if ($day) {
+            $thisStart = sprintf('%04d-%02d-%02d', $year, $month, $day);
+            $thisEnd = $thisStart;
 
-        $prevTs = strtotime('-1 month', strtotime($thisStart));
-        $prevStart = date('Y-m-01', $prevTs);
-        $prevEnd = date('Y-m-t', $prevTs);
+            $prevTs = strtotime('-1 day', strtotime($thisStart));
+            $prevStart = $prevEnd = date('Y-m-d', $prevTs);
+        } else {
+            $thisStart = sprintf('%04d-%02d-01', $year, $month);
+            $thisEnd = date('Y-m-t', strtotime($thisStart));
+
+            $prevTs = strtotime('-1 month', strtotime($thisStart));
+            $prevStart = date('Y-m-01', $prevTs);
+            $prevEnd = date('Y-m-t', $prevTs);
+        }
 
         $thisTotals = $this->dailyStatsModel->getTotals($thisStart, $thisEnd);
         $prevTotals = $this->dailyStatsModel->getTotals($prevStart, $prevEnd);
@@ -56,8 +67,22 @@ class DashboardService extends CI_Service
         }
         unset($p);
 
+        // 이번달 등록된 상담노트의 진행상태 분포(상담중/매물제안/계약완료/이탈) - Admin/note/list 상단 탭과 동일 집계, 이번달로 스코프.
+        $noteStatusBreakdown = $this->noteService->status_total_count([
+            "`created_at` >= '{$thisStart} 00:00:00'",
+            "`created_at` <= '{$thisEnd} 23:59:59'",
+        ]);
+
+        // 기간 선택기(period 드롭다운)용 - 실 데이터가 있는 월만, 1년 전을 마지노선으로 제외.
+        $oneYearAgo = date('Y-m-d', strtotime('-1 year'));
+        $availablePeriods = array_map(function ($ym) {
+            $y = (int)substr($ym, 0, 4);
+            $m = (int)substr($ym, 4, 2);
+            return ['period' => $ym, 'year' => $y, 'month' => $m, 'label' => "{$y}년 {$m}월"];
+        }, $this->dailyStatsModel->getAvailableMonths($oneYearAgo));
+
         return [
-            'period' => ['year' => (int)$year, 'month' => (int)$month, 'start' => $thisStart, 'end' => $thisEnd],
+            'period' => ['year' => (int)$year, 'month' => (int)$month, 'day' => $day ? (int)$day : null, 'start' => $thisStart, 'end' => $thisEnd],
             'kpi' => [
                 'naver_referral' => [
                     'current' => (int)($thisTotals['naver_referral_count'] ?? 0),
@@ -85,6 +110,10 @@ class DashboardService extends CI_Service
             'top_properties' => $topProperties,
             // 문의수 연동 전이라는 걸 FE가 명시적으로 알고 "연동 예정" 등으로 표시하도록 하는 플래그.
             'inquiry_data_available' => false,
+            // 이번달 등록된 상담노트 진행상태 분포 (Admin/note/list 상단 탭 counts와 동일 형태)
+            'note_status_breakdown' => $noteStatusBreakdown,
+            // 기간 선택기용 - 실 데이터가 있는 월만 최신순, 1년 전까지만
+            'available_periods' => $availablePeriods,
         ];
     }
 }
