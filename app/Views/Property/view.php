@@ -9,7 +9,12 @@
             <div class="property_view">
 
                 <div class="gallery">
-                    <div class="main"<?= !empty($row['main_image_url']) ? " style=\"background-image:url('".$row['main_image_url']."')\"" : "" ?>></div>
+                    <div class="main<?= empty($row['main_image_url']) ? ' no_image' : '' ?>"<?= !empty($row['main_image_url']) ? " style=\"background-image:url('".$row['main_image_url']."')\"" : "" ?>>
+                        <?= empty($row['main_image_url']) ? '이미지 없음' : '' ?>
+                        <?php if (!empty($row['status_stamp_txt'])): ?>
+                            <div class="status_stamp status_stamp--<?= $row['status'] ?>"><?= $row['status_stamp_txt'] ?></div>
+                        <?php endif; ?>
+                    </div>
                     <?php if (!empty($row['detail_images'])): ?>
                         <div class="thumbs">
                             <?php foreach (array_slice($row['detail_images'], 0, 4) as $img): ?>

@@ -219,7 +219,7 @@ class PropertyService extends CI_Service
         }
         if ($region !== "" && $region !== "all") {
             $kw = $this->db->escapeLikeString($region);
-            $where[] = "(`addr_sido` LIKE '%$kw%' OR `addr_sigungu` LIKE '%$kw%' OR `addr_dong` LIKE '%$kw%' OR `addr_road` LIKE '%$kw%')";
+            $where[] = "(`addr_sid o` LIKE '%$kw%' OR `addr_sigungu` LIKE '%$kw%' OR `addr_dong` LIKE '%$kw%' OR `addr_road` LIKE '%$kw%')";
         }
         if ($property_name !== "" && $property_name !== "all") {
             $kw = $this->db->escapeLikeString($property_name);
@@ -290,7 +290,7 @@ class PropertyService extends CI_Service
     // 거래보류(4)는 사유가 다양해 그대로 노출하면 오해 소지가 있어 "확인중"으로 순화해서 보여줌.
     private function build_status_stamp_txt($status)
     {
-        $map = [2 => '거래중', 3 => '거래완료', 4 => '확인중'];
+        $map = [2 => '거래중', 3 => '거래완료', 4 => '매물 확인중'];
         return $map[$status] ?? null;
     }
 

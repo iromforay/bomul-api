@@ -1,7 +1,8 @@
 /*상세보기*/
 .property_view{padding:20px 0 60px;}
 .property_view .gallery{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:24px;}
-.property_view .gallery .main{aspect-ratio:4/3;background:#f2f4f7 center/cover no-repeat;border-radius:10px;}
+.property_view .gallery .main{position:relative;aspect-ratio:4/3;background:#f2f4f7 center/cover no-repeat;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#9aa1ac;font-size:13px;}
+.property_view .gallery .main.no_image{aspect-ratio:auto;min-height:0;height:180px;}
 .property_view .gallery .thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 .property_view .gallery .thumbs div{aspect-ratio:1/1;background:#f2f4f7 center/cover no-repeat;border-radius:8px;}
 .property_view .type{display:inline-block;font-size:12px;font-weight:700;color:#006eff;background:#eaf2ff;border-radius:5px;padding:3px 10px;margin-bottom:10px;}
@@ -26,12 +27,25 @@
 .property_list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;padding:20px 0;}
 .property_card{display:block;border:1px solid #e4e7ec;border-radius:10px;overflow:hidden;text-decoration:none;color:#16181d;background:#fff;transition:box-shadow .15s ease;}
 .property_card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);}
-.property_card .thumb{width:100%;aspect-ratio:4/3;background:#f2f4f7 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:#9aa1ac;font-size:13px;}
+.property_card .thumb{position:relative;width:100%;aspect-ratio:4/3;background:#f2f4f7 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:#9aa1ac;font-size:13px;}
 .property_card .body{padding:14px 16px;}
 .property_card .type{display:inline-block;font-size:11px;font-weight:700;color:#006eff;background:#eaf2ff;border-radius:5px;padding:2px 8px;margin-bottom:8px;}
 .property_card h3{font-size:16px;font-weight:700;margin:0 0 6px;}
 .property_card .addr{font-size:12.5px;color:#6b7280;margin:0 0 10px;}
 .property_card .price{font-size:15px;font-weight:800;color:#16181d;}
+
+/* 거래상태 도장(스탬프) - 거래가능(1)/비공개(5) 외 상태에서만 표시 */
+.status_stamp{
+    position:absolute; top:12px; right:12px; z-index:5;
+    padding:6px 12px; border:3px solid currentColor; border-radius:8px;
+    font-size:13px; font-weight:800; letter-spacing:2px; line-height:1;
+    color:#C0392B; background:rgba(255,255,255,.55);
+    transform:rotate(-14deg); text-align:center; white-space:nowrap;
+    mix-blend-mode:multiply; pointer-events:none; user-select:none;
+}
+.property_view .status_stamp{ top:16px; right:16px; font-size:16px; padding:9px 16px; }
+.status_stamp--3{ color:#4B5563; } /* 거래완료 - 무채색 */
+.status_stamp--4{ color:#B45309; } /* 확인중(거래보류) - 주황 */
 .property_empty{padding:60px 0;text-align:center;color:#9aa1ac;}
 .property_paging{display:flex;justify-content:center;gap:6px;padding:24px 0;}
 .property_paging a{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border:1px solid #e4e7ec;border-radius:7px;color:#6b7280;text-decoration:none;font-size:13px;}
