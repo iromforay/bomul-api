@@ -26,6 +26,13 @@ class BasicService extends CI_Service
         return $this;
     }
 
+    // 저장된 기본설정 원본row. 필수값 검증에서 "이번 요청엔 없지만 기존에 저장돼 있는 값"을 판단할 때 사용.
+    public function get_row()
+    {
+        $rows = $this->model->findbyid(1);
+        return $rows[0] ?? [];
+    }
+
     public function get_by_basic()
     {
         $rows = $this->model->findbyid(1);
@@ -100,6 +107,24 @@ class BasicService extends CI_Service
         exit;
 
     }
+
+    // 네이버 예약위젯 노출여부/사이트 인증코드만 부분저장. save()와 달리 basic 폼 전체(중개사무소 정보 등) 없이 단독 호출 가능.
+    public function save_verification_code($data)
+    {
+        $entity = new Basic_Entity();
+        $entity->setBasicNo(1);
+        $entity->setNaverReserveShow($data['naver_reserve_show'] ?? null);
+        $entity->setNaverSiteVerification($data['naver_site_verification'] ?? null);
+
+        if($this->model->sql_edit($entity)){
+            $this->log->info("query :".$this->model->getQuery()." ture");
+            return AT_Result::toSuccessData();
+        }else{
+            $this->log->info("query :".$this->model->getQuery()." false");
+            return AT_Result::toFailData();
+        }
+    }
+
     //사이트명,로고 설정
     public function sitename_and_logo($data,$file)
     {

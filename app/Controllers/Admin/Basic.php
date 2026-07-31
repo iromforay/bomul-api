@@ -80,12 +80,7 @@ class Basic extends BaseController
         $data['broker_agent_name'] = $this->request->getVar("broker_agent_name");
         $data['broker_agent_phone'] = $this->request->getVar("broker_agent_phone");
         $data['footer_copy'] = $this->request->getVar("footer_copy");
-        // 네이버 서치어드바이저 사이트 소유권 확인 코드 (HTML 태그 방식) - BO에서 실수로
-        // <meta name="naver-site-verification" content="..."> 태그 전체를 그대로 붙여넣어도
-        // content 값만 뽑아서 저장한다 (자주 하는 실수라 서버에서 관대하게 처리).
-        $data['naver_site_verification'] = $this->extract_naver_verification_code(
-            $this->request->getVar("naver_site_verification")
-        );
+
 
         $data['logo_del'] = $this->request->getVar("logo_del"); //로고삭제
 
@@ -114,7 +109,10 @@ class Basic extends BaseController
         return $value;
     }
 
-    // 중개사무소 법정 표시항목(공인중개사법 제18조의2) 필수값 검증
+    // 중개사무소 법정 표시항목(공인중개사법 제18조의2) 필수값 검증.
+    // basic/save는 한 화면에서 값을 골라 부분수정하는 API라(naver_site_verification만 저장하는 경우 등)
+    // 이번 요청에 안 실린 필드는 기존 저장값으로 대체해서 판단한다. 처음 설정하거나(기존값도 없음)
+    // 값을 비우려는 시도일 때만 필수값 누락으로 막는다.
     private function validate_required($data)
     {
         $required = [
@@ -128,13 +126,34 @@ class Basic extends BaseController
             'broker_agent_phone' => '소속공인중개사 연락처',
         ];
 
+        $current = $this->service->get_row();
+
         $missing = [];
         foreach ($required as $field => $label) {
-            if (!isset($data[$field]) || trim($data[$field]) === '') {
+            $value = $data[$field] ?? null;
+            if ($value === null || trim($value) === '') {
+                $value = $current[$field] ?? null; // 이번 요청엔 없지만 기존에 저장된 값이 있으면 유지
+            }
+            if ($value === null || trim($value) === '') {
                 $missing[] = $label;
             }
         }
         return $missing;
+    }
+
+    // 네이버 예약위젯 노출여부/사이트 인증코드만 부분저장. 중개사무소 정보 등 basic 폼 전체 없이 단독 호출 가능.
+    public function postSave_verification_code()
+    {
+        $this->log->info("[REV] save_verification_code : ".json_encode($_POST,JSON_UNESCAPED_UNICODE));
+
+        $data['naver_reserve_show'] = $this->request->getVar("naver_reserve_show");
+        $data['naver_site_verification'] = $this->extract_naver_verification_code(
+            $this->request->getVar("naver_site_verification")
+        );
+
+        $oResult = $this->service->save_verification_code($data);
+        $this->log->info("[REV] data : ".json_encode($data,JSON_UNESCAPED_UNICODE));
+        $this->view($oResult);
     }
 
     /*
@@ -149,18 +168,5 @@ class Basic extends BaseController
 
     }
 
-    /*preflight*/
-    public function optionsData()
-    {
-        return $this;
-    }
-    public function optionsSave()
-    {
-        return $this;
-    }
-    public function optionsfile_del()
-    {
-        return $this;
-    }
 }
 
