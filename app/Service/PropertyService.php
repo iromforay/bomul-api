@@ -180,6 +180,27 @@ class PropertyService extends CI_Service
         return $status;
     }
 
+    // 위와 동일한 패턴 - 노출여부(노출/숨김)별 전체 매물수.
+    public function display_yn_total_count($where=array())
+    {
+        $rows = $this->model->display_yn_total_count($where);
+        $_display = array();
+        foreach ($rows as $v) {
+            $_display[$v['display_yn']] = $v['total_count'];
+        }
+
+        $total = 0;
+        foreach ($this->model->get_display_yn("all") as $code => $title) {
+            $display[$code]['title'] = $title;
+            $display[$code]['total_count'] = $_display[$code] ?? 0;
+            $total += $display[$code]['total_count'];
+        }
+        $display['all']['title'] = "전체";
+        $display['all']['total_count'] = $total;
+
+        return $display;
+    }
+
     public function get_list($page=1,$perPage=10,$where="",$search=array())
     {
         $start = ($page -1)*$perPage;
@@ -219,7 +240,7 @@ class PropertyService extends CI_Service
         }
         if ($region !== "" && $region !== "all") {
             $kw = $this->db->escapeLikeString($region);
-            $where[] = "(`addr_sid o` LIKE '%$kw%' OR `addr_sigungu` LIKE '%$kw%' OR `addr_dong` LIKE '%$kw%' OR `addr_road` LIKE '%$kw%')";
+            $where[] = "(`addr_sido` LIKE '%$kw%' OR `addr_sigungu` LIKE '%$kw%' OR `addr_dong` LIKE '%$kw%' OR `addr_road` LIKE '%$kw%')";
         }
         if ($property_name !== "" && $property_name !== "all") {
             $kw = $this->db->escapeLikeString($property_name);

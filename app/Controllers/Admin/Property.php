@@ -44,14 +44,16 @@ class Property extends BaseController
         );
 
         $counts = $this->service->status_total_count(); //거래상태별 전체 매물수.
+        $display_counts = $this->service->display_yn_total_count(); //노출여부별 전체 매물수.
 
         $rows = $this->service->get_list($page, $limit, "", $search);
         $pager_links = $this->calPaging($page, $rows['total'], 10, $limit);
 
         $data = array(
-            'rows'   => $rows['rows'],
-            'pager'  => $pager_links,
-            'counts' => $counts
+            'rows'           => $rows['rows'],
+            'pager'          => $pager_links,
+            'counts'         => $counts,
+            'display_counts' => $display_counts
         );
 
         $oResult = AT_Result::toSuccessData("", $data);

@@ -94,6 +94,14 @@ class PropertyModel extends CI_Model
         return $this->getExecQuery($sql);
     }
 
+    // 위와 동일한 패턴 - 노출여부(노출/숨김)별 전체 매물수.
+    public function display_yn_total_count($where="")
+    {
+        $where_sql = $this->build_where($where);
+        $sql = "SELECT `display_yn`, count(*) as 'total_count' FROM `$this->table` $where_sql GROUP BY `display_yn`";
+        return $this->getExecQuery($sql);
+    }
+
     // soft delete된 매물은 목록/카운트에서 항상 제외.
     private function build_where($where)
     {
