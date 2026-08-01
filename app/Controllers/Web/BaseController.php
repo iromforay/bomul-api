@@ -106,7 +106,13 @@ class BaseController extends Controller
     }
     public function set_domain()
     {
-        $shop_code="foray";
+        // fid.bomul.co.kr / fid.bomul.ai.kr 의 첫 서브도메인을 fid(=SHOP_CODE)로 사용한다.
+        // 로컬 개발(localhost 등)이나 서브도메인 없는 apex 접속처럼 fid를 알 수 없을 때만
+        // "foray"로 폴백한다.
+        $host = strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? '')[0]);
+        $parts = explode('.', $host);
+        $shop_code = (count($parts) >= 4) ? $parts[0] : "foray";
+
         $this->session_id = $shop_code;
         if(!defined("SHOP_CODE")) define('SHOP_CODE', $shop_code);
         return $this;

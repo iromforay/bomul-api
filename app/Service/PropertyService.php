@@ -319,6 +319,11 @@ class PropertyService extends CI_Service
     // 가격은 일부러 안 넣는다 - number_format()이 만드는 콤마(예: "30,000")가 URL에 그대로 들어가면
     // 인코딩 안 된 콤마 때문에 "disallowed characters" 오류가 나고, 매물마다 가격이 바뀌어서
     // 검색엔진 매칭율도 떨어진다.
+    //
+    // 자동 슬러그(지역+거래방식+금액)는 검색엔진 매칭용으로 만든 것이지만, 매물명이 이미 그 정보를
+    // 담아 더 구체적으로 작성된 경우가 있다 - 그때는 매물명을 우선한다.
+    // 1) 매물명에 지역명/거래방식/금액 중 2개 이상이 포함되면 매물명 채택
+    // 2) 그렇지 않으면 매물명/슬러그 중 글자수가 더 긴 쪽 채택(정보량이 많다고 판단)
     public function build_url_slug($row)
     {
         switch ($row['transaction_type']) {
@@ -338,6 +343,25 @@ class PropertyService extends CI_Service
             default:
                 $price = '';
         }
-        return trim($row['addr_dong'].' '.($row['transaction_type_txt'] ?: $row['transaction_type']))." ".$price; // 가격은 매칭율 저하로 제거
+
+        $addr = trim($row['addr_dong'] ?? '');
+        $type_txt = trim($row['transaction_type_txt'] ?: $row['transaction_type']);
+        $slug = trim($addr.' '.$type_txt)." ".$price; // 가격은 매칭율 저하로 제거
+
+        $property_name = trim($row['property_name'] ?? '');
+        if ($property_name === '') {
+            return $slug;
+        }
+
+        $matched = 0;
+        if ($addr !== '' && mb_strpos($property_name, $addr) !== false) $matched++;
+        if ($type_txt !== '' && mb_strpos($property_name, $type_txt) !== false) $matched++;
+        if ($price !== '' && mb_strpos($property_name, $price) !== false) $matched++;
+
+        if ($matched >= 2) {
+            return $property_name;
+        }
+
+        return mb_strlen($property_name) > mb_strlen($slug) ? $property_name : $slug;
     }
 }

@@ -74,7 +74,7 @@
                 <div class="property_map">
                     <h3>위치</h3>
                     <?php $mapScheme = (($_SERVER['HTTPS'] ?? 'off') !== 'off') ? 'https' : 'http'; ?>
-                    <img src="<?= $mapScheme ?>://api.bomul.co.kr/admin/map/image?lat=<?= urlencode($row['lat']) ?>&lng=<?= urlencode($row['lng']) ?>" alt="매물 위치 지도">
+                    <img src="<?= $mapScheme ?>://api.bomul.ai.kr/admin/map/image?lat=<?= urlencode($row['lat']) ?>&lng=<?= urlencode($row['lng']) ?>" alt="매물 위치 지도">
                 </div>
                 <?php endif; ?>
 

@@ -7,7 +7,7 @@ use CodeIgniter\Router\RouteCollection;
 //$routes->get('/', 'Home::index');
 
 $host = $_SERVER['HTTP_HOST'] ?? '';
-if ($host !== 'api.bomul.co.kr') {
+if ($host !== 'api.bomul.ai.kr') {
 
     // setDefaultNamespace('App\Controllers\Web') 호출 *전에* 등록 - RouteCollection::create()가
     // 라우트 등록 시점의 defaultNamespace를 그 자리에서 핸들러 문자열에 구워넣기 때문에, 이 한 줄만

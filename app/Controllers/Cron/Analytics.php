@@ -97,12 +97,12 @@ class Analytics extends Controller
     }
 
     // 집계 완료(성공/실패)를 중앙 스케줄링 테이블에 반영하도록 콜백 전송.
-    // 콜백 대상이 api.bomul.co.kr이라 그쪽 관례대로 Authorization 헤더 토큰을 실어야 한다
+    // 콜백 대상이 api.bomul.ai.kr이라 그쪽 관례대로 Authorization 헤더 토큰을 실어야 한다
     // (여기 Cron\Analytics 자신은 {fid}.bomul.co.kr=web이라 IP체크만 하는 것과 대비됨).
     private function sendCallback($fid, $ok)
     {
         $secret = env('CRON_SECRET', '');
-        $url = 'http://api.bomul.co.kr/callback/complete?ok=' . ($ok ? '1' : '0')
+        $url = 'http://api.bomul.ai.kr/callback/complete?ok=' . ($ok ? '1' : '0')
             . '&fid=' . urlencode($fid) . '&job_type=' . urlencode(self::JOB_TYPE);
 
         $ch = curl_init($url);
