@@ -29,12 +29,14 @@
 #header .width_con .nav_con > ul li {margin: 0 20px 0 0; padding: 0 5px;}
 #header .width_con .nav_con > ul li a {font-size: 0.9rem; line-height: 1.3rem; font-weight: 700; color: var(--main_menucolor); cursor: pointer;}
 #header.on .width_con .nav_con > ul li a {color: #000;}
+#header.property .width_con .nav_con ul li.property,
 #header.notice .width_con .nav_con ul li.notice,
 #header.around .width_con .nav_con ul li.around,
 #header.charge .width_con .nav_con ul li.charge,
 #header.review .width_con .nav_con ul li.review,
 #header.vod .width_con .nav_con ul li.vod,
 #header.map .width_con .nav_con ul li.map {background: var(--sub_menubgcolor);}
+#header.property .width_con .nav_con ul li.property a,
 #header.notice .width_con .nav_con ul li.notice a,
 #header.around .width_con .nav_con ul li.around a,
 #header.charge .width_con .nav_con ul li.charge a,

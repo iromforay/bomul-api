@@ -6,6 +6,7 @@ use App\Controllers\Web\BaseController;
 
 class Charge extends BaseController
 {
+    private $log;
     public function __construct()
     {
         $this->set_code("charge");
@@ -17,7 +18,9 @@ class Charge extends BaseController
 
     public function getindex()
     {
-        $data=[];
+        $data=array(
+            'active'=> $this->get_code()
+        );
         $this->view("",'Charge/index',$data);
     }
 }
