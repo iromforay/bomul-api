@@ -94,10 +94,12 @@ class Property extends BaseController
 
         $noteService = new NoteService($this->log, $this->session_id);
         $result = $noteService->exec([
-            'visitor_name'  => $visitorName,
-            'visitor_phone' => $visitorPhone,
-            'property_no'   => $propertyNo ?: null,
-            'inflow_type'   => 'web', // 웹 상담신청 팝업을 통한 유입
+            'visitor_name'  => $visitorName, //방문자명
+            'visitor_phone' => $visitorPhone, //방문자 연락처
+            'property_no'   => $propertyNo ?: null, //관심매물
+            'inflow_type'   => 'web', // 유입경로 - 웹 상담신청 팝업을 통한 유입
+            'visit_type'    => 'tenant' , //방문형태는 세입자
+            'status'        => 'consult_request', //진행상태 - 상담요청
         ]);
 
         // 문의내용(선택)은 note 테이블 컬럼이 아니라 별도 memo로 붙인다 (BO 노트 상세의 memos와 동일 구조)

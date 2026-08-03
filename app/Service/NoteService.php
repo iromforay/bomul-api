@@ -139,7 +139,22 @@ class NoteService extends CI_Service
     {
         $row = $this->model->findbyid($note_no);
         $row = $this->after_process($row);
+
+        // 관심매물(property_no)이 있으면 매물명도 같이 내려준다 (목록에선 N+1 부담이라 상세에서만)
+        // 형식: "[property_no]property_name" - BO 화면에서 매물번호/이름을 한 번에 식별하기 위함
+        if (isset($row[0]) && (int) ($row[0]['property_no'] ?? 0) > 0) {
+            $propertyNo = (int) $row[0]['property_no'];
+            $row[0]['property_name'] = '[' . $propertyNo . ']' . $this->getPropertyName($propertyNo);
+        }
+
         return $row;
+    }
+
+    private function getPropertyName($property_no)
+    {
+        $propertyModel = model('App\Models\PropertyModel', true, $this->db);
+        $row = $propertyModel->findbyid($property_no);
+        return $row[0]['property_name'] ?? null;
     }
 
     // Board::Postboard_del() 참고 - soft delete (is_deleted=1로만 세우고 row는 남김)

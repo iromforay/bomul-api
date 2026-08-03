@@ -28,6 +28,7 @@
                         <?php else: ?>
                             <div class="no_image">이미지 없음</div>
                         <?php endif; ?>
+                        <div class="property_code">매물코드 <?= $row['property_no'] ?></div>
                         <?php if (!empty($row['status_stamp_txt'])): ?>
                             <div class="status_stamp status_stamp--<?= $row['status'] ?>"><?= $row['status_stamp_txt'] ?></div>
                         <?php endif; ?>

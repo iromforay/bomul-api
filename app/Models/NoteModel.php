@@ -70,7 +70,7 @@ class NoteModel extends CI_Model
 
     public function get_all_status()
     {
-        return array("consulting", "proposed", "contracted", "lost");
+        return array("consult_request", "consulting", "proposed", "contracted", "lost");
     }
 
     public function register(Note_Entity $entity)
@@ -125,6 +125,7 @@ class NoteModel extends CI_Model
     public function get_status($status="all")
     {
         $_status = array(
+            "consult_request" => "상담접수", // 상담 전 단계 - 웹 상담신청 팝업으로 접수만 되고 아직 담당자가 안 붙은 상태
             "consulting" => "상담중",
             "proposed" => "매물제안",
             "contracted" => "계약완료",
