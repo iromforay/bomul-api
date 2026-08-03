@@ -29,7 +29,7 @@
         <nav class="nav_con">
             <ul>
             <?php if (($common['property_show'] ?? 'Y') == "Y"): ?>
-                <li class="map"><a href="/property" title="매물보기">매물보기</a></li>
+                <li class="property"><a href="/property" title="매물보기">매물보기</a></li>
             <?php endif; ?>
             <?php if (($common['notice_show'] ?? 'Y') == "Y"): ?>
                 <li class="notice"><a href="/notice" title="공지&이벤트">공지&이벤트</a></li>
