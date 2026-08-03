@@ -66,7 +66,7 @@ $capacity = MAX_CONCURRENT - $inFlight;
 $fids = $scheduleModel->claimNextBatch(JOB_TYPE, $runDate, $capacity);
 
 foreach ($fids as $fid) {
-    $url = "http://{$fid}." . BASE_DOMAIN . "/cron/analytics/daily-aggregate?date=" . urlencode($runDate);
+    $url = "https://{$fid}." . BASE_DOMAIN . "/cron/analytics/daily-aggregate?date=" . urlencode($runDate);
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_TIMEOUT_MS => FIRE_TIMEOUT_MS,

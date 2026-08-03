@@ -40,6 +40,7 @@ class Property extends BaseController
             'transaction_type' => $this->request->getGet('transaction_type') ?? "",
             'status'           => $this->request->getGet('status') ?? "",
             'region'           => $this->request->getGet('region') ?? "",
+            'display_yn'       => $this->request->getGet('display_yn') ?? "",
             'property_name'    => $this->request->getGet('property_name') ?? "",
         );
 

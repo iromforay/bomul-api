@@ -226,9 +226,13 @@ class PropertyService extends CI_Service
         $status           = $search['status'] ?? "";
         $region           = $search['region'] ?? "";
         $property_name    = $search['property_name'] ?? "";
+        $display_yn    = $search['display_yn'] ?? "";
 
         $where = array();
 
+        if ($display_yn !== "" && $display_yn !== "all") {
+            $where[] = "`display_yn` = ".$this->db->escape($display_yn);
+        }
         if ($property_type !== "" && $property_type !== "all") {
             $where[] = "`property_type` = ".$this->db->escape($property_type);
         }

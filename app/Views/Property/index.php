@@ -19,6 +19,7 @@
                         <a class="property_card" href="/property/view/<?= $row['property_no'] ?>/<?= rawurlencode($row['url_slug']) ?>">
                             <div class="thumb"<?= !empty($row['main_image_url']) ? " style=\"background-image:url('".$row['main_image_url']."')\"" : "" ?>>
                                 <?= empty($row['main_image_url']) ? '이미지 없음' : '' ?>
+                                <div class="property_code">매물코드 <?= $row['property_no'] ?></div>
                                 <?php if (!empty($row['status_stamp_txt'])): ?>
                                     <div class="status_stamp status_stamp--<?= $row['status'] ?>"><?= $row['status_stamp_txt'] ?></div>
                                 <?php endif; ?>
