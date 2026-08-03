@@ -7,14 +7,14 @@ use CodeIgniter\Router\RouteCollection;
 //$routes->get('/', 'Home::index');
 
 $host = $_SERVER['HTTP_HOST'] ?? '';
-if ($host !== 'api.bomul.co.kr') {
+if ($host !== 'api.bomul.ai.kr') {
 
     // setDefaultNamespace('App\Controllers\Web') 호출 *전에* 등록 - RouteCollection::create()가
     // 라우트 등록 시점의 defaultNamespace를 그 자리에서 핸들러 문자열에 구워넣기 때문에, 이 한 줄만
     // 앱 전역 기본값(Config\Routing::$defaultNamespace = 'App\Controllers')으로 풀리고 아래
     // setDefaultNamespace('App\Controllers\Web')의 영향을 안 받는다. App\Controllers\Cron
     // 네임스페이스로 맞추기 위한 의도적 배치 순서.
-    // 새벽 배치(app/batch/analy.php)가 중개사 서브도메인({fid}.bomul.co.kr)으로 curl 호출.
+    // 새벽 배치(app/batch/analy.php)가 중개사 서브도메인({fid}.bomul.ai.kr)으로 curl 호출.
     $routes->get('cron/analytics/daily-aggregate', 'Cron\Analytics::getDailyAggregate');
 
     // 🌐 WEB 전용: 모든 요청을 Web namespace로 자동 라우팅

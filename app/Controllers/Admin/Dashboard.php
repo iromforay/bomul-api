@@ -6,7 +6,7 @@ use App\Libraries\AT_Result;
 use App\Service\DashboardService;
 
 /*
- * html/bo_dashboard.html 시안이 호출하는 API. api.bomul.co.kr 오토라우팅으로 잡히므로
+ * html/bo_dashboard.html 시안이 호출하는 API. api.bomul.ai.kr 오토라우팅으로 잡히므로
  * (App\Controllers 기본 네임스페이스 + Admin 서브디렉토리) 별도 라우트 등록 불필요.
  */
 class Dashboard extends BaseController

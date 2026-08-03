@@ -81,8 +81,8 @@ class Map extends Controller
 
         // site_url()은 안 씀 - Config\App::$baseURL이 .env에서 안 덮어써져서(app.baseURL 키가
         // 아니라 site_url 키로 들어가 있어 무시됨) localhost:8080 기본값이 나간다. 이 엔드포인트는
-        // 항상 api.bomul.co.kr에 있으니 직접 고정한다.
-        $imageUrl = 'http://api.bomul.co.kr/admin/map/image?lat=' . urlencode($lat) . '&lng=' . urlencode($lng);
+        // 항상 api.bomul.ai.kr에 있으니 직접 고정한다.
+        $imageUrl = 'http://api.bomul.ai.kr/admin/map/image?lat=' . urlencode($lat) . '&lng=' . urlencode($lng);
 
         echo AT_Result::toJson(AT_Result::toSuccessData("", [
             'address'   => $first,

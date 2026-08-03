@@ -155,7 +155,7 @@ class BaseController extends Controller
     }
     public function body()
     {
-        //{"SUCCESS":"TRUE","MSG":"\uc131\uacf5\uc785\ub2c8\ub2e4.","RECORD":{"row":{"name":"\uacf5\uc9c0\uc0ac\ud56d","code":"notice","bgcolor":"#de0d0d","transparent":"29","title":null,"title_show":null,"bgcolor_show":null},"img":null,"basic":{"site_name":"foray","logo_show":"Y","menu_back_color":"#006eff","menu_back_transparent":"50","menu_bg_color":"#e0e0e0","menu_bg_transparent":null,"main_menu_color":"#000000","notice_show":"Y","around_show":"Y","charge_show":"Y","review_show":"Y","vod_show":"N","map_show":"Y","link_menu_show":"Y","naver_reserve":"","naver_reserve_show":"Y","kakao_channel":"","kakao_channel_show":"Y","company_name":"25\uc2dc \ubd80\ub3d9\uc0b0","footer_copy":"","logo_url":"http:\/\/api.bomul.co.kr\/pds\/\ub85c\uace0","sub_menu_color":"#000000","sns_link":[]}}}
+        //{"SUCCESS":"TRUE","MSG":"\uc131\uacf5\uc785\ub2c8\ub2e4.","RECORD":{"row":{"name":"\uacf5\uc9c0\uc0ac\ud56d","code":"notice","bgcolor":"#de0d0d","transparent":"29","title":null,"title_show":null,"bgcolor_show":null},"img":null,"basic":{"site_name":"foray","logo_show":"Y","menu_back_color":"#006eff","menu_back_transparent":"50","menu_bg_color":"#e0e0e0","menu_bg_transparent":null,"main_menu_color":"#000000","notice_show":"Y","around_show":"Y","charge_show":"Y","review_show":"Y","vod_show":"N","map_show":"Y","link_menu_show":"Y","naver_reserve":"","naver_reserve_show":"Y","kakao_channel":"","kakao_channel_show":"Y","company_name":"25\uc2dc \ubd80\ub3d9\uc0b0","footer_copy":"","logo_url":"http:\/\/api.bomul.ai.kr\/pds\/\ub85c\uace0","sub_menu_color":"#000000","sns_link":[]}}}
         //API/Notice
         $row = $this->listing($this->code);
 

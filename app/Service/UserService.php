@@ -28,7 +28,7 @@ class UserService
 
             //새롭게 bomul databases에서 직접 로그인 체크함.
         $log_row = $this->model->adminLogin($user_id);
-
+      //  echo $this->model->getQuery();exit;
             /* 기존 방식 curl로 로그인 함.
             $curl = new Curl();
             $host = "https://help.all-teaching.com/User/Login/cafeLogin";

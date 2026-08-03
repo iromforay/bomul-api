@@ -48,7 +48,7 @@ define('APP_PDS', ROOT_PATH.'/public/pds/');
 //define('SITE',getenv("site_url"));
 define('SITE',getenv("site_url"));
 define('SITE_PDS', SITE.'/pds/');
-define('COMMON_PDS', 'http://api.bomul.co.kr/pds/');
+define('COMMON_PDS', 'http://api.bomul.ai.kr/pds/');
 define('Admin_SITE', SITE.'/Admin');
 define('LOGIN_SERVER', 'https://');
 define('RS', SITE.'/resources');

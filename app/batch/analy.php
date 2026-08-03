@@ -4,7 +4,7 @@
  * 새벽 배치 - 중개사별 일별 통계 집계 dispatcher.
  * app/batch/batch.php(마더)가 활성 시간대(예: 02:00~02:30) 동안 매분 이 파일을 require한다.
  *
- * 완료 확인은 콜백 기반이라(api.bomul.co.kr/callback/complete, Cron\Analytics가 집계를 끝내면
+ * 완료 확인은 콜백 기반이라(api.bomul.ai.kr/callback/complete, Cron\Analytics가 집계를 끝내면
  * 직접 호출) 이 스크립트는 curl 응답을 기다리지 않는다 - 그 순간 "몇 개가 아직 처리중인지"는
  * bomul.batch_schedule 테이블을 보고 판단한다 (BatchScheduleModel 참고 - job_type='analytics_daily'
  * 로 다른 배치 종류와 구분되는 범용 테이블이라, 나중에 다른 배치가 생기면 같은 테이블/로직을
@@ -40,7 +40,7 @@ if (!defined('ENVIRONMENT')) {
 
 const JOB_TYPE = 'analytics_daily'; // batch_schedule에서 이 job을 구분하는 값 (Cron\Analytics의 콜백과 일치해야 함)
 const MAX_CONCURRENT = 3;
-const BASE_DOMAIN = 'bomul.co.kr';
+const BASE_DOMAIN = 'bomul.ai.kr';
 const FIRE_TIMEOUT_MS = 300; // fire-and-forget - 요청이 서버에 도달할 정도만 기다리고 응답은 안 기다림
 
 $runDate = date('Y-m-d', strtotime('-1 day')); // AnalyticsAggregateService 기본값과 동일 (어제)

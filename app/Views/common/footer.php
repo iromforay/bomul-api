@@ -7,17 +7,17 @@
                 <?=$common['company_name']??"회사"?>
                 <span>▲</span>
             </h5>
-            <p>Copyrightⓒ 2023 <a href="https://www.bomul.co.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.</p>
+            <p>Copyrightⓒ 2023 <a href="https://www.bomul.ai.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.</p>
         </div>
 
         <p class="footer_desc">
             <?if(strlen($common['footer_copy'])>0){
                 echo $common['footer_copy'];
                 }else{?>
-                    Copyrightⓒ 2023 <a href="https://www.bomul.co.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.
+                    Copyrightⓒ 2023 <a href="https://www.bomul.ai.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.
             <?}?>
             <br>
-            Copyrightⓒ 2023 <a href="https://www.bomul.co.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.
+            Copyrightⓒ 2023 <a href="https://www.bomul.ai.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.
         </p>
         <?if($common['link_menu_show']=="Y"){?>
         <div class="bottom_btn_con">

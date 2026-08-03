@@ -22,8 +22,8 @@ class User extends BaseController
     public function postlogin()
     {
 
-        $user_id = $this->request->getVar("user_id");
-        $password = $this->request->getVar("password");
+        $user_id = trim($this->request->getVar("user_id"));
+        $password = trim($this->request->getVar("password"));
         $this->log->info("login user_id:".$user_id.", password : ".$password);
         $debug = $this->request->getVar("debug")??0;
         $this->set_debug($debug?1:0);

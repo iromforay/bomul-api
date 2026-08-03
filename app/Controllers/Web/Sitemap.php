@@ -109,7 +109,7 @@ class Sitemap extends Controller
         }
     }
 
-    // Host 헤더의 첫 세그먼트 = fid = shop_code (예: foray.bomul.co.kr → foray)
+    // Host 헤더의 첫 세그먼트 = fid = shop_code (예: foray.bomul.ai.kr → foray)
     private function resolveShopCodeFromHost()
     {
         $host = $_SERVER['HTTP_HOST'] ?? '';
