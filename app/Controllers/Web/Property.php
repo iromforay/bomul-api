@@ -3,6 +3,9 @@
 namespace App\Controllers\Web;
 
 use App\Controllers\Web\BaseController;
+use App\Libraries\AT_Result;
+use App\Service\MemoService;
+use App\Service\NoteService;
 use App\Service\PropertyService;
 
 class Property extends BaseController
@@ -72,5 +75,38 @@ class Property extends BaseController
         );
 
         $this->view("",'Property/view',$data);
+    }
+
+    // 매물 상세페이지 "상담신청" 팝업이 ajax POST하는 저장 엔드포인트 (property/saveNote)
+    public function savenote()
+    {
+        $post = $this->request->getPost();
+
+        $visitorName  = trim((string) ($post['visitor_name'] ?? ''));
+        $visitorPhone = trim((string) ($post['visitor_phone'] ?? ''));
+        $memoText     = trim((string) ($post['memo'] ?? ''));
+        $propertyNo   = (int) ($post['property_no'] ?? 0);
+
+        if ($visitorName === '' || $visitorPhone === '') {
+            echo AT_Result::toJson(AT_Result::toFailData('이름과 연락처를 입력해주세요.'));
+            return;
+        }
+
+        $noteService = new NoteService($this->log, $this->session_id);
+        $result = $noteService->exec([
+            'visitor_name'  => $visitorName,
+            'visitor_phone' => $visitorPhone,
+            'property_no'   => $propertyNo ?: null,
+            'inflow_type'   => 'web', // 웹 상담신청 팝업을 통한 유입
+        ]);
+
+        // 문의내용(선택)은 note 테이블 컬럼이 아니라 별도 memo로 붙인다 (BO 노트 상세의 memos와 동일 구조)
+        $noteNo = (int) ($result['RECORD']['note_no'] ?? 0);
+        if ($result['SUCCESS'] === 'TRUE' && $noteNo > 0 && $memoText !== '') {
+            $memoService = new MemoService($this->log, $this->session_id);
+            $memoService->add_memo('note', $noteNo, 0, $visitorName . '(웹신청)', $memoText);
+        }
+
+        echo AT_Result::toJson($result);
     }
 }

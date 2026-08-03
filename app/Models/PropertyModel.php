@@ -202,7 +202,7 @@ class PropertyModel extends CI_Model
             "warehouse"=>"창고",
             "knowledge"=>"지식산업센터",
             "building"=>"건물",
-            "motel"=>"숙박시설",
+            "motel"=>"생활숙박",
             "etc"=>"기타"
         );
         return $property_type=="all" ? $_property_type : $_property_type[$property_type]??"";

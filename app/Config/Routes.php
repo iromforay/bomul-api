@@ -40,6 +40,9 @@ if ($host !== 'api.bomul.ai.kr') {
     $routes->post('track/collect', 'Track::postCollect');
     $routes->options('track/collect', 'Track::optionsCollect');
 
+    // 매물 상세페이지 상담신청 팝업이 ajax POST하는 저장 엔드포인트
+    $routes->post('property/saveNote', 'Property::savenote');
+
     // Admin\Map(네이버 지도 주소검색 API) 개발용 테스트 페이지 - 정식 FE 생기면 제거
     $routes->get('map-search-test', 'MapSearchTest::getIndex');
 
