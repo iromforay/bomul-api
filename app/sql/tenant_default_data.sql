@@ -1,0 +1,59 @@
+-- 신규 상점 DB 생성 시 반드시 필요한 기본 데이터 (menu/function_menu/basic).
+-- basic은 placeholder("데모부동산") 상태로 들어가고, TenantProvisioner::updateBasicRow()가
+-- 상호명/대표자명/등록번호만 실제 신청정보로 UPDATE한다 (INSERT 아님 - 이 행을 그대로 씀).
+-- add_menu는 지금 주석처리 - file2(지도 아이콘 이미지) 행이 demo 상점 전용 업로드 파일이라
+-- 그대로 복사하면 깨진 이미지가 됨. 필요해지면 그 행만 빼고 주석 해제.
+
+insert  into `menu`(`menu_no`,`name`,`code`,`bgcolor`,`transparent`,`title`,`title_show`,`bgcolor_show`,`write_date`) values 
+(1,'메인','main','#123a5e','46','<h5>서울 실매물 정보, 마포공인중개사 사무소  확인하세요</h5>','Y','N',NULL),
+(2,'공지사항','notice','#123A5E','0',NULL,NULL,NULL,NULL),
+(3,'둘러보기','around','#123A5E','50',NULL,'N',NULL,NULL),
+(4,'이용요금','charge','#123A5E','60',NULL,'N',NULL,NULL),
+(5,'후기','review','#123A5E','62',NULL,'N',NULL,NULL),
+(6,'오시는길','map','#123A5E','36',NULL,NULL,NULL,NULL),
+(7,'홍보영상','vod','#123A5E','0',NULL,'N','N',NULL),
+(8,'매물관리','property','#c0392b','94',NULL,'N','Y',NULL);
+
+-- insert  into `add_menu`(`add_menu_no`,`code`,`key`,`text`,`show`,`img_dir`,`img_name`,`write_date`) values
+-- (1,'map','tel','연락처1','Y','','',NULL),
+-- (2,'map','addr','주소2','Y','','',NULL),
+-- (3,'map','subway','지하철 정보','Y','','',NULL),
+-- (4,'map','bus','버스 정보','Y','','',NULL),
+-- (5,'map','google','maps.google.com/?','Y','','',NULL),
+-- (8,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+insert  into `function_menu`(`function_menu_no`,`function_menu_key`,`function_menu_name`,`function_menu_value`,`write_date`) values 
+(1,'property_name','매물명','Y','2026-07-08 04:56:44'),
+(2,'building_name','건물명','Y','2026-07-08 04:56:44'),
+(3,'addr_sido','시도','Y','2026-07-08 04:56:44'),
+(4,'addr_sigungu','시군구','Y','2026-07-08 04:56:44'),
+(5,'addr_dong','읍면동','Y','2026-07-08 04:56:44'),
+(6,'addr_road','도로명','Y','2026-07-08 04:56:44'),
+(7,'supply_area','공급면적','Y','2026-07-08 04:56:44'),
+(8,'exclusive_area','전용면적','Y','2026-07-08 04:56:44'),
+(9,'total_floors','총층수','Y','2026-07-08 04:56:44'),
+(10,'current_floor','해당층','Y','2026-07-08 04:56:44'),
+(11,'room_count','방개수','Y','2026-07-08 04:56:44'),
+(12,'bathroom_count','화장실수','Y','2026-07-08 04:56:44'),
+(13,'parking_available','주차가능여부','Y','2026-07-08 04:56:44'),
+(14,'parking_count','총주차가능대수','Y','2026-07-08 04:56:44'),
+(15,'completion_date','준공일','Y','2026-07-08 04:56:44'),
+(16,'move_in_date','입주가능일','Y','2026-07-08 04:56:44'),
+(17,'direction','방향','Y','2026-07-08 04:56:44'),
+(18,'heating_fuel','난방연료','Y','2026-07-08 04:56:44'),
+(19,'heating_type','난방방식','Y','2026-07-08 04:56:44'),
+(20,'sale_price','매매가','Y','2026-07-08 04:56:44'),
+(21,'jeonse_price','전세가','Y','2026-07-08 04:56:44'),
+(22,'deposit_price','보증금','Y','2026-07-08 04:56:44'),
+(23,'monthly_rent','월세','Y','2026-07-08 04:56:44'),
+(24,'loan_amount','융자금','Y','2026-07-08 04:56:44'),
+(25,'maintenance_fee','관리비','Y','2026-07-08 04:56:44'),
+(26,'status','거래상태','Y','2026-07-08 04:56:44'),
+(27,'display_yn','홈페이지노출','Y','2026-07-08 04:56:44'),
+(28,'summary','한줄소개','Y','2026-07-08 04:56:44'),
+(29,'description','상세설명','Y','2026-07-08 04:56:44'),
+(30,'thumbnail_image','대표이미지','Y','2026-07-08 04:56:44'),
+(31,'detail_images','추가이미지','Y','2026-07-08 04:56:44');
+
+insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`property_show`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`,`naver_site_verification`) values
+    (1,'데모부동산','','로고','N','#123a5e','50','#F4F5F7',NULL,'#ffffff','#c0392b','Y','Y','N','Y','Y','Y','N','N','','N','','N','데모 부동산','데모 부동산 공인중개사사무소','서울 동작구 노량진로 100','02-815-2500','제11590-2024-00042호','나병연','김민수','02-815-2501','대표이사 : 000 | 개인정보관리책임자 : 000 | 사업자등록번호 : 111-12-12345 | 주소 서울 동작구 노량진로 100 | TEL 02-000-0000','test2');

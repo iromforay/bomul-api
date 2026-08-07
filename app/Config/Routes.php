@@ -17,6 +17,11 @@ if ($host !== 'api.bomul.ai.kr') {
     // 새벽 배치(app/batch/analy.php)가 중개사 서브도메인({fid}.bomul.ai.kr)으로 curl 호출.
     $routes->get('cron/analytics/daily-aggregate', 'Cron\Analytics::getDailyAggregate');
 
+    // bomul-bo(중앙) QueuePush 커맨드가 push하는 수신 엔드포인트 - 위와 같은 이유로 defaultNamespace
+    // 분기 전에 등록해서 App\Controllers\Receiver(Web 네임스페이스 아님)로 고정 라우팅한다.
+    $routes->get('receiver', 'Receiver::postIndex');
+    $routes->post('receiver', 'Receiver::postIndex');
+
     // 🌐 WEB 전용: 모든 요청을 Web namespace로 자동 라우팅
     $routes->setDefaultNamespace('App\Controllers\Web');
 

@@ -23,6 +23,10 @@ if ($h === '02') {
     require __DIR__ . '/analy.php';
 }
 
+// 서비스 신청 승인건 세팅 처리 + 중앙 콜백 - analytics와 달리 특정 시간대에 몰리는 배치가 아니라
+// (승인은 아무 때나 일어남) 시간대 조건 없이 항상 매분 호출. pending 없으면 바로 종료하니 부담 없음.
+require __DIR__ . '/setting_callback.php';
+
 // 단발성 배치 예시 (시:분까지 정확히 매칭될 때 딱 한 번만):
 // if ($h === '03' && $i === '00') {
 //     require __DIR__ . '/example.php';
