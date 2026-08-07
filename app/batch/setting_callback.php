@@ -31,14 +31,19 @@ $db = db_connect('default');
 $settingModel = model('App\Models\SettingQueueModel', true, $db);
 $provisioner = new \App\Libraries\TenantProvisioner();
 
-// 1. 처리 - DB 생성 + 스키마/기본데이터 실행 + basic 시딩 + 디렉토리 생성
+// 1. 처리 - action='new'는 DB 생성+스키마/기본데이터+member 등록, action='update'는
+// member.service만 Y/N로 바꾸는 가벼운 처리 (DB/스키마는 안 건드림)
 $pending = $settingModel->get_pending();
 foreach ($pending as $row) {
     $payload = json_decode($row['payload'], true) ?? [];
-    $result = $provisioner->provision($row['fid'], $payload);
+    $action  = $row['action'] ?? 'new';
+
+    $result = $action === 'update'
+        ? $provisioner->updateMemberStatus($row['fid'], $payload)
+        : $provisioner->provision($row['fid'], $payload);
 
     $settingModel->markResult($row['setting_no'], $result['ok'] ? 'DONE' : 'FAILED', $result['message']);
-    log_message($result['ok'] ? 'info' : 'error', "[setting_callback] setting_no={$row['setting_no']} fid={$row['fid']} - {$result['message']}");
+    log_message($result['ok'] ? 'info' : 'error', "[setting_callback] setting_no={$row['setting_no']} fid={$row['fid']} action={$action} - {$result['message']}");
 }
 
 // 2. 콜백 - 처리는 끝났는데 아직 중앙에 못 알린 것들 (콜백 실패로 재시도되는 것도 이 조건에 자연히 다시 걸림)

@@ -36,6 +36,7 @@ class Receiver extends Controller
 
         $queueNo = (int) ($body['queue_no'] ?? 0);
         $fid     = (string) ($body['fid'] ?? '');
+        $action  = (string) ($body['action'] ?? 'new');
 
         if ($queueNo <= 0 || $fid === '') {
             echo AT_Result::toJson(AT_Result::toFailData('queue_no, fid는 필수입니다.'));
@@ -44,7 +45,7 @@ class Receiver extends Controller
 
         $db = db_connect('default');
         $model = model(SettingQueueModel::class, true, $db);
-        $setting_no = $model->sql_save($queueNo, $fid, $body);
+        $setting_no = $model->sql_save($queueNo, $fid, $action, $body);
 
         if (!$setting_no) {
             echo AT_Result::toJson(AT_Result::toFailData('저장에 실패했습니다.'));

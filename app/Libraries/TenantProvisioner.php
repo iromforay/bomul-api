@@ -97,6 +97,27 @@ class TenantProvisioner
             : ['ok' => false, 'message' => 'member 등록 실패 - ' . ($model->getDbError()['message'] ?? '')];
     }
 
+    // action='update' 전용 - DB/스키마는 안 건드리고 중앙 bomul.member.service만 Y/N로 바꾼다.
+    public function updateMemberStatus(string $fid, array $payload): array
+    {
+        $status = strtoupper((string) ($payload['status'] ?? ''));
+        if (!in_array($status, ['Y', 'N'], true)) {
+            return ['ok' => false, 'message' => "status 값이 올바르지 않습니다: {$status}"];
+        }
+
+        $db = db_connect('default');
+        $model = model(\App\Models\MemberModel::class, true, $db);
+
+        if (!$model->existsByFid($fid)) {
+            return ['ok' => false, 'message' => "등록된 member가 없습니다({$fid})"];
+        }
+
+        $updated = $model->updateServiceStatus($fid, $status);
+        return $updated
+            ? ['ok' => true, 'message' => "member.service={$status} 변경 완료({$fid})"]
+            : ['ok' => false, 'message' => 'member 상태 변경 실패 - ' . ($model->getDbError()['message'] ?? '')];
+    }
+
     // mysqldump 스타일 파일 실행 - CI4 쿼리빌더는 한 번에 한 문장만 돌리는 게 기본이라, 세미콜론+개행을
     // 문장 경계로 본다. 블록 주석(/* ... */) 안에 세미콜론이 섞여있으면(Navicat 덤프 헤더 등에 흔함)
     // 그 경계에서 잘못 잘려서 주석 뒷부분이 SQL 문장으로 실행돼버리는 문제가 있었다 - 그래서 쪼개기

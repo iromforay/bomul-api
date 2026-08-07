@@ -38,4 +38,10 @@ class MemberModel extends CI_Model
 
         return $this->safeExecQuery($sql);
     }
+
+    public function updateServiceStatus($fid, string $status)
+    {
+        $sql = "UPDATE `$this->table` SET `service` = " . $this->db->escape($status) . " WHERE `fid` = " . $this->db->escape($fid);
+        return $this->safeExecQuery($sql);
+    }
 }
