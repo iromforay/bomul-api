@@ -44,4 +44,13 @@ class MemberModel extends CI_Model
         $sql = "UPDATE `$this->table` SET `service` = " . $this->db->escape($status) . " WHERE `fid` = " . $this->db->escape($fid);
         return $this->safeExecQuery($sql);
     }
+
+    // 사용자웹 BaseController::check_service_status()가 호출 - member row가 없으면 null
+    // (기존 레거시 상점 등 - 이 경우 호출부에서 운영중으로 간주한다)
+    public function getServiceByFid($fid): ?string
+    {
+        $sql = "SELECT `service` FROM `$this->table` WHERE `fid` = " . $this->db->escape($fid) . " LIMIT 1";
+        $rows = $this->getExecQuery($sql);
+        return $rows[0]['service'] ?? null;
+    }
 }

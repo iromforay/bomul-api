@@ -4,6 +4,7 @@ namespace App\Controllers\Web;
 
 use App\Service\BasicService;
 use App\Service\MenuService;
+use App\Models\MemberModel;
 use CodeIgniter\Controller;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -81,28 +82,35 @@ class BaseController extends Controller
 
         define('SHOP_CODE', $SHOP_CODE); //상점코드 - help 아이디*/
 
-       // $this->check_service_status();
         $this->set_domain();
+        $this->check_service_status();
         return $this;
     }
+
+    // member.service(OPERATING/USER_CLOSED/ALL_CLOSED) 확인 후 사용자웹 접속 차단.
+    // USER_CLOSED/ALL_CLOSED 둘 다 사용자웹은 막는다(사용자기준 차단여부는 동일, 관리자bo 접속가능
+    // 여부만 다름 - 그건 bo쪽 로그인에서 별도 체크). member row가 없거나(레거시 상점) 그 외 값은
+    // 운영중으로 간주해 통과시킨다.
+    // DB를 매 요청마다 조회하면 부하가 크니 fid당 5초 file cache로 완화 - 상태변경 반영이 최대 5초
+    // 지연될 수 있지만 즉시성 요구 대비 부하 절감이 더 중요하다고 판단.
     public function check_service_status()
     {
-        if($this->session_id !="") {
-            $log=$this->getMonoLog("api");
-            $BasicService = new BasicService($log, SHOP_CODE);
-            $status = $BasicService->get_service_status(SHOP_CODE);
+        $fid = SHOP_CODE;
+        $cacheKey = 'member_service_' . $fid;
 
-            $log->info("[REV] SHOP_CODE : ".SHOP_CODE." status : ".$status);
-            if($status){
-                return $this;
-            }else{
-                return $this;
-                // echo AT_Result::toFailJson("서비스 만료","SERVICE_EXPIRED");
-                exit;
-            }
-        }else{
-            echo "상태 확인 안됨";
+        $status = cache()->get($cacheKey);
+        if ($status === null) {
+            $db = db_connect('default');
+            $model = model(MemberModel::class, true, $db);
+            $status = $model->getServiceByFid($fid) ?? '';
+            cache()->save($cacheKey, $status, 5);
         }
+
+        if (in_array($status, ['USER_CLOSED', 'ALL_CLOSED'], true)) {
+            $this->render_error_page('error/service_closed');
+        }
+
+        return $this;
     }
     public function set_domain()
     {
@@ -113,9 +121,41 @@ class BaseController extends Controller
         $parts = explode('.', $host);
         $shop_code = (count($parts) >= 4) ? $parts[0] : "foray";
 
+        if (!$this->tenant_db_exists($shop_code)) {
+            $this->render_error_page('error/invalid_url');
+        }
+
         $this->session_id = $shop_code;
         if(!defined("SHOP_CODE")) define('SHOP_CODE', $shop_code);
         return $this;
+    }
+
+    // 존재하지 않는 상점/서비스 종료 상점 접속 시 안내 HTML을 그대로 내려주고 종료한다. 상태코드는
+    // 그대로 200 - 404/503을 쓰면 브라우저/모니터링 도구/CDN이 "서버 오류"로 인식해서 안내 문구를
+    // 못 보여주거나 장애로 오탐하는 문제가 있었다. 그래서 정상 응답(200)으로 안내 페이지 자체를
+    // 그대로 내려서 사용자가 "주소가 틀렸다" / "서비스가 종료됐다"를 화면으로 바로 구분하게 한다.
+    private function render_error_page(string $view): void
+    {
+        echo view($view);
+        exit;
+    }
+
+    // fid(서브도메인)와 동일한 이름의 테넌트 DB가 실제로 존재하는지 확인 - TenantProvisioner::provision()이
+    // 상점마다 `CREATE DATABASE {fid}`로 만들어두는 그 DB. 없는 상점코드로 접속하면(오타, 삭제된 상점 등)
+    // 여기서 걸러 404를 낸다 - 그대로 두면 뒤의 로직이 존재하지 않는 DB에 setDatabase()를 시도하다 죽는다.
+    // 매 요청 information_schema 조회는 부하가 있어 fid당 5초 file cache로 완화한다.
+    private function tenant_db_exists(string $fid): bool
+    {
+        $cacheKey = 'tenant_db_exists_' . $fid;
+        $exists = cache()->get($cacheKey);
+        if ($exists === null) {
+            $db = db_connect('default');
+            $sql = "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = " . $db->escape($fid) . " LIMIT 1";
+            $row = $db->query($sql)->getRowArray();
+            $exists = $row !== null;
+            cache()->save($cacheKey, $exists, 5);
+        }
+        return (bool) $exists;
     }
     public function view(string $layout="" ,string $name = "", array $data = [], array $options = [])
     {
