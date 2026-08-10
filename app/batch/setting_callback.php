@@ -31,14 +31,14 @@ $db = db_connect('default');
 $settingModel = model('App\Models\SettingQueueModel', true, $db);
 $provisioner = new \App\Libraries\TenantProvisioner();
 
-// 1. 처리 - action='new'는 DB 생성+스키마/기본데이터+member 등록, action='update'는
-// member.service만 Y/N로 바꾸는 가벼운 처리 (DB/스키마는 안 건드림)
+// 1. 처리 - action='new'는 DB 생성+스키마/기본데이터+member 등록, action='status'는
+// member.service만 바꾸는 가벼운 처리 (DB/스키마는 안 건드림). 그 외 값은 'new'와 동일하게 처리.
 $pending = $settingModel->get_pending();
 foreach ($pending as $row) {
     $payload = json_decode($row['payload'], true) ?? [];
     $action  = $row['action'] ?? 'new';
 
-    $result = $action === 'update'
+    $result = $action === 'status'
         ? $provisioner->updateMemberStatus($row['fid'], $payload)
         : $provisioner->provision($row['fid'], $payload);
 

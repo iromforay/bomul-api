@@ -97,11 +97,12 @@ class TenantProvisioner
             : ['ok' => false, 'message' => 'member 등록 실패 - ' . ($model->getDbError()['message'] ?? '')];
     }
 
-    // action='update' 전용 - DB/스키마는 안 건드리고 중앙 bomul.member.service만 Y/N로 바꾼다.
+    // action='status' 전용 - DB/스키마는 안 건드리고 중앙 bomul.member.service만 바꾼다.
+    // OPERATING(운영) / USER_CLOSED(사용자 종료) / ALL_CLOSED(전체 종료-사용자,관리자 모두 접속 불가)
     public function updateMemberStatus(string $fid, array $payload): array
     {
         $status = strtoupper((string) ($payload['status'] ?? ''));
-        if (!in_array($status, ['Y', 'N'], true)) {
+        if (!in_array($status, ['OPERATING', 'USER_CLOSED', 'ALL_CLOSED'], true)) {
             return ['ok' => false, 'message' => "status 값이 올바르지 않습니다: {$status}"];
         }
 

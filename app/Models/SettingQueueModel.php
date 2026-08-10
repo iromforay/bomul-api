@@ -11,8 +11,8 @@ class SettingQueueModel extends CI_Model
     }
 
     // Receiver가 push 수신 즉시 호출 - 원본 payload를 그대로 저장하고 PENDING으로 적재.
-    // action: 'new'(신규 세팅) | 'update'(member.service 등 상태 변경) - setting_callback.php가
-    // 이 값으로 TenantProvisioner::provision() vs updateMemberStatus() 중 뭘 실행할지 분기한다.
+    // action: 'new'(신규 세팅) | 'status'(member.service 상태 변경, payload.status=OPERATING|USER_CLOSED|ALL_CLOSED)
+    // - setting_callback.php가 이 값으로 TenantProvisioner::provision() vs updateMemberStatus() 중 뭘 실행할지 분기한다.
     public function sql_save($queue_no, $fid, string $action, array $payload)
     {
         $sql = "INSERT INTO `$this->table` SET
