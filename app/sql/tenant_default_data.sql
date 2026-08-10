@@ -65,3 +65,5 @@ insert  into `add_menu`(`add_menu_no`,`code`,`key`,`text`,`show`,`img_dir`,`img_
 (3,'basic','sns3',NULL,'N',NULL,NULL,'now()'),
 (4,'basic','sns4',NULL,'N',NULL,NULL,'now()'),
 (5,'basic','sns5',NULL,'N',NULL,NULL,'now()');
+
+INSERT INTO `profile`(profile_no,nick_name,img_dir,img_name)VALUES(1,'데모 중개사무소', '','')
