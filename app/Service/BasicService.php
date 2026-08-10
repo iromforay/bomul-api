@@ -43,6 +43,11 @@ class BasicService extends CI_Service
             $data['logo_url'] = SITE_PDS.$data['logo_dir'].$data['logo_name'];
         }
         $data['sub_menu_color'] = $data['sub_menu_focus_color'];
+        if (isset($data['favicon_dir']) and $data['favicon_dir']!="" ) {
+            $data['favicon_dir'] = SITE_PDS . $data['favicon_dir'];
+        }
+
+
         unset($data['sub_menu_focus_color']);
         unset($data['logo_dir']); unset($data['logo_name']); unset($data['basic_no']);
 
