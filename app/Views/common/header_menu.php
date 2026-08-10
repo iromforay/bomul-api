@@ -52,6 +52,7 @@
 
             </ul>
 
+            <?if($common['link_menu_show'] =="Y"):?>
             <div class="fn_btn">
                 <div class="sns_con">
                     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="link"
@@ -66,6 +67,7 @@
 
                 <ul class="sns_list"></ul>
             </div>
+            <?php endif; ?>
         </nav>
 
         <div class="mob_con">

@@ -11,7 +11,9 @@ class Basic_Entity
     private $logo_dir;
     private $logo_name;
     private $logo_show;
-
+    private $favicon_dir;
+    private $favicon_name;
+    private $favicon_show;
     private $menu_bg_color;
     private $menu_bg_transparent;
     private $main_menu_color;
@@ -522,6 +524,54 @@ public function setSubMenuFocusColor($sub_menu_focus_color): void
     public function setMenuBgTransparent($menu_bg_transparent): void
     {
         $this->menu_bg_transparent = $menu_bg_transparent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFaviconDir()
+    {
+        return $this->favicon_dir;
+    }
+
+    /**
+     * @param mixed $favicon_dir
+     */
+    public function setFaviconDir($favicon_dir): void
+    {
+        $this->favicon_dir = $favicon_dir;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFaviconName()
+    {
+        return $this->favicon_name;
+    }
+
+    /**
+     * @param mixed $favicon_name
+     */
+    public function setFaviconName($favicon_name): void
+    {
+        $this->favicon_name = $favicon_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFaviconShow()
+    {
+        return $this->favicon_show;
+    }
+
+    /**
+     * @param mixed $favicon_show
+     */
+    public function setFaviconShow($favicon_show): void
+    {
+        $this->favicon_show = $favicon_show;
     }
 
 

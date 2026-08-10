@@ -44,6 +44,8 @@ class Basic extends BaseController
             $file=null;
         }
         $data['logo_show'] = $this->request->getVar("logo_show");
+        $data['favicon_show'] = $this->request->getVar("favicon_show");
+        $favicon_file = isset($_FILES['favicon_img']) ? $_FILES['favicon_img'] : "";
 
         $data['main_menu_color'] = $this->request->getVar("main_menu_color");
         $data['sub_menu_focus_color'] = $this->request->getVar("sub_menu_color");
@@ -91,7 +93,7 @@ class Basic extends BaseController
         }
 
         $this->log->info("[REV] data : ".json_encode($data,JSON_UNESCAPED_UNICODE));
-        $oResult = $this->service->save($data,$file,$sns_file);
+        $oResult = $this->service->save($data,$file,$favicon_file,$sns_file);
         $this->view($oResult);
     }
 

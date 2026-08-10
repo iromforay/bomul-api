@@ -132,6 +132,7 @@ class BaseController extends Controller
         }
 
         $data['FRESH_TIME'] = isset($data['FRESH_TIME'])? DATE('YmdHis') : FRESH_TIME;
+        $data['common']['favicon'] = $data['common']['favicon']?? RS_IMG."/header/favicon.png";
 
         $temp_layout = array(
             'header_menu' =>view("common/header_menu",$data),

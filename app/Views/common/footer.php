@@ -19,22 +19,26 @@
             <br>
             Copyrightⓒ 2023 <a href="https://www.bomul.ai.kr" target="_blank" rel="noopener noreferrer">보이는 매물</a> All rights reserved.
         </p>
-        <?if($common['link_menu_show']=="Y"){?>
+        <?if($common['naver_reserve_show']=="Y" or $common['kakao_channel_show']=="Y"){?>
+
         <div class="bottom_btn_con">
             <div class="inner">
+            <?if($common['naver_reserve_show']=="Y"){?>
                 <div class="naver_con">
                     <a href="" target="_blank" data-track-click="reserve">
                         <img src="<?= RS_IMG ?>/header/naver.png" alt="네이버 예약">
                         <p>예약하기</p>
                     </a>
                 </div>
-
+            <?}?>
+            <?if($common['kakao_channel_show']=="Y"){?>
                 <div class="kakao_con">
                     <a href="" target="_blank" data-track-click="kakao">
                         <img src="<?= RS_IMG ?>/header/kakao.png" alt="카카오톡 채널">
                         <p>카톡채널추가</p>
                     </a>
                 </div>
+            <?}?>
             </div>
         </div>
         <?}?>

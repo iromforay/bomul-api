@@ -64,7 +64,7 @@ class BasicService extends CI_Service
         return $data;
     }
     // 기본설정 저장
-    public function save($data,$file,$sns_file)
+    public function save($data,$file,$favicon_file,$sns_file)
     {
     //사이트 로고 설정
         $rows = $this->model->findbyid(1);
@@ -75,6 +75,8 @@ class BasicService extends CI_Service
         //사이트명, 로고설정
         $this->log->info("사이트명, 로고설정");
         $this->sitename_and_logo($data,$file);
+        //파비콘
+        $this->favicon($data,$favicon_file);
         //메뉴&페이지 설정
         $this->log->info("메뉴&페이지 설정");
         $this->menu_setting($data);
@@ -167,6 +169,51 @@ class BasicService extends CI_Service
         }
 
         $this->entity->setLogoShow($data['logo_show']);
+        return $this;
+    }
+
+    //파비콘 설정
+    public function favicon($data,$file)
+    {
+        //사이트명
+
+
+        /*파일 등록*/
+        if(isset($file['name']) and $file['name'] !="") {//파일 있음
+
+            $oResult = $this->file_upload($file);
+
+            if($oResult['SUCCESS'] == "TRUE") {
+                if($oResult['RECORD']['file_path'] !="") $this->entity->setFaviconDir($oResult['RECORD']['file_path']);
+                if($oResult['RECORD']['file_name'] !="") $this->entity->setFaviconName($oResult['RECORD']['file_name']);
+            }
+            else{ //등록파일 업로드 실패
+                return AT_Result::toFailData($oResult['MSG']);
+            }
+            if(isset($img[0]['img_no']) and $img[0]['img_no']>0) { //로고 추가인데, 기존 자료가 있을때, 기존 파일 삭제
+                $file['img_dir'] = $this->row['favicon_dir'];
+                $file['img_name'] = $this->row['favicon_name'];
+                $this->file_del($file);
+            }
+            //저장 또는 수정
+        }else{
+            $img_entity = new Img_Entity();
+            if(isset($data['favicon_del']) and $data['favicon_del']=="Y"){ //기존파일 삭제일때
+                //파일 실삭제
+                $file['img_dir'] = $this->row['favicon_dir'];
+                $file['img_name'] = $this->row['favicon_name'];
+                $this->file_del($file);
+
+                $this->entity->setFaviconDir("");
+                $this->entity->setFaviconName("");
+            }else { //유지
+                //기존 데이터 조회
+                $this->entity->setFaviconDir($this->row['favicon_dir']??"");
+                $this->entity->setFaviconName($this->row['favicon_name']??"");
+            }
+        }
+
+        $this->entity->setFaviconShow($data['favicon_show']);
         return $this;
     }
     //각 메뉴별 활성여부 세팅및 폰트색상
@@ -385,11 +432,12 @@ class BasicService extends CI_Service
 
         if(0){
             $curl = new Curl();
-            $host = "https://help.all-teaching.com/User/Login/getHomePageStatus";
-            $curl->set_url($host)->set_method("POST")->setdata("userid", $session_id);
+            //$host = "https://help.all-teaching.com/User/Login/getHomePageStatus";
+            //$curl->set_url($host)->set_method("POST")->setdata("userid", $session_id);
             $this->log->info("login connetction host:" . $host . ", userid : " . $session_id);
-            $curl->exec();
-            $log_row = $curl->return_data();
+            //$curl->exec();
+            //$log_row = $curl->return_data();
+            $log_row = array();
         }
         //$log_row['EXPIRE'] = ; //10분
         $this->log->info("help reuslt :" . json_encode($log_row, JSON_UNESCAPED_UNICODE));

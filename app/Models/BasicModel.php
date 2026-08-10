@@ -38,6 +38,10 @@ class BasicModel extends CI_Model
         ! is_null($entity->getLogoName())               ?    $set[] = "`logo_name`=".               $this->db->escape($entity->getLogoName())           : "";
         ! is_null($entity->getLogoShow())               ?    $set[] = "`logo_show`=".               $this->db->escape($entity->getLogoShow())           : "";
 
+        ! is_null($entity->getFaviconDir())             ?    $set[] = "`favicon_dir`=".             $this->db->escape($entity->getFaviconDir())         : "";
+        ! is_null($entity->getFaviconName())            ?    $set[] = "`favicon_name`=".            $this->db->escape($entity->getFaviconName())        : "";
+        ! is_null($entity->getFaviconShow())            ?    $set[] = "`favicon_show`=".            $this->db->escape($entity->getFaviconShow())        : "";
+
         ! is_null($entity->getMenuBgColor())            ?    $set[] = "`menu_back_color`=".         $this->db->escape($entity->getMenuBgColor())        : "";
         ! is_null($entity->getMenuBgTransparent())      ?    $set[] = "`menu_back_transparent`=".   $this->db->escape($entity->getMenuBgTransparent())  : "";
 
