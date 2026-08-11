@@ -14,11 +14,18 @@
 
             <div class="slider">
                 <div class="img_con">
-                    <?php if (!empty($img)): ?>
+                    <?php $imgCount = !empty($img) ? count($img) : 0; ?>
+                    <?php if ($imgCount >= 2): ?>
+                    <div class="bg bg-fade">
+                        <?php foreach ($img as $i => $url): ?>
+                        <div class="tile<?= $i === 0 ? ' active' : '' ?>" style="background-image:url('<?=$url?>');"></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php elseif ($imgCount === 1): ?>
                     <div class="bg bg-scroll">
                         <div class="scroll-track">
-                            <div class="tile" style="background-image:url('<?=$img?>');"></div>
-                            <div class="tile" style="background-image:url('<?=$img?>');"></div>
+                            <div class="tile" style="background-image:url('<?=$img[0]?>');"></div>
+                            <div class="tile" style="background-image:url('<?=$img[0]?>');"></div>
                         </div>
                     </div>
                     <?php else: ?>

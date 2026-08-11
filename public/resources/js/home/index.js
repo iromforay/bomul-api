@@ -1,5 +1,18 @@
 $(document).ready(function () {
 
+    // 히어로 배경 이미지 스와프 - 등록된 메인이미지가 2장 이상일 때만 동작(.bg-fade가 있을 때)
+    (function () {
+        var $tiles = $('.section_01 .bg-fade .tile');
+        if ($tiles.length < 2) return;
+
+        var current = 0;
+        setInterval(function () {
+            $tiles.eq(current).removeClass('active');
+            current = (current + 1) % $tiles.length;
+            $tiles.eq(current).addClass('active');
+        }, 5000);
+    })();
+
     $('.slider').slick({
         arrows: true,
         dots: false,
