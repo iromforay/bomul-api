@@ -8,7 +8,8 @@
         <div class="width_con <?=$sub['widthConClass']?>">
 
             <div class="main_con">
-                <h6>매물정보</h6>
+                <h6><?=$sub['name']?></h6>
+                <?=($sub['title_show']=="Y"? $sub['title'] : "")?>
             </div>
 
             <?php if (empty($rows)): ?>

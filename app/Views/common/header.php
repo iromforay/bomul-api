@@ -50,8 +50,6 @@ $ogImage = !empty($row['main_image_url'])
 </style>
 <link rel="stylesheet" href="<?=RS_CSS?>/common/style.css?var=<?=FRESH_TIME?>" >
 
-<script src="<?=RS_JS?>/common/index.js?var=<?=FRESH_TIME?>"></script>
-
 <!-- Font Awesome :: Start -->
 <!--<link rel="stylesheet" href="<?php /*=RS_TH*/?>/fontawesome_free_6_1_1/css/all.css" />-->
 <!--<script type="text/javascript" src="<?php /*=RS_TH*/?>/fontawesome_free_6_1_1/js/all.js"></script>-->
@@ -67,3 +65,7 @@ $ogImage = !empty($row['main_image_url'])
 
 <!-- Slick JS -->
 <script src="<?= RS_JS ?>/slick.min.js"></script>
+
+<!-- common/index.js는 페이지 공통 스크립트(햄버거 메뉴 등)라 jQuery보다 뒤에 와야 한다 -
+     예전엔 jQuery보다 먼저 로드되고 있어서 그 안에서 $ 를 쓰면 바로 깨지는 상태였다. -->
+<script src="<?=RS_JS?>/common/index.js?var=<?=FRESH_TIME?>"></script>

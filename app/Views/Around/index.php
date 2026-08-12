@@ -23,9 +23,7 @@
       </div>
      <?php endif; ?>
 
-      <p class="zoom">
-        각 이미지들을 클릭하시면 크게 보실 수 있습니다.
-      </p>
+
     </div>
     <!-- //section -->
 
