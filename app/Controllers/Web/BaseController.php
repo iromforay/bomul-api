@@ -225,7 +225,10 @@ class BaseController extends Controller
             $this->sub_body =  $row['RECORD']['row'];
             $this->sub_body['widthConClass'] = "";
             $this->sub_body['widthConClass'] = $this->sub_body['bgcolor_show'] === 'N' ? 'sub-bg-color' : 'sub-bg-image';
-
+//dd($img);
+            if(count($img)<=0) { //등록된 이미지가 없다면 기본 이미지 제공.
+                $img['0']['full_url'] = RS_IMG."/demo/menu/sub_title.png";
+            }
             $this->sub_body['img'] = $img;
 
             $body = $row['RECORD']['basic'];

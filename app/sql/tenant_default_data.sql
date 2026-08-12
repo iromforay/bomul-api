@@ -5,14 +5,14 @@
 -- 그대로 복사하면 깨진 이미지가 됨. 필요해지면 그 행만 빼고 주석 해제.
 
 insert  into `menu`(`menu_no`,`name`,`code`,`bgcolor`,`transparent`,`title`,`title_show`,`bgcolor_show`,`write_date`) values 
-(1,'메인','main','#123a5e','46','<h5>서울 실매물 정보, 마포공인중개사 사무소  확인하세요</h5>','Y','N',NULL),
-(2,'공지사항','notice','#123A5E','0',NULL,NULL,NULL,now()),
-(3,'둘러보기','around','#123A5E','50',NULL,'N',NULL,now()),
-(4,'이용요금','charge','#123A5E','60',NULL,'N',NULL,now()),
-(5,'후기','review','#123A5E','62',NULL,'N',NULL,now()),
-(6,'오시는길','map','#123A5E','36',NULL,NULL,NULL,now()),
-(7,'홍보영상','vod','#123A5E','0',NULL,'N','N',now()),
-(8,'매물관리','property','#c0392b','94',NULL,'N','Y',now());
+(1,'메인','main','#ffffff','50','<h5><strong>더 잘보이고, 더 빨</strong><strong style="background-color: rgb(230, 0, 0);"></strong><strong>리 거래되는 매물</strong></h5>','Y','N',NULL),
+(2,'공지사항','notice','#ffffff','50',NULL,NULL,'Y',now()),
+(3,'둘러보기','around','#ffffff','50','<p>시선이 머무는 하이라이트 매물입니다.</p>','N','Y',now()),
+(4,'이용요금','charge','#ffffff','50',NULL,'N',NULL,now()),
+(5,'후기','review','#ffffff','50','<p>저희 매장을 이용해주신 고객들의 생생후기 게시판입니다.</p>','N','Y',now()),
+(6,'오시는길','map','#ffffff','50',NULL,NULL,'Y',now()),
+(7,'홍보영상','vod','#ffffff','50',NULL,'N','N',now()),
+(8,'매물관리','property','#ffffff','50','믿고 보는 우리동네 매물, 한눈에','N','Y',now());
 
 -- insert  into `add_menu`(`add_menu_no`,`code`,`key`,`text`,`show`,`img_dir`,`img_name`,`write_date`) values
 -- (1,'map','tel','연락처1','Y','','',NULL),
@@ -56,7 +56,7 @@ insert  into `function_menu`(`function_menu_no`,`function_menu_key`,`function_me
 (31,'detail_images','추가이미지','Y',now());
 
 insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`property_show`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`,`naver_site_verification`) values
-    (1,'데모부동산','','로고','N','#123a5e','50','#F4F5F7',NULL,'#ffffff','#c0392b','Y','Y','N','N','Y','Y','N','N','','N','','N','데모 부동산','데모 부동산 공인중개사사무소','서울 동작구 노량진로 100','02-815-2500','제11590-2024-00042호','나병연','김민수','02-815-2501','대표이사 : 000 | 개인정보관리책임자 : 000 | 사업자등록번호 : 111-12-12345 | 주소 서울 동작구 노량진로 100 | TEL 02-000-0000','test2');
+    (1,'데모부동산','','로고','N','#ffffff','100','#F4F5F7',NULL,'#000222','#2563eb','Y','Y','N','N','Y','Y','N','N','','N','','N','데모 부동산','데모 부동산 공인중개사사무소','서울 동작구 노량진로 100','02-815-2500','제11590-2024-00042호','나병연','김민수','02-815-2501','대표이사 : 000 | 개인정보관리책임자 : 000 | 사업자등록번호 : 111-12-12345 | 주소 서울 동작구 노량진로 100 | TEL 02-000-0000','test2');
 
 --sns 링크 5개 초기 세팅
 insert  into `add_menu`(`add_menu_no`,`code`,`key`,`text`,`show`,`img_dir`,`img_name`,`write_date`) values

@@ -28,7 +28,7 @@
             </a>
         </div>
         <?php else: ?>
-        <a href="/"><h2><?= $common['site_name'] ?? '' ?></h2></a>
+        <a href="/" class="logo_min_con"><img src="<?=RS_IMG."/demo/logo_min.png"?>" style="width:50px;" alt="logo_min"><h2><?= $common['site_name'] ?? '' ?></h2></a>
         <?php endif; ?>
 
         <nav class="nav_con">

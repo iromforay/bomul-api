@@ -5,6 +5,9 @@
 #header .width_con .logo_con {display: flex; justify-content: center; align-items: center;  height: 100%;}
 #header .width_con .logo_con a {cursor: pointer;}
 #header .width_con .logo_con a img {max-width: 165px; object-fit: cover;}
+#header .width_con .logo_min_con {display: flex; align-items: center; gap: 8px; height: 100%; white-space: nowrap; cursor: pointer;}
+#header .width_con .logo_min_con img {flex-shrink: 0;}
+#header .width_con .logo_min_con h2 {white-space: nowrap;}
 #header .width_con .nav_con {display: flex; justify-content: space-between; height: 100%;}
 #header .width_con .nav_con .fn_btn {position: relative; display: flex; justify-content: center;  align-items: center; width: 72px; height: 100%; background: #fff; border: 1px solid #E0E0E0; border-top: none; border-bottom: none;}
 #header .width_con .nav_con .fn_btn > div {position: relative; cursor: pointer;}

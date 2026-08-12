@@ -250,7 +250,7 @@ body.open_nav {
    영향을 안 주고 배경 레이어에만 적용되게 한다.
    bgcolor_show="N" -> sub-bg-color(색상+투명도) / 그 외 -> sub-bg-image(등록이미지+투명도,
    등록이미지 없으면 CSS 멀티 배경으로 그라데이션 폴백 - 이 경우도 투명도는 동일하게 적용됨) */
-.section_02 .width_con {position: relative; z-index: 0;}
+.section_02 .width_con {position: relative; z-index: 0;min-height: 600px;}
 .section_02 .width_con.sub-bg-color::before,
 .section_02 .width_con.sub-bg-image::before {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; content: '';
