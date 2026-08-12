@@ -5,7 +5,7 @@
   <div class="App">
         <!-- section -->
     <div class="sections section_02 map">
-      <div class="width_con">
+      <div class="width_con <?=$sub['widthConClass']?>">
         <div class="map_con">
 
           <div class="col col1">

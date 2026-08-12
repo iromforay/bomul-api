@@ -33,7 +33,9 @@ class Around extends BaseController
             RS_IMG."/sec_02/img_sec03_5.jpg"
         );
     }else{
-        $imgs = $list_data['RECORD']['img'];
+        // RECORD.img는 [img_no, full_url] 형태 배열(MenuService::getBycode() 참고) - 위 기본이미지
+        // 배열(문자열)과 타입을 맞춰야 뷰가 항상 문자열로만 받는다(Array to string conversion 방지).
+        $imgs = array_column($list_data['RECORD']['img'], 'full_url');
     }
 
         $data = array(

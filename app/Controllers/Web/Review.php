@@ -38,6 +38,7 @@ class Review extends BaseController
             'rows' =>$rows['rows'],
             'paging'=> $paging
         );
+
         $this->view("",'Review/index',$data);
     }
     public function getview($board_no)

@@ -5,7 +5,7 @@
   <div class="App">
     <!-- section -->
     <div class="sections section_02 slide">
-      <div class="width_con">
+      <div class="width_con <?=$sub['widthConClass']?>">
 
         <div class="main_con">
             <h6>이용요금</h6>

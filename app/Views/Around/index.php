@@ -5,14 +5,13 @@
   <div class="App">
     <!-- section -->
     <div class="sections section_03 slide">
-      <div class="width_con">
+      <div class="width_con <?=$sub['widthConClass']?>">
         <div class="main_con">
-          <div class="slide_nav">
-            <h6><?=$rows['name']?></h6>
-          </div>
+          <h6><?=$rows['name']?></h6>
+            <?=($rows['title_show']=="Y"? $rows['title'] : "")?>
         </div>
       </div>
-
+     <?if(count($img)>0) :?>
       <div class="slide_con">
         <ul class="slick-slider">
         <?foreach($img as $k=>$row){?>
@@ -22,6 +21,7 @@
         <?}//end foreach?>
         </ul>
       </div>
+     <?php endif; ?>
 
       <p class="zoom">
         각 이미지들을 클릭하시면 크게 보실 수 있습니다.
