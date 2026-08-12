@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Web;
 
+use App\Libraries\AT_Result;
 use App\Service\BasicService;
 use App\Service\MenuService;
 use App\Models\MemberModel;
@@ -50,6 +51,15 @@ class BaseController extends Controller
     {
         return $this->body;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSubBody()
+    {
+        return $this->sub_body;
+    }
+
 
     /**
      * @return mixed
@@ -205,9 +215,15 @@ class BaseController extends Controller
         //{"SUCCESS":"TRUE","MSG":"\uc131\uacf5\uc785\ub2c8\ub2e4.","RECORD":{"row":{"name":"\uacf5\uc9c0\uc0ac\ud56d","code":"notice","bgcolor":"#de0d0d","transparent":"29","title":null,"title_show":null,"bgcolor_show":null},"img":null,"basic":{"site_name":"foray","logo_show":"Y","menu_back_color":"#006eff","menu_back_transparent":"50","menu_bg_color":"#e0e0e0","menu_bg_transparent":null,"main_menu_color":"#000000","notice_show":"Y","around_show":"Y","charge_show":"Y","review_show":"Y","vod_show":"N","map_show":"Y","link_menu_show":"Y","naver_reserve":"","naver_reserve_show":"Y","kakao_channel":"","kakao_channel_show":"Y","company_name":"25\uc2dc \ubd80\ub3d9\uc0b0","footer_copy":"","logo_url":"http:\/\/api.bomul.ai.kr\/pds\/\ub85c\uace0","sub_menu_color":"#000000","sns_link":[]}}}
         //API/Notice
         $row = $this->listing($this->code);
-
+        $menu_no = $row['RECORD']['row']['menu_no']??0;
+        $img = $this->getImage($menu_no,$this->code);
         if($row['SUCCESS'] == "TRUE"){
             $this->sub_body =  $row['RECORD']['row'];
+            $this->sub_body['widthConClass'] = "";
+            $this->sub_body['widthConClass'] = $this->sub_body['bgcolor_show'] === 'N' ? 'sub-bg-color' : 'sub-bg-image';
+
+            $this->sub_body['img'] = $img;
+
             $body = $row['RECORD']['basic'];
             $body['menu_back_transparent'] = (int)$body['menu_back_transparent']/100;
             $body['sec_bgcolor'] = $row['RECORD']['row']['bgcolor'];
@@ -236,6 +252,25 @@ class BaseController extends Controller
     {
         $pager_links = $this->calPaging($page,$total,10, $limit);
         return $pager_links;
+    }
+    public function getImage($menu_no,$code)
+    {
+        $img_model = model('App\Models\ImgModel',true,$this->db);
+        $image= array();
+        // 각 메뉴별 등록가능 이미지가 고정 (notice,charge,review,map,vod,property 는 각 1장씩 )
+        if(in_array($code,["main","around"])){ //main,around(메임,둘러보기는 다수 이미지 등록 가능
+            $image_row = $img_model->get_image($menu_no,"menu",0);
+        }else{
+            $image_row = $img_model->get_image($menu_no,"menu",1);
+        }
+
+        foreach ($image_row as $k => $v) {
+            $image[$k]['img_no'] = $v['img_no'];
+            $image[$k]['full_url'] = SITE_PDS . $v['img_dir'] . $v['img_name'];
+        }
+
+        return $image;
+
     }
     public function calPaging($page_num=1, $total_items = 0, $block_size = 10, $limit = 5)
     {

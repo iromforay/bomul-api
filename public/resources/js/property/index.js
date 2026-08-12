@@ -80,4 +80,17 @@ $(document).ready(function () {
         }
     });
 
+    // 4. SNS 버튼(.sns_con) 클릭 시 .sns_list 노출 토글
+    $('.fn_btn .sns_con').on('click', function (e) {
+        e.stopPropagation();
+        $(this).siblings('.sns_list').toggleClass('on');
+    });
+
+    // 5. SNS 팝업 외부 클릭 시 닫기
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.fn_btn').length) {
+            $('.fn_btn .sns_list').removeClass('on');
+        }
+    });
+
 });

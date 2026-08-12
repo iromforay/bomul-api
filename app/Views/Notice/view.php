@@ -4,7 +4,7 @@
     <div class="App">
         <!-- section -->
         <section class="sections section_02 view">
-          <div class="width_con">
+          <div class="width_con <?=$sub['widthConClass']?>">
               <div class="view_con">
 
                   <div class="row row1">

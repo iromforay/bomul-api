@@ -10,8 +10,6 @@ use App\Service\PropertyService;
 
 class Property extends BaseController
 {
-    private $log;
-
     public function __construct()
     {
         $this->set_code("property");

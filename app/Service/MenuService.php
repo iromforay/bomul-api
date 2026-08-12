@@ -60,7 +60,13 @@ class MenuService extends CI_Service
     {
         $data= $this->model->findbyCode($code);
         if(isset($data['row']['menu_no']) and $data['row']['menu_no']>0) {
-            $image_row = $this->img_model->get_image($data['row']['menu_no']);
+            // 각 메뉴별 등록가능 이미지가 고정 (notice,charge,review,map,vod,property 는 각 1장씩 )
+            if(in_array($code,["main","around"])){ //main,around(메임,둘러보기는 다수 이미지 등록 가능
+                $image_row = $this->img_model->get_image($data['row']['menu_no'],"menu",0);
+            }else{
+                $image_row = $this->img_model->get_image($data['row']['menu_no'],"menu",1);
+            }
+
 
             foreach ($image_row as $k => $v) {
                 $image[$k]['img_no'] = $v['img_no'];

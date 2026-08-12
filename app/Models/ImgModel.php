@@ -38,9 +38,12 @@ class ImgModel extends CI_Model
     // $parent_table 기본값은 menu로 유지 - 기존 호출부(메뉴)는 그대로 동작
     // write_date는 동시 업로드 시 초 단위로 값이 겹쳐 정렬이 불안정하므로, 등록순서를 정확히 반영하는
     // img_no(auto_increment) 오름차순으로 정렬 (오래된 순)
-    public function get_image($parent_no, $parent_table = 'menu')
+    public function get_image($parent_no, $parent_table = 'menu',$count=0)
     {
         $sql = "SELECT * FROM `$this->table` WHERE `parent_table`=".$this->db->escape($parent_table)." AND parent_no = ".$this->db->escape($parent_no)." ORDER BY `$this->primaryKey` ASC";
+        if($count!=0){
+            $sql.=" LIMIT $count";
+        }
         return $this->getExecQuery($sql);
     }
 

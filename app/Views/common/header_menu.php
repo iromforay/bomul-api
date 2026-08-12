@@ -9,6 +9,11 @@
             --menu_back_transparent : <?= $common['menu_back_transparent'] ?? '0' ?>;
             --transparent: <?= $common['main_transparent'] ?? '0' ?>;
             --sec_bgcolor: <?= $common['sec_bgcolor'] ?? '#f5f5f5' ?>;
+
+            --sub_back_transparent :<?=is_numeric($sub['transparent'] ?? null) ? (100 - (float)$sub['transparent']) / 100 : 1?>;
+            --sub_back_color :<?=$sub['bgcolor'] ?? '#ffffff'?>;
+            --sub_back_image : <?=!empty($sub['img'][0]['full_url']) ? "url('".$sub['img'][0]['full_url']."')" : 'none'?>;
+            --sub_bgcolor_show : <?=$sub['bgcolor_show'] ?? 'Y'?>;
     }
 </style>
 

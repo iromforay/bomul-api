@@ -32,11 +32,21 @@ class Home extends BaseController
         $service = new MenuService($this->log,null);
         $img = $service->getBycode($this->get_code());
         $data = array();
-        //dd($basic['sns_list']);
+        /*
+         * $img['RECORD']['row']['bgcolor_show'] == "N" 이면 이미지 적용 안하고, 배경색 보임.
+         * $img['RECORD']['row']['bgcolor'] 이  배경색이고, $img['RECORD']['row']['transparent'] 투명도
+         * "Y"(또는 그 외) 이면 이미지 - 등록된 이미지가 있으면 그걸, 없으면 기본이미지로 폴백.
+         */
 
-        if($img['SUCCESS'] =="TRUE" && isset($img['RECORD']['img']) && count($img['RECORD']['img'])>0){//실제 배경이미지 등록을 한경우
+        if($img['SUCCESS'] =="TRUE" && $img['RECORD']['row']['bgcolor_show'] == "N") {//bgcolor_show="N"이면 배경색+투명도
+            $data = array(
+                "img"=>"",
+                "bgcolor"=> $img['RECORD']['row']['bgcolor'],
+                "transparent"=> $img['RECORD']['row']['transparent']
+                );
+        }else if($img['SUCCESS'] =="TRUE" && $img['RECORD']['row']['bgcolor_show'] == "Y" && isset($img['RECORD']['img']) && count($img['RECORD']['img'])>0) {//bgcolor_show="Y"이면서 실제 배경이미지가 등록된 경우.
             $data["img"] = [];
-            foreach($img['RECORD']['img'] as $v){
+            foreach ($img['RECORD']['img'] as $v) {
                 $data["img"][] = $v['full_url'];
             }
         }else{
@@ -51,8 +61,8 @@ class Home extends BaseController
                 ];
           //  $data["img"] = [RS_IMG . "/sec_02/hero_skyline.svg"];
         }
-
         $this->view("",'Home/index',$data);
+     //   d($data);
     }
 
     public function index()

@@ -12,8 +12,7 @@
                 </div>
             </div>
 
-            <div class="slider">
-                <div class="img_con">
+            <div class="img_con">
                     <?php $imgCount = !empty($img) ? count($img) : 0; ?>
                     <?php if ($imgCount >= 2): ?>
                     <div class="bg bg-fade">
@@ -28,10 +27,12 @@
                             <div class="tile" style="background-image:url('<?=$img[0]?>');"></div>
                         </div>
                     </div>
+                    <?php elseif (!empty($bgcolor)): ?>
+                    <?php $opacity = is_numeric($transparent ?? null) ? (100 - (float)$transparent) / 100 : 1; ?>
+                    <div class="bg" style="background:<?=$bgcolor?>; opacity:<?=$opacity?>;"></div>
                     <?php else: ?>
                     <div class="bg" style="background:linear-gradient(135deg, #0F2D48 0%, #123A5E 55%, #1B4F72 100%);"></div>
                     <?php endif; ?>
-                </div>
             </div>
 
         </section>
