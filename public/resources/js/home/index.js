@@ -74,20 +74,7 @@ $(document).ready(function () {
         $footer.find('.tit span').text($footer.hasClass('folding') ? '▲' : '▼');
     });
 
-    // 햄버거/네비게이션 토글은 common/index.js로 이동함
-
-    // 1. SNS 버튼(.sns_con) 클릭 시 .sns_list 노출 토글
-    $('.fn_btn .sns_con').on('click', function (e) {
-        e.stopPropagation();
-        $(this).siblings('.sns_list').toggleClass('on');
-    });
-
-    // 2. SNS 팝업 외부 클릭 시 닫기
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.fn_btn').length) {
-            $('.fn_btn .sns_list').removeClass('on');
-        }
-    });
+    // 햄버거/네비게이션/SNS 토글은 common/index.js로 이동함
 
     // 이용후기 리스트에서 VIEW MORE(자세히 보기) 버튼 클릭 시
     $('.board_con .view_more').on('click', function (e) {

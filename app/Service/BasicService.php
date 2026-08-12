@@ -39,8 +39,10 @@ class BasicService extends CI_Service
 
         $data = $rows[0];
 
-        if(isset($data['logo_dir']) and isset($data['logo_name'])){
+        if(isset($data['logo_dir']) and isset($data['logo_name'])){ //로고 정보가 있을땐 등록한 로그
             $data['logo_url'] = SITE_PDS.$data['logo_dir'].$data['logo_name'];
+        }else{//등록한 로고가 없을땐 보이는 매물 로고 기본 세팅
+            $data['logo_url'] = RS_IMG.'/demo/logo.png';
         }
         $data['sub_menu_color'] = $data['sub_menu_focus_color'];
         if (isset($data['favicon_dir']) and $data['favicon_dir']!="" ) {

@@ -19,6 +19,7 @@ class Map extends BaseController
     public function getindex()
     {
         $data=[];
+//dd($this->getSubBody());
         $this->view("",'Map/index',$data);
     }
 }

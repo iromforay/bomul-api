@@ -12,8 +12,13 @@
                 </div>
             </div>
 
-            <div class="img_con">
-                    <?php $imgCount = !empty($img) ? count($img) : 0; ?>
+            <?php
+                // 이미지는 항상 기본 배경 - bgcolor_show="Y"일 때 색상은 이미지를 대체하지 않고
+                // 그 위에 반투명 오버레이로 얹힌다(has-color-overlay가 .img_con:before를 켬).
+                $imgCount = !empty($img) ? count($img) : 0;
+                $hasColorOverlay = (($sub['bgcolor_show'] ?? 'N') === 'Y');
+            ?>
+            <div class="img_con<?= $hasColorOverlay ? ' has-color-overlay' : '' ?>">
                     <?php if ($imgCount >= 2): ?>
                     <div class="bg bg-fade">
                         <?php foreach ($img as $i => $url): ?>
@@ -21,15 +26,7 @@
                         <?php endforeach; ?>
                     </div>
                     <?php elseif ($imgCount === 1): ?>
-                    <div class="bg bg-scroll">
-                        <div class="scroll-track">
-                            <div class="tile" style="background-image:url('<?=$img[0]?>');"></div>
-                            <div class="tile" style="background-image:url('<?=$img[0]?>');"></div>
-                        </div>
-                    </div>
-                    <?php elseif (!empty($bgcolor)): ?>
-                    <?php $opacity = is_numeric($transparent ?? null) ? (100 - (float)$transparent) / 100 : 1; ?>
-                    <div class="bg" style="background:<?=$bgcolor?>; opacity:<?=$opacity?>;"></div>
+                    <div class="bg" style="background-image:url('<?=$img[0]?>'); background-size:cover; background-position:center; background-repeat:no-repeat;"></div>
                     <?php else: ?>
                     <div class="bg" style="background:linear-gradient(135deg, #0F2D48 0%, #123A5E 55%, #1B4F72 100%);"></div>
                     <?php endif; ?>

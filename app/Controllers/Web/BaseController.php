@@ -216,7 +216,11 @@ class BaseController extends Controller
         //API/Notice
         $row = $this->listing($this->code);
         $menu_no = $row['RECORD']['row']['menu_no']??0;
-        $img = $this->getImage($menu_no,$this->code);
+
+        if(empty($row['RECORD']['img'])) {
+            $img = $this->getImage($menu_no, $this->code);
+        }else $img = $row['RECORD']['img'];
+
         if($row['SUCCESS'] == "TRUE"){
             $this->sub_body =  $row['RECORD']['row'];
             $this->sub_body['widthConClass'] = "";

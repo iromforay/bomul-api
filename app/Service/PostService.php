@@ -178,6 +178,8 @@ class PostService extends CI_Service
 
     public function after_process($data)
     {
+        $board_list = array();
+
         foreach($data as $k=>$v){
             $value['board_no'] = $v['post_no'];
             $value['board_type'] = $v['bcode'];
