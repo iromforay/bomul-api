@@ -56,7 +56,7 @@ insert  into `function_menu`(`function_menu_no`,`function_menu_key`,`function_me
 (31,'detail_images','추가이미지','Y',now());
 
 insert  into `basic`(`basic_no`,`site_name`,`logo_dir`,`logo_name`,`logo_show`,`menu_back_color`,`menu_back_transparent`,`menu_bg_color`,`menu_bg_transparent`,`main_menu_color`,`sub_menu_focus_color`,`property_show`,`notice_show`,`around_show`,`charge_show`,`review_show`,`vod_show`,`map_show`,`link_menu_show`,`naver_reserve`,`naver_reserve_show`,`kakao_channel`,`kakao_channel_show`,`company_name`,`broker_office_name`,`broker_address`,`broker_phone`,`broker_reg_no`,`broker_ceo_name`,`broker_agent_name`,`broker_agent_phone`,`footer_copy`,`naver_site_verification`) values
-    (1,'데모부동산','','로고','N','#123a5e','50','#F4F5F7',NULL,'#ffffff','#c0392b','Y','Y','N','Y','Y','Y','N','N','','N','','N','데모 부동산','데모 부동산 공인중개사사무소','서울 동작구 노량진로 100','02-815-2500','제11590-2024-00042호','나병연','김민수','02-815-2501','대표이사 : 000 | 개인정보관리책임자 : 000 | 사업자등록번호 : 111-12-12345 | 주소 서울 동작구 노량진로 100 | TEL 02-000-0000','test2');
+    (1,'데모부동산','','로고','N','#123a5e','50','#F4F5F7',NULL,'#ffffff','#c0392b','Y','Y','N','N','Y','Y','N','N','','N','','N','데모 부동산','데모 부동산 공인중개사사무소','서울 동작구 노량진로 100','02-815-2500','제11590-2024-00042호','나병연','김민수','02-815-2501','대표이사 : 000 | 개인정보관리책임자 : 000 | 사업자등록번호 : 111-12-12345 | 주소 서울 동작구 노량진로 100 | TEL 02-000-0000','test2');
 
 --sns 링크 5개 초기 세팅
 insert  into `add_menu`(`add_menu_no`,`code`,`key`,`text`,`show`,`img_dir`,`img_name`,`write_date`) values

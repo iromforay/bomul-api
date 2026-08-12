@@ -32,7 +32,7 @@ class Home extends BaseController
         $service = new MenuService($this->log,null);
         $img = $service->getBycode($this->get_code());
         $data = array();
-        //$basic['sns_link'];
+        //dd($basic['sns_list']);
 
         if($img['SUCCESS'] =="TRUE" && isset($img['RECORD']['img']) && count($img['RECORD']['img'])>0){//실제 배경이미지 등록을 한경우
             $data["img"] = [];

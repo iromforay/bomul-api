@@ -65,7 +65,18 @@
                     <p>SNS</p>
                 </div>
 
-                <ul class="sns_list"></ul>
+                <ul class="sns_list">
+                <?php foreach (($common['sns_list'] ?? []) as $sns): ?>
+                    <?php if (empty($sns['img_url'])) continue; ?>
+                    <li>
+                    <?php if (!empty($sns['link'])): ?>
+                        <a href="<?=$sns['link']?>" target="_blank" rel="noopener"><img src="<?=$sns['img_url']?>" alt=""></a>
+                    <?php else: ?>
+                        <img src="<?=$sns['img_url']?>" alt="">
+                    <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+                </ul>
             </div>
             <?php endif; ?>
         </nav>
@@ -114,9 +125,23 @@
         </ul>
     </div>
 
+    <?if($common['link_menu_show'] =="Y"):?>
     <div class="row4 rows">
         <h6>SNS</h6>
+        <ul class="sns_list">
+        <?php foreach (($common['sns_list'] ?? []) as $sns): ?>
+            <?php if (empty($sns['img_url'])) continue; ?>
+            <li>
+            <?php if (!empty($sns['link'])): ?>
+                <a href="<?=$sns['link']?>" target="_blank" rel="noopener"><img src="<?=$sns['img_url']?>" alt=""></a>
+            <?php else: ?>
+                <span><img src="<?=$sns['img_url']?>" alt=""></span>
+            <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+        </ul>
     </div>
+    <?php endif; ?>
 
 </div>
 <!-- //mobile menu -->

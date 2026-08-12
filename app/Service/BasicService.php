@@ -57,6 +57,7 @@ class BasicService extends CI_Service
         foreach($add_data as $k=>$v){
 
             $v['link'] = $v['text'];
+            //여기서 사용자 등록과 기본 템플릿을 구분해야함.
             $v['img_url'] = (isset($v['img_dir']) and isset($v['img_name']) )?  SITE_PDS.$v['img_dir'].$v['img_name']: "";
 
             unset($v['code']); unset($v['text']); unset($v['show']);
@@ -64,7 +65,7 @@ class BasicService extends CI_Service
             unset($v['img_dir']); unset($v['img_name']);
             $add_data[$k] = $v;
         }
-        $data['sns_link'] = $add_data;
+        $data['sns_list'] = $add_data;
 
         return $data;
     }

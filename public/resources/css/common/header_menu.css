@@ -74,9 +74,10 @@ body.open_nav {
 .App .mob_nav .row3 ul li a {font-size: 0.8rem; line-height: 1.2rem; font-weight: 500;}
 .App .mob_nav .row4 {}
 .App .mob_nav .rows.row4 h6:before {width: 80%;}
-.App .mob_nav .row4 ul {display: flex; align-items: center;}
-.App .mob_nav .row4 ul li {padding: 10px; margin: 0 5px 0 0;}
-.App .mob_nav .row4 ul li img {width: 20px;}
+.App .mob_nav .row4 ul {}
+.App .mob_nav .row4 ul li {padding: 15px 0; border-bottom: 1px solid #E0E0E0;}
+.App .mob_nav .row4 ul li a, .App .mob_nav .row4 ul li span {display: flex; align-items: center; font-size: 0.8rem; line-height: 1.2rem; font-weight: 500;}
+.App .mob_nav .row4 ul li img {width: 20px; height: 20px; margin: 0 10px 0 0; object-fit: cover;}
 
 @media screen and (max-width:1200px){
     #header .width_con {padding: 0 0 0 10px;}
