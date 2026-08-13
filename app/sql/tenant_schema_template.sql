@@ -31,6 +31,7 @@ CREATE TABLE `add_menu` (
   `img_dir` varchar(255) DEFAULT NULL,
   `img_name` varchar(255) DEFAULT NULL,
   `write_date` datetime DEFAULT NULL,
+  `modify_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`add_menu_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -73,6 +74,7 @@ CREATE TABLE `basic` (
   `broker_agent_phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '소속공인중개사 연락처 (있는 경우만)',
   `footer_copy` varchar(255) DEFAULT NULL,
   `naver_site_verification` varchar(255) DEFAULT NULL COMMENT '네이버 서치어드바이저 사이트 소유권 확인 코드',
+  `modify_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`basic_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -139,6 +141,7 @@ CREATE TABLE `function_menu` (
   `function_menu_name` varchar(32) DEFAULT NULL,
   `function_menu_value` varchar(4) DEFAULT NULL,
   `write_date` datetime DEFAULT NULL,
+  `modify_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`function_menu_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -192,6 +195,7 @@ CREATE TABLE `menu` (
   `title_show` varchar(10) DEFAULT NULL,
   `bgcolor_show` varchar(10) DEFAULT NULL,
   `write_date` datetime DEFAULT NULL,
+  `modify_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`menu_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -277,6 +281,7 @@ CREATE TABLE `profile` (
   `nick_name` varchar(255) DEFAULT NULL,
   `img_dir` varchar(255) DEFAULT NULL,
   `img_name` varchar(255) DEFAULT NULL,
+  `modify_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`profile_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
