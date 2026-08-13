@@ -9,7 +9,7 @@ class LoginModel extends CI_Model
 {
     public function __construct($dbs)
     {
-        parent::__construct($dbs,"login_session","login_no");
+        parent::__construct($dbs,"login_session","login_session_no");
         return $this;
 
     }
@@ -54,15 +54,28 @@ class LoginModel extends CI_Model
         }
 
     }
+    // write_date 기준 SESSION_EXPIRE_DAYS(.env, 기본 7일)가 지난 세션은 만료 처리.
+    // status 컬럼은 로그아웃 등에서 갱신되지 않아 사실상 의미가 없어 조건에서 제외한다.
     public function get_session_id($session_id)
     {
-        $sql = "SELECT * FROM `$this->table` WHERE session_id = ".$this->db->escape($session_id);
+        $days = (int) env('SESSION_EXPIRE_DAYS', 7);
+        $sql = "SELECT * FROM `$this->table` WHERE session_id = ".$this->db->escape($session_id)
+            ." AND write_date > (NOW() - INTERVAL $days DAY)";
         $rows = $this->getExecQuery($sql);
 
         if(isset($rows[0]))
             return $rows[0];
         else return null;
 
+    }
+
+    // Cron\SessionCleanup이 주기적으로 호출 - write_date 기준 만료된 row를 물리 삭제.
+    public function deleteExpired($days)
+    {
+        $days = (int) $days;
+        $sql = "DELETE FROM `$this->table` WHERE write_date < (NOW() - INTERVAL $days DAY)";
+        $this->safeExecQuery($sql);
+        return $this->getAffectedRows();
     }
     public function get_fid_by_session_id($session_id)
     {

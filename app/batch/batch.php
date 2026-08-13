@@ -27,6 +27,19 @@ if ($h === '02') {
 // (승인은 아무 때나 일어남) 시간대 조건 없이 항상 매분 호출. pending 없으면 바로 종료하니 부담 없음.
 require __DIR__ . '/setting_callback.php';
 
+// 만료된 login_session row 정리 - 하루 한 번(23:59)만 api.bomul.ai.kr을 curl로 찔러서
+// Cron\SessionCleanup::getCleanup()이 write_date 기준 SESSION_EXPIRE_DAYS 지난 row를 지우게 한다.
+// 중앙 테이블(default DB) 하나만 다루면 되니 analy.php처럼 fid별 dispatch가 필요 없어 여기서 바로 호출.
+if ($h === '23' && $i === '59') {
+    $ch = curl_init('https://api.bomul.ai.kr/cron/session/cleanup');
+    curl_setopt_array($ch, [
+        CURLOPT_TIMEOUT_MS => 3000,
+        CURLOPT_RETURNTRANSFER => true,
+    ]);
+    curl_exec($ch);
+    curl_close($ch);
+}
+
 // 단발성 배치 예시 (시:분까지 정확히 매칭될 때 딱 한 번만):
 // if ($h === '03' && $i === '00') {
 //     require __DIR__ . '/example.php';

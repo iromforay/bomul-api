@@ -38,15 +38,15 @@ class User extends BaseController
 
     public function postsessionLogin()
     {
-        $session_id = $this->request->getVar("session_id");
+        $id = trim($this->request->getVar("id"));
+        $time = trim($this->request->getVar("time"));
+        $session_token = trim($this->request->getVar("session_token"));
 
-        $this->log->info("sessionLogin session_id:".$session_id);
+        $this->log->info("sessionLogin id:".$id.", time:".$time);
 
-
-        $oResult = $this->service->session_login($session_id);
+        $oResult = $this->service->session_login_by_token($id, $time, $session_token);
 
         $this->log->info("sessionLogin info result : ".json_encode($oResult,JSON_UNESCAPED_UNICODE));
-     //   dd($oResult);
         echo AT_Result::toJson($oResult);
         exit;
     }

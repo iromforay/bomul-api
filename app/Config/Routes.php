@@ -70,6 +70,10 @@ if ($host !== 'api.bomul.ai.kr') {
         return service('response')->setStatusCode(200);
     });
 
+    // login_session 정리 배치(외부 cron이 주기 호출) - 중앙 DB(default) 테이블이라 fid 서브도메인이
+    // 아닌 api.bomul.ai.kr 쪽에 둔다. 인증은 Cron\Analytics와 동일하게 CRON_ALLOWED_IPS만 확인.
+    $routes->get('cron/session/cleanup', 'Cron\SessionCleanup::getCleanup');
+
     // 🔥 API는 기존 그대로 (Api/Admin 자동 라우팅 유지)
     $routes->setDefaultNamespace('App\Controllers');
     $routes->setAutoRoute(true);
