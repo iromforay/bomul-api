@@ -35,6 +35,7 @@ if ($host !== 'api.bomul.ai.kr') {
     $routes->get('sitemap',   'Sitemap::getIndex');
     $routes->get('roboots',   'Robots::getIndex');
     $routes->get('property', 'Property::getindex');
+    $routes->get('search', 'Property::getSearch');
     //상세보기
     $routes->get('notice/view/([0-9]+)(?:/[^/]*)?', 'Notice::getview/$1');
     $routes->get('review/view/([0-9]+)(?:/[^/]*)?', 'Review::getview/$1');

@@ -187,4 +187,15 @@ class Property extends BaseController
         $basic = $basicService->get_by_basic();
         return $basic['company_name'] ?? '';
     }
+
+    public function getSearch()
+    {
+        $property_name = $this->request->getVar('property_name'); // 매물명 검색
+        $property_no = $this->request->getVar('property_no'); //매물코드 검색
+
+        $number = implode(",", array_map(fn($v) => (int)$v, $property_no));
+        $RESULT = $this->service->search($property_name,$number);
+        echo json_encode($RESULT);
+        exit;
+    }
 }

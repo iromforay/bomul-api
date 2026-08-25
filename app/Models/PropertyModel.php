@@ -110,6 +110,26 @@ class PropertyModel extends CI_Model
         return "WHERE ".implode(" AND ", $conditions);
     }
 
+    public function search($property_name)
+    {
+        $property_name =  $this->db->escapeLikeString($property_name);
+        $sql = "SELECT * FROM `$this->table` WHERE (`property_name` like '%".$property_name."%' OR `building_name` like '%".$property_name."%')  AND `is_deleted` = 0";
+
+        return $this->getExecQuery($sql);
+    }
+    public function findbyInid($seq_nos)
+    {
+        $ids = is_array($seq_nos) ? $seq_nos : explode(",", $seq_nos);
+        $ids = array_map("intval", $ids);
+        $ids = array_filter($ids, fn($id) => $id > 0);
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        $sql = "SELECT * FROM `$this->table` WHERE `$this->primaryKey` IN (".implode(",", $ids).") AND `is_deleted` = 0";
+        return $this->getExecQuery($sql);
+    }
     // soft delete된 매물은 상세조회에서도 제외 (Board::Postboard_del() 패턴 참고)
     public function findbyid($seq_no)
     {
