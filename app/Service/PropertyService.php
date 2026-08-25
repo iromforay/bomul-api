@@ -368,4 +368,20 @@ class PropertyService extends CI_Service
 
         return mb_strlen($property_name) > mb_strlen($slug) ? $property_name : $slug;
     }
+
+    public function search($property_name,$property_no="")
+    {
+        if($property_name=="" && $property_no=="") {
+            return AT_Result::toFailData("검색어를 입력하세요");
+        }
+
+        if($property_name!="") {
+            $rows = $this->model->search($property_name);
+        }else{
+            $rows = $this->model->findbyInid($property_no);
+        }
+        $rows = $this->after_process($rows);
+        return AT_Result::toSuccessData($rows);
+
+    }
 }
